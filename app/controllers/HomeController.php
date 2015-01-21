@@ -4,6 +4,6 @@ class HomeController extends BaseController
 {
 	public function ShowIndex()
 	{
-		return View::make('home');
+		return View::make('pages.home');
 	}
 }
