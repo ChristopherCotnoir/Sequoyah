@@ -26,7 +26,7 @@ return array(
 	|
 	*/
 
-	'url' => 'http://sequoyah.cs.odu.edu',
+	'url' => 'https://sequoyah.cs.odu.edu',
 
 	/*
 	|--------------------------------------------------------------------------
