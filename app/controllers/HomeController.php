@@ -6,4 +6,9 @@ class HomeController extends BaseController
 	{
 		return View::make('pages.home');
 	}
+
+  public function ShowAbout()
+  {
+    return View::make('pages.about');
+  }
 }

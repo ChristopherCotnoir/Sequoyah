@@ -12,6 +12,9 @@
 	
 	<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
 	@show
+
+  @section('head-custom')
+  @show
 </head>
 @yield('body')
 </html>
