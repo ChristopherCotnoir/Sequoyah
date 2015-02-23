@@ -1,5 +1,5 @@
 suites:
     main:
-        namespace: App
-        psr4_prefix: App
+        namespace: Sequoyah
+        psr4_prefix: Sequoyah
         src_path: app

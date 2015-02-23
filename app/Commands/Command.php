@@ -1,4 +1,4 @@
-<?php namespace App\Commands;
+<?php namespace Sequoyah\Commands;
 
 abstract class Command {
 

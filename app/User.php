@@ -1,4 +1,4 @@
-<?php namespace App;
+<?php namespace Sequoyah;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
