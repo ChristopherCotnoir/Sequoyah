@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 *.swp
-=======
 /vendor
 /node_modules
 .env
->>>>>>> laravel/master
