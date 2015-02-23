@@ -1,14 +1,10 @@
 <?php
 
 /*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
+Route::get('/', 'HomeController@ShowIndex');
+Route::get('syllabary', 'SyllabaryController@ShowGrid');
+Route::get('about', 'HomeController@ShowAbout');
+Route::get('sleep', function() { return Redirect::away('http://Ncnl.tumblr.com'); });
 */
 
 Route::get('/', 'WelcomeController@index');
