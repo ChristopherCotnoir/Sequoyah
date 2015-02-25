@@ -7,11 +7,20 @@ Route::get('about', 'HomeController@ShowAbout');
 Route::get('sleep', function() { return Redirect::away('http://Ncnl.tumblr.com'); });
 */
 
-Route::get('/', 'WelcomeController@index');
+Route::get('/', 'HomeController@ShowIndex');
+Route::get('about', 'HomeController@ShowAbout');
+Route::get('syllabary', 'SyllabaryController@ShowGrid');
 
-Route::get('home', 'HomeController@index');
+Route::group(['namespace' => 'Auth', 'prefix' => 'auth'], function()
+{
+	Route::get('login', 'AuthController@ShowLogin');
+	Route::post('login', 'AuthController@DoLogin');
+});
 
-Route::controllers([
+/*
+Route::controllers(
+[
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
 ]);
+*/

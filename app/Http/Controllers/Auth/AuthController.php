@@ -3,22 +3,99 @@
 use Sequoyah\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\Registrar;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
-class AuthController extends Controller {
+class AuthController extends Controller
+{
+	/**
+	 * The Guard implementation.
+	 *
+	 * @var Guard
+	 */
+	protected $auth;
 
-	/*
-	|--------------------------------------------------------------------------
-	| Registration & Login Controller
-	|--------------------------------------------------------------------------
-	|
-	| This controller handles the registration of new users, as well as the
-	| authentication of existing users. By default, this controller uses
-	| a simple trait to add these behaviors. Why don't you explore it?
-	|
-	*/
+	/**
+	 * The registrar implementation.
+	 *
+	 * @var Registrar
+	 */
+	protected $registrar;
 
-	use AuthenticatesAndRegistersUsers;
+	/**
+	 * Show the application registration form.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function ShowRegister()
+	{
+		return view('pages.auth.register');
+	}
+
+	/**
+	 * Handle a registration request for the application.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function DoRegister(Request $request)
+	{
+		$validator = $this->registrar->validator($request->all());
+
+		if ($validator->fails())
+		{
+			$this->throwValidationException(
+				$request, $validator
+			);
+		}
+
+		$this->auth->login($this->registrar->create($request->all()));
+
+		return redirect($this->redirectPath());
+	}
+
+	/**
+	 * Show the application login form.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function ShowLogin()
+	{
+		return view('pages.auth.login');
+	}
+
+	/**
+	 * Handle a login request to the application.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function DoLogin(Request $request)
+	{
+		$this->validate($request, [
+			'username' => 'required', 'password' => 'required',
+		]);
+
+		$credentials = $request->only('username', 'password');
+
+		if ($this->auth->attempt($credentials, $request->has('remember')))
+			return redirect()->intended($this->redirectPath());
+
+		return redirect($this->loginPath())
+			->withInput($request->only('username', 'remember'))
+			->withErrors([
+				'username' => 'These credentials do not match our records.',
+			]);
+	}
+
+	/**
+	 * Log the user out of the application.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function Logout()
+	{
+		$this->auth->logout();
+		return redirect('/');
+	}
 
 	/**
 	 * Create a new authentication controller instance.
@@ -32,7 +109,7 @@ class AuthController extends Controller {
 		$this->auth = $auth;
 		$this->registrar = $registrar;
 
-		$this->middleware('guest', ['except' => 'getLogout']);
+		$this->middleware('guest', ['except' => 'ShowLogout']);
 	}
 
 }

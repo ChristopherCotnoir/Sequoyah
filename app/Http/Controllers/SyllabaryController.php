@@ -1,6 +1,6 @@
 <?php namespace Sequoyah\Http\Controllers;
 
-class HomeController extends Controller
+class SyllabaryController extends Controller
 {
 	/**
 	 * Create a new controller instance.
@@ -9,7 +9,7 @@ class HomeController extends Controller
 	 */
 	public function __construct()
 	{
-		// $this->middleware('auth');
+		$this->middleware('auth');
 	}
 
 	/**
@@ -17,12 +17,7 @@ class HomeController extends Controller
 	 *
 	 * @return Response
 	 */
-	public function Index()
-	{
-		return view('pages.home');
-	}
-
-	public function About()
+	public function Grid()
 	{
 		return '';
 	}

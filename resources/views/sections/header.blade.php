@@ -1,7 +1,7 @@
 <header>
 	<div id='login'>
 		<div>
-				<a href=''>Login <i class='fa fa-sign-in'></i></a>
+			<a href='{{ action('Auth\AuthController@ShowLogin') }}'>Login <i class='fa fa-sign-in'></i></a>
 		</div>
 	</div>
 	<h1 id='logos'>

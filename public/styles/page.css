@@ -29,6 +29,10 @@ body {
 strong, .strong, .bold { font-weight: 400; }
 .small { font-size: 80%; }
 
+.block { display: block; }
+.iblock { display: inline-block; }
+.inline { display: inline; }
+
 .text-center { text-align: center; }
 .text-left { text-align: left; }
 .text-right { text-align: right; }
@@ -157,8 +161,19 @@ dt { font-weight: 400; margin-top: 5px; }
 dl { margin-bottom: 5px; }
 
 form {
-	width: 50%;
+	width: 80%;
+	max-width: 30em;
 	margin: 4em auto;
+}
+form h1 {
+	font-weight: 300;
+}
+form .hint {
+	font-size: 1em;
+}
+form h1 .hint {
+	font-size: 60%;
+	line-height: 2em;
 }
 input, textarea {
 	padding: 4px 8px;
@@ -180,7 +195,7 @@ textarea {
 	height: 4em;
 }
 input[type='submit'] {
-	background: #666;
+	background: #555;
 	color: #fff;
 	text-shadow: none;
 	box-sizing: content-box;
