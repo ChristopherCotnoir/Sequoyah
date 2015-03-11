@@ -18,22 +18,23 @@
   <tr>
     <th class='headerCell'></th>
     @foreach($vowels as $vowel)
-      <th class='headerCell'><b>{{{ $vowel }}} <br /> {{ '&#x' . dechex($starting_symbol) }}</b></th>
+      <th class='headerCell'><b>{{{ $vowel }}} <br /> <?php echo '&#x' . dechex($starting_symbol); ?></b></th>
       <?php $starting_symbol++; ?>
     @endforeach
   </tr>
 
   @foreach($consonants as $consonant)
     <tr>
-      <td class='headerCell'><b>{{{ $consonant }}}</b> <br /> {{ '&#x' . dechex($starting_symbol) }}</td>
+      <td class='headerCell'><b>{{{ $consonant }}}</b> <br /> <?php echo '&#x' . dechex($starting_symbol); ?></td>
       <?php $starting_symbol++; ?>
       @for($i = 0; $i < count($vowels); $i++)
-        <td>{{{ $consonant . $vowels[$i] }}} <br /> {{ '&#x' . dechex($starting_symbol) }}</td>
+        <td>{{{ $consonant . $vowels[$i] }}} <br /> <?php echo '&#x' . dechex($starting_symbol); ?></td>
         <?php $starting_symbol++; ?>
       @endfor
     </tr>
   @endforeach
 </table>
+
 </main>
 @stop
 
