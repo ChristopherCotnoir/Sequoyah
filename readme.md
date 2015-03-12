@@ -1,23 +1,27 @@
-## Laravel PHP Framework
+# Sequoyah Installation
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/downloads.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+#### Database Setup
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+Ensure that MySQL is installed. Once installed, log in to the database server and run the following commands.
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+    CREATE USER sequoyah@localhost IDENTIFIED BY 'hayouqes';
+    CREATE DATABASE sequoyah;
+    GRANT ALL ON sequoyah.* TO sequoyah@localhost;
+    
+Once this is done, your database will be ready.
 
-## Official Documentation
+#### Vendor File Downloading
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+Laravel relies on other PHP libraries to function. To get these libraries, you must use the PHP package management system Composer. In the terminal, type the following commands to get it. You should run these commands inside the root source directory of Sequoyah, wherever you 'git clone'd it to.
 
-## Contributing
+    wget http://www.getcomposer.org/installer
+    ./installer
+    composer.phar install
+    
+Once this command completes, your dependencies will be up to date, and your vendor directory will be correctly set up.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+### Storage Directory Permissions
 
-### License
+Laravel will won't work if it cannot write to the app/storage directory. In this directory are cache files as well as log files. Because the directory is normally owned by your user account, the default user account a the web server uses can't write to the directory. To quickly fix that, run the following command in the root of the Sequoyah source directory.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+    chmod -R 777 app/storage
