@@ -17,13 +17,8 @@ class HomeController extends Controller
 	 *
 	 * @return Response
 	 */
-	public function Index()
+	public function ShowIndex()
 	{
 		return view('pages.home');
-	}
-
-	public function About()
-	{
-		return '';
 	}
 }

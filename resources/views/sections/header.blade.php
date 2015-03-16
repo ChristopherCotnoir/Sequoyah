@@ -12,8 +12,7 @@
 	</h1>
 	<nav>
 		<a class='nav active' href='{{ action('HomeController@ShowIndex') }}' title='Home'>Home</a>
-    <a class='nav' href='{{ action('SyllabaryController@ShowGrid') }}' title='Syllabary Editor'>Syllabary Editor</a>
-    <a class='nav' href='{{ action('HomeController@ShowAbout') }}' title='About'>About</a>
+		<a class='nav' href='{{ action('SyllabaryController@ShowGrid') }}' title='Syllabary Editor'>Syllabary Editor</a>
 		<a class='nav' target='_blank' href='https://bitbucket.org/411blacks15/sequoyah' title='Bitbucket (External Link)'><i class='fa fa-bitbucket'></i> Bitbucket</a>
 	</nav>
 </header>

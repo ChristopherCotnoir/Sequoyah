@@ -11,8 +11,8 @@ class CreateProjectsTable extends Migration {
 		{
 			$table->bigIncrements('id');
 			$table->string('name');
-			$table->date('created_at');
-			$table->date('updated_at');
+			
+			$table->timestamps();
 		});
 	}
 
