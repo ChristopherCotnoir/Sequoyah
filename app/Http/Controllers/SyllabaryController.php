@@ -106,9 +106,10 @@ class SyllabaryController extends Controller
         return response()->json(['success' => True]);
 
     }
+
+    public function UploadAudioSample($syllabaryId)
+    {
+       // 
+    }
 }
 
-public function UploadAudioSample($syllabaryId)
-{
-    // 
-}
