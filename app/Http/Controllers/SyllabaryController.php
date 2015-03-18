@@ -7,6 +7,7 @@
 use Sequoyah\Models\SyllabaryColumnHeader;
 use Sequoyah\Models\SyllabaryRowHeader;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Http\Request;
 
 class SyllabaryController extends Controller
 {
@@ -105,4 +106,9 @@ class SyllabaryController extends Controller
         return response()->json(['success' => True]);
 
     }
+}
+
+public function UploadAudioSample($syllabaryId)
+{
+    // 
 }
