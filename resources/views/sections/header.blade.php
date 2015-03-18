@@ -1,7 +1,11 @@
 <header>
 	<div id='login'>
 		<div>
-			<a href='{{ action('Auth\AuthController@ShowLogin') }}'>Login <i class='fa fa-sign-in'></i></a>
+			@if (Auth::check())
+				<a href='{{ action('Auth\AuthController@DoLogout') }}'>Login <i class='fa fa-sign-in'></i></a>
+			@else
+				<a href='{{ action('Auth\AuthController@ShowLogin') }}'>Login <i class='fa fa-sign-in'></i></a>
+			@endif
 		</div>
 	</div>
 	<h1 id='logos'>
