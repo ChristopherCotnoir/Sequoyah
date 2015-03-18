@@ -199,10 +199,34 @@ input[type='submit'] {
 	color: #fff;
 	text-shadow: none;
 	box-sizing: content-box;
+	transition: 0.2s background;
 }
-.form-error {
+input[type='submit']:hover {
+	background: #666;
+}
+input[type='submit']:active {
+	background: #444;
+}
+
+output .error {
 	background: #f64;
 	padding: 4px;
 	color: #fff;
 	text-shadow: none;
+}
+
+input[type='radio'], input[type='checkbox'] {
+	-webkit-appearance: none;
+	width: 1.5em;
+	height: 1.5em;
+	float: right;
+	margin-right: -16px; /* textboxes have total 16px padding */
+}
+input[type='radio']:checked::before, input[type='checkbox']:checked::before {
+	display: block;
+	text-align: center;
+	vertical-align: middle;
+	margin-left: -0.25em;
+	content: '\f00c';
+	font-family: 'FontAwesome';
 }

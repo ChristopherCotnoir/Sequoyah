@@ -3,8 +3,8 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProjectMembersTable extends Migration {
-
+class CreateUsersTable extends Migration
+{
 	/**
 	 * Run the migrations.
 	 *
@@ -16,10 +16,10 @@ class CreateProjectMembersTable extends Migration {
 		{
 			$table->bigInteger('id')->unsigned();
 			
-			$table->text('email');
+			$table->string('username', 128); //user's publically available user name (i.e. JohnSmith) -- case insensitive
 			
-			$table->text('name');
-			$table->string('password', 200);
+			$table->text('name'); //user's formal name (i.e. John Smith)
+			$table->string('password', 200); //hashed user password (uses laravel hash make)
 			
 			$table->timestamps();
 		});
@@ -34,5 +34,4 @@ class CreateProjectMembersTable extends Migration {
 	{
 		Schema::drop('users');
 	}
-
 }

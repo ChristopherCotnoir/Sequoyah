@@ -19,12 +19,6 @@ Route::group(['namespace' => 'Auth', 'prefix' => 'auth'], function()
 {
 	Route::get('login', 'AuthController@ShowLogin');
 	Route::post('login', 'AuthController@DoLogin');
+	Route::get('create', 'AuthController@ShowRegister');
+	Route::post('create', 'AuthController@DoRegister');
 });
-
-/*
-Route::controllers(
-[
-	'auth' => 'Auth\AuthController',
-	'password' => 'Auth\PasswordController',
-]);
-*/
