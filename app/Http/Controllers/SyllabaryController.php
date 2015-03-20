@@ -109,7 +109,48 @@ class SyllabaryController extends Controller
 
     public function UploadAudioSample($syllabaryId)
     {
-       // 
+	$targetDir = "/tmp/sequoyah/audioSample/";
+	$targetFile = $targetDir . basename($_FILES['audioSample']['name']);
+	$uploadOk = true;
+	$audioFileType = pathinfo($targetFile, PATHINFO_EXTENSION);
+
+	// Check if file name is already in use.
+
+	if (file_exists($targetFile))
+	{
+	     echo "File already exists.";
+	     $uploadOK = false;
+	}
+
+	// File type check is a stub until audio formats are agreed upon.
+        // Sample formats: audio/x-wav , audio/mp4 , audio/ogg , ...
+
+	if (/*($audioFileType != )*/ false)
+	{
+	     echo "Unsupported audio format.";
+	     $uploadOk = false;
+	}
+
+	// File size check is a stub until audio file sizes are agreed upon.
+
+	if(/*$_Files['audioSample']['size'] ==*/ false)
+	{
+	     echo "File size too large.";
+	     $uploadOK = false;
+	}
+
+	if ($uploadOK == false)
+	{
+	     echo "File was not uploaded.";
+	}
+	elseif(move_uploaded_file($_FILE['audioSample']['tmpName'], $targetFile))
+	{
+	     echo "The file" . basename($_FILE['audioSample']['name']) . " has been uploaded.";
+	}
+	else
+	{
+	     echo "An unexpected error has occured while uploading file.";
+	}
     }
 }
 
