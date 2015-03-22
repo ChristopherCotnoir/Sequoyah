@@ -122,20 +122,25 @@ class SyllabaryController extends Controller
 	     $uploadOK = false;
 	}
 
-	// File type check is a stub until audio formats are agreed upon.
-        // Sample formats: audio/x-wav , audio/mp4 , audio/ogg , ...
+	// Audio format check.
 
-	if (/*($audioFileType != )*/ false)
+	if (($audioFileType != "audio/wav") || ($audioFileType != "audio/mpeg") || 
+	      ($audioFileType != "audio/ogg"))
 	{
-	     echo "Unsupported audio format.";
+	     echo "Unsupported audio format. Use wav, mpeg, or ogg.";
 	     $uploadOk = false;
 	}
 
-	// File size check is a stub until audio file sizes are agreed upon.
+	// Audio file size check.
 
-	if(/*$_Files['audioSample']['size'] ==*/ false)
+	if($_Files['audioSample']['size'] > 5242880) // Max size is 5MB.
 	{
 	     echo "File size too large.";
+	     $uploadOK = false;
+	}
+	elseif($_Files['audioSample']['size'] == 0)
+	{
+	     echo "File size too small.";
 	     $uploadOK = false;
 	}
 
