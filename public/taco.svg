@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   version="1.1"
+   id="svg2"
+   viewBox="0 0 1467.1431 832.96068"
+   height="235.08002mm"
+   width="414.06039mm">
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient4165">
+      <stop
+         id="stop4167"
+         offset="0"
+         style="stop-color:#b39821;stop-opacity:1" />
+      <stop
+         id="stop4169"
+         offset="1"
+         style="stop-color:#e7de43;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       y2="-116.20923"
+       x2="1094.2858"
+       y1="615.21936"
+       x1="1088.5714"
+       id="linearGradient4171"
+       xlink:href="#linearGradient4165" />
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       y2="418.07648"
+       x2="700"
+       y1="-76.209229"
+       x1="714.28571"
+       id="linearGradient4843"
+       xlink:href="#linearGradient4165" />
+  </defs>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-286.42773,161.20834)"
+     id="layer1">
+    <path
+       style="fill:url(#linearGradient4843);fill-opacity:1;stroke:#5e4407;stroke-width:50;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 912.85739,-136.20834 C 753.34857,-136.20862 600.37271,-72.844251 487.58277,39.945333 374.79282,152.73492 311.42796,305.71057 311.42773,465.21939 c 0.23562,61.59107 92.21642,185.63764 216.7461,181.42772 l 957.90237,0 c 18.6332,-58.67571 28.147,-119.86449 28.209,-181.42772 -2e-4,-159.5085 -63.3648,-312.48387 -176.1544,-425.273403 C 1225.3413,-72.843544 1072.3659,-136.20813 912.85739,-136.20834 Z"
+       id="path4141" />
+    <ellipse
+       ry="114.85177"
+       rx="253.4232"
+       cy="519.50507"
+       cx="634.28571"
+       id="path4145"
+       style="fill:#411b00;fill-opacity:1;stroke:#2b1503;stroke-width:20.36012077;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <ellipse
+       ry="118.57143"
+       rx="117.14286"
+       cy="385.2193"
+       cx="531.42859"
+       id="path4143"
+       style="fill:#54df09;fill-opacity:1;stroke:#357006;stroke-width:20;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <ellipse
+       ry="101.42857"
+       rx="112.85714"
+       cy="282.36221"
+       cx="607.14288"
+       id="path4147"
+       style="fill:#df1d1d;fill-opacity:1;stroke:#541c08;stroke-width:20;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <path
+       id="path3336"
+       d="m 1127.1431,-136.20834 a 601.42859,601.42859 0 0 0 -601.42966,601.42773 601.42859,601.42859 0 0 0 28.7461,181.42772 l 1145.90236,0 a 601.42859,601.42859 0 0 0 28.209,-181.42772 601.42859,601.42859 0 0 0 -601.4278,-601.42773 z"
+       style="fill:url(#linearGradient4171);fill-opacity:1;stroke:#5e4407;stroke-width:50;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+  </g>
+</svg>
