@@ -154,7 +154,7 @@ main {
 	width: 80%;
 }
 p, .paragraph { text-align: justify; }
-p::first-letter, .paragraph::first-letter { font-size: 150%; }
+//p::first-letter, .paragraph::first-letter { font-size: 150%; }
 h2, label { margin-bottom: 0.5em; font-size: 1.5em; }
 ul, ol { text-align: left; padding-left: 1.5em; }
 li { margin: 5px 0; }
@@ -235,6 +235,7 @@ input[type='radio']:checked::before, input[type='checkbox']:checked::before {
 
 
 
+
 .homeContent {
 	
 	background: #f64;
@@ -264,5 +265,204 @@ input[type='radio']:checked::before, input[type='checkbox']:checked::before {
 	padding-top: 50px;
 	text-shadow: none;
 }
+
+.home-text-left {
+	
+	padding-left: 10%;
+	text-align: center;
+	text-shadow: none;
+	width: 30%;
+	
+
+}
+
+.home-text-center {
+	
+	
+	text-align: center;
+	text-shadow: none;
+	width: 30%;
+
+}
+
+.home-text-right {
+	
+	
+	text-align: center;
+	text-shadow: none;
+	width: 30%;
+	
+
+}
+
+.tr-style {
+	
+
+	
+}
+
+.home-table {
+	
+	width: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.what-is {
+  width: 100%;
+  background-color: #f5f5f5;
+  border-top: 1px solid rgba(0,0,0,0.075);;
+  border-bottom: 1px solid rgba(0,0,0,0.075);
+}
+
+  .what-is .row {
+    padding-top: 50px;
+  }
+
+.what-container {
+  margin-left: 3%;
+  margin-top: 10px;
+}
+
+.what-column {
+
+  float: left;
+  margin-right: 3%;
+  width: 30%;
+}
+
+.what-item {
+  margin-left: 0 !important;
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
+  margin-right: 0 !important;
+  overflow: hidden;
+  margin-bottom: 1.313em;
+}
+
+.what-image {
+  position: relative;
+  overflow: hidden;
+  background-size: cover;
+}
+
+  .what-image i {
+    font-size: 6em;
+    color: #548;
+    margin-top: 17px;
+  }
+
+  .what-image h3 {
+
+    color: #548;
+    font-size: 28px;
+  }
+
+.what-content {
+  padding: 1.5em;
+  box-shadow: none;
+}
+
+.what-content p {
+
+  font-size: 18px;
+  text-align: left;
+}
+
+  .what-container div:nth-child(2) .what-content {
+    padding-bottom: 62px;
+  }
+
+  .what-container div:nth-child(3) .what-content {
+    padding-bottom: 76px;
+  }
+
+.what-is div:nth-child(2) {
+  text-align: center;
+  margin-bottom: 2%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ .tiles {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 25px 100px 0;
+}
+
+ .tiles:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+ .tiles .tile {
+    border: 1px solid #dee0df;
+    padding: 25px 15px;
+    border-radius: 4px;
+    width: 30%;
+    margin-right: 1%;
+    float: left;
+    text-align: center;
+}
+
+ .tiles .tile:last-child {
+    margin-right: 0;
+}
+
+ .tiles .tile h2 {
+    color: #f4645f;
+    font-size: 24px;
+    font-weight: 400;
+}
+
+ .tiles .tile p {
+    font-size: 16px;
+    color: #525252;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
