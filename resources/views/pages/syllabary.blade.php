@@ -9,6 +9,16 @@
   .headerCell {
     background: #BDC3C7;
   }
+
+  .headerCell svg {
+    width:100px;
+    height:100px;
+  }
+
+  .syllableCell svg {
+    width: 100px;
+    height: 100px;
+  }
 </style>
 @stop
 
@@ -18,17 +28,21 @@
   <tr>
     <th class='headerCell'></th>
     @foreach($vowels as $vowel)
-      <th class='headerCell'><b>{{{ $vowel }}} <br /> <?php echo '&#x' . dechex($starting_symbol); ?></b></th>
+      <th class='headerCell'><b>{{{ $vowel['ipa'] }}} <br /> <?php echo $vowel['symbol']; ?></b></th>
       <?php $starting_symbol++; ?>
     @endforeach
   </tr>
 
   @foreach($consonants as $consonant)
     <tr>
-      <td class='headerCell'><b>{{{ $consonant }}}</b> <br /> <?php echo '&#x' . dechex($starting_symbol); ?></td>
+      <td class='headerCell'><b>{{{ $consonant['ipa'] }}}</b> <br /> <?php echo $consonant['symbol']; ?></td>
       <?php $starting_symbol++; ?>
       @for($i = 0; $i < count($vowels); $i++)
-        <td>{{{ $consonant . $vowels[$i] }}} <br /> <?php echo '&#x' . dechex($starting_symbol); ?></td>
+        <td class='syllableCell'>{{{ $consonant['ipa'] . $vowels[$i]['ipa'] }}} <br />
+          <svg width="100%" height="100%">
+            <?php echo $consonant['symbol'] . "\n" . $vowels[$i]['symbol'];?>
+          </svg>
+        </td>
         <?php $starting_symbol++; ?>
       @endfor
     </tr>

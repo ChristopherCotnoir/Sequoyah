@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSyllabaryRowHeaderTable extends Migration {
+class CreateSymbolsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,13 +12,10 @@ class CreateSyllabaryRowHeaderTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('syllabary_row_header', function(Blueprint $table)
+		Schema::create('symbols', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('syllabary_id')->unsigned();
-			$table->string('ipa', 10);
-      $table->integer('symbol_id')->unsigned();
-			$table->integer('index')->unsigned();
+      $table->text('symbol_data');
 			$table->timestamps();
 		});
 	}
@@ -30,7 +27,6 @@ class CreateSyllabaryRowHeaderTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('syllabary_row_header');
+		Schema::drop('symbols');
 	}
-
 }

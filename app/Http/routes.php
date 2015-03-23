@@ -5,6 +5,7 @@ Route::get('sleep', function() { return Redirect::away('http://Ncnl.tumblr.com')
 Route::get('fuck', function() { return 'FUCK'; });
 
 Route::get('syllabary', 'SyllabaryController@ShowGrid');
+Route::get('syllabary/testsvg/{symbolId}', 'SyllabaryController@TestSvg');
 Route::post('syllabary/{syllabaryId}/column/add', 'SyllabaryController@AddColumn');
 Route::post('syllabary/{syllabaryId}/column/{columnIndex}/remove', 'SyllabaryController@RemoveColumn');
 Route::post('syllabary/{syllabaryId}/row/add', 'SyllabaryController@AddRow');
