@@ -6,6 +6,7 @@
 
 use Sequoyah\Models\SyllabaryColumnHeader;
 use Sequoyah\Models\SyllabaryRowHeader;
+use Sequoyah\Models\Symbol;
 use Illuminate\Support\Facades\Input;
 
 class SyllabaryController extends Controller
@@ -33,13 +34,17 @@ class SyllabaryController extends Controller
         // TODO - Grab the current syllabary ID from the project data.
         $colHeaders = SyllabaryColumnHeader::where('syllabary_id', '=', 1)->
                                              orderBy('index')->get();
-        foreach($colHeaders as $header)
-            array_push($vowels, $header->ipa);
+        foreach($colHeaders as $header) {
+            $symbol = Symbol::find($header->symbol_id);
+            array_push($vowels, array('ipa' => $header->ipa, 'symbol' => $symbol->symbol_data));
+        }
 
         $rowHeaders = SyllabaryRowHeader::where('syllabary_id', '=', 1)->
                                           orderBy('index')->get();
-        foreach($rowHeaders as $header)
-            array_push($consonants, $header->ipa);
+        foreach($rowHeaders as $header) {
+            $symbol = Symbol::find($header->symbol_id);
+            array_push($consonants, array('ipa' => $header->ipa, 'symbol' => $symbol->symbol_data));
+        }
 
         return view('pages.syllabary', array(
             'vowels' => $vowels,
@@ -104,5 +109,15 @@ class SyllabaryController extends Controller
         $rowHeader->delete();
         return response()->json(['success' => True]);
 
+    }
+
+    public function TestSvg($symbolId)
+    {
+      $symbol = Symbol::find($symbolId);
+
+      if ($symbol == false)
+        return '<b>Symbol not found!</b>';
+
+      return '<body>' . $symbol->symbol_data . '</body>';
     }
 }

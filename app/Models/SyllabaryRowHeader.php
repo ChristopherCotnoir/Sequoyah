@@ -6,5 +6,5 @@ class SyllabaryRowHeader extends Model {
 
 	protected $table = 'syllabary_row_header';
 
-	protected $fillable = ['syllabary_id', 'ipa', 'index'];
+	protected $fillable = ['syllabary_id', 'ipa', 'symbol_id', 'index'];
 }
