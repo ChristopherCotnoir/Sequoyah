@@ -154,6 +154,7 @@ main {
 	width: 80%;
 }
 p, .paragraph { text-align: justify; }
+p::first-letter, .paragraph::first-letter { font-size: 150%; }
 h2, label { margin-bottom: 0.5em; font-size: 1.5em; }
 ul, ol { text-align: left; padding-left: 1.5em; }
 li { margin: 5px 0; }

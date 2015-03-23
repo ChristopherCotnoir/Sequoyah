@@ -2,7 +2,7 @@
 	<div id='login'>
 		<div>
 			@if (Auth::check())
-				<a href='{{ action('Auth\AuthController@DoLogout') }}'>Login <i class='fa fa-sign-in'></i></a>
+				<a href='auth/logout'>Logout <i class='fa fa-sign-out'></i></a>
 			@else
 				<a href='{{ action('Auth\AuthController@ShowLogin') }}'>Login <i class='fa fa-sign-in'></i></a>
 			@endif

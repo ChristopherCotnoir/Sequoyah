@@ -74,7 +74,7 @@ class AuthController extends Controller
 			'username' => 'required', 'password' => 'required',
 		]);
 
-		$credentials = $request->only('username', 'password', 'name');
+		$credentials = $request->only('username', 'password');
 
 		if ($this->auth->attempt($credentials, $request->has('remember')))
 			return redirect('/');
@@ -85,17 +85,6 @@ class AuthController extends Controller
 			->withErrors([
 				'username' => 'These credentials do not match our records.',
 			]);
-	}
-
-	/**
-	 * Log the user out of the application.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function Logout()
-	{
-		$this->auth->logout();
-		return redirect('/');
 	}
 
 	/**
