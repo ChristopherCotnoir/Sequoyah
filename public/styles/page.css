@@ -230,3 +230,37 @@ input[type='radio']:checked::before, input[type='checkbox']:checked::before {
 	content: '\f00c';
 	font-family: 'FontAwesome';
 }
+
+
+
+.homeContent {
+	
+	background: #f64;
+	height: 400px;
+	
+	background-image:url('../images/home-bg.jpg');
+	background-size: cover;
+}
+
+#strong-title {
+
+	text-align: center;
+	font-size: 50px;
+	color: #F6F6F6;
+	text-indent: 50px;
+	padding-top: 100px;
+	text-shadow: none;
+}
+
+#title-description {
+	
+	text-align: center;
+	font-size: 25px;
+	line-height: 120%;
+	color: #F6F6F6;
+	text-indent: 50px;
+	padding-top: 50px;
+	text-shadow: none;
+}
+
+
