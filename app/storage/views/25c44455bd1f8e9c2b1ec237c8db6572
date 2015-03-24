@@ -1,8 +1,0 @@
-<?php $__env->startSection('body'); ?>
-<body lang='en'>
-	<?php echo $__env->make('sections.header', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
-	<?php echo $__env->yieldContent('content'); ?>
-	<?php echo $__env->make('sections.footer', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
-</body>
-<?php $__env->stopSection(); ?>
-<?php echo $__env->make('page', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
