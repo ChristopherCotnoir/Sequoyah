@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
 			
 			$table->text('name'); //user's formal name (i.e. John Smith)
 			$table->string('password', 200); //hashed user password (uses laravel hash make)
+			$table->rememberToken();
 			
 			$table->timestamps();
 		});
