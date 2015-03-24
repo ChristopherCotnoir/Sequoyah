@@ -70,6 +70,7 @@ class AuthController extends Controller
 	 */
 	public function DoLogin(\Illuminate\Http\Request $request)
 	{
+		
 		$this->validate($request, [
 			'username' => 'required', 'password' => 'required',
 		]);
@@ -78,7 +79,7 @@ class AuthController extends Controller
 
 		if ($this->auth->attempt($credentials, $request->has('remember')))
 			return redirect('/');
-
+		
 		return redirect()
 			->action('Auth\AuthController@ShowLogin')
 			->withInput($request->only('username', 'remember', 'name'))
