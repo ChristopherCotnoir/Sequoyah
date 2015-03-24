@@ -375,15 +375,51 @@ input[type='radio']:checked::before, input[type='checkbox']:checked::before {
 
 
 
+#syllabaryGrid {
+  width: 100%;
+  font-size: 200%;
+}
+
+.headerCell {
+  background: #BDC3C7;
+}
+
+.headerCell svg {
+  width:100px;
+  height:100px;
+}
+
+.syllableCell svg {
+  width: 100px;
+  height: 100px;
+}
 
 
 
+.symbol {
+	
+	align: center;
+	float: center;
+	
+
+}
+
+.symbol:hover #edit-button {
+    visibility: visible;
+}
 
 
+.edit-button {
+	
+	font-size:35%;
+	width: 60%;
+	height: 22px;
+}
 
-
-
-
+#edit-button:active {
+	
+  background-color: rgb(200, 200, 200);
+}
 
 
 
