@@ -70,6 +70,7 @@ class AuthController extends Controller
 	 */
 	public function DoLogin(\Illuminate\Http\Request $request)
 	{
+		
 		$this->validate($request, [
 			'username' => 'required', 'password' => 'required',
 		]);
