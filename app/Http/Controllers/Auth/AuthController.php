@@ -36,7 +36,7 @@ class AuthController extends Controller
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function DoRegister(Request $request)
+	public function DoRegister(\Illuminate\Http\Request $request)
 	{
 		$validator = $this->registrar->validator($request->all());
 
@@ -49,7 +49,7 @@ class AuthController extends Controller
 
 		$this->auth->login($this->registrar->create($request->all()));
 
-		return redirect($this->redirectPath());
+		return redirect('/');
 	}
 
 	/**
@@ -68,8 +68,9 @@ class AuthController extends Controller
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function DoLogin(Request $request)
+	public function DoLogin(\Illuminate\Http\Request $request)
 	{
+		
 		$this->validate($request, [
 			'username' => 'required', 'password' => 'required',
 		]);
@@ -77,24 +78,14 @@ class AuthController extends Controller
 		$credentials = $request->only('username', 'password');
 
 		if ($this->auth->attempt($credentials, $request->has('remember')))
-			return redirect()->intended($this->redirectPath());
-
-		return redirect($this->loginPath())
-			->withInput($request->only('username', 'remember'))
+			return redirect('/');
+		
+		return redirect()
+			->action('Auth\AuthController@ShowLogin')
+			->withInput($request->only('username', 'remember', 'name'))
 			->withErrors([
 				'username' => 'These credentials do not match our records.',
 			]);
-	}
-
-	/**
-	 * Log the user out of the application.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function Logout()
-	{
-		$this->auth->logout();
-		return redirect('/');
 	}
 
 	/**

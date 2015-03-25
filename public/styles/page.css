@@ -16,7 +16,7 @@ html {
 }
 html, input, textarea, select {
 	color: #444;
-	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+	text-shadow: none;
 	
 	font-family: 'Roboto', 'calibri', sans-serif, sans-serif;
 	font-weight: 300;
@@ -56,7 +56,7 @@ header {
 	padding-top: 15px;
 	background: #c43;
 	color: #fff;
-	text-shadow: 0 1px 0 rgba(120, 60, 40, 0.8);
+	text-shadow: none;
 }
 #logo {
 	font-size: 120%;
@@ -95,7 +95,7 @@ nav {
 	user-select: none;
 	border-bottom: 1px solid rgba(0, 20, 50, 0.3);
 	box-sizing: content-box;
-	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+	box-shadow: none;
 	margin: 0 -10px;
 	padding: 0 5px;
 	padding-top: 3px;
@@ -106,7 +106,7 @@ nav .nav {
 	text-align: center;
 	display: inline-block;
 	color: #fff;
-	text-shadow: 0 1px 0 rgba(40, 60, 120, 0.8);
+	text-shadow: none;
 }
 nav .nav.active {
 	color: #fca;
@@ -154,6 +154,7 @@ main {
 	width: 80%;
 }
 p, .paragraph { text-align: justify; }
+//p::first-letter, .paragraph::first-letter { font-size: 150%; }
 h2, label { margin-bottom: 0.5em; font-size: 1.5em; }
 ul, ol { text-align: left; padding-left: 1.5em; }
 li { margin: 5px 0; }
@@ -183,9 +184,12 @@ input, textarea {
 	border: none;
 	width: 100%;
 	display: block;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-	border: 1px solid transparent;
+	box-shadow: none;
+	border-style: solid;
+	border-color:black;
+	border: 1px solid rgba(90, 90, 90, .2);
 	margin-bottom: 1em;
+	box-sizing: border-box;
 }
 input:focus, textarea:focus {
 	outline: none;
@@ -198,11 +202,230 @@ input[type='submit'] {
 	background: #555;
 	color: #fff;
 	text-shadow: none;
-	box-sizing: content-box;
+	transition: 0.2s background;
 }
-.form-error {
+input[type='submit']:hover {
+	background: #666;
+}
+input[type='submit']:active {
+	background: #444;
+}
+
+output.error {
 	background: #f64;
 	padding: 4px;
 	color: #fff;
 	text-shadow: none;
+	display: block;
+	margin: 2px 0 4px 0;
 }
+
+input[type='radio'], input[type='checkbox'] {
+	-webkit-appearance: none;
+	width: 1.5em;
+	height: 1.5em;
+	float: right;
+}
+input[type='radio']:checked::before, input[type='checkbox']:checked::before {
+	display: block;
+	text-align: center;
+	vertical-align: middle;
+	margin-left: -0.25em;
+	content: '\f00c';
+	font-family: 'FontAwesome';
+}
+
+
+
+
+.homeContent {
+	
+	background: #f64;
+	height: 400px;
+	
+	background-image:url('../images/home-bg.jpg');
+	background-size: cover;
+}
+
+#strong-title {
+
+	text-align: center;
+	font-size: 50px;
+	color: #F6F6F6;
+	text-indent: 50px;
+	padding-top: 100px;
+	text-shadow: none;
+}
+
+#title-description {
+	
+	text-align: center;
+	font-size: 25px;
+	line-height: 120%;
+	color: #F6F6F6;
+	text-indent: 50px;
+	padding-top: 50px;
+	text-shadow: none;
+}
+
+.home-text-left {
+	
+	padding-left: 10%;
+	text-align: center;
+	text-shadow: none;
+	width: 30%;
+	
+
+}
+
+.home-text-center {
+	
+	
+	text-align: center;
+	text-shadow: none;
+	width: 30%;
+
+}
+
+.home-text-right {
+	
+	
+	text-align: center;
+	text-shadow: none;
+	width: 30%;
+	
+
+}
+
+
+.home-table {
+	
+	width: 100%;
+}
+
+
+#white-text {
+	
+	color: white;
+	text-shadow: none;
+	
+}
+
+
+#home-login {
+	
+	padding-top: 5px;
+	padding-bottom: 70px;
+	margin-left: 30%;
+	width:40%;
+	height: 50%;
+}
+
+
+
+#login-home {
+
+	opacity: 0.9;
+
+}
+
+#login-home a { display: block; }
+#login-home i { width: 1em; margin-left: 5px; }
+
+
+
+ .tiles {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 25px 100px 0;
+}
+
+ .tiles:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+ .tiles .tile {
+    border: 1px solid #dee0df;
+    padding: 25px 15px;
+    border-radius: 4px;
+    width: 30%;
+    margin-right: 1%;
+    float: left;
+    text-align: center;
+}
+
+ .tiles .tile:last-child {
+    margin-right: 0;
+}
+
+ .tiles .tile h2 {
+    color: #f4645f;
+    font-size: 24px;
+    font-weight: 400;
+}
+
+ .tiles .tile p {
+    font-size: 16px;
+    color: #525252;
+}
+
+
+
+
+
+#syllabaryGrid {
+  width: 100%;
+  font-size: 200%;
+}
+
+.headerCell {
+  background: #BDC3C7;
+}
+
+.headerCell svg {
+  width:100px;
+  height:100px;
+}
+
+.syllableCell svg {
+  width: 100px;
+  height: 100px;
+}
+
+
+
+.symbol {
+	
+	align: center;
+	float: center;
+	
+
+}
+
+.symbol:hover #edit-button {
+    visibility: visible;
+}
+
+
+.edit-button {
+	
+	font-size:35%;
+	width: 60%;
+	height: 22px;
+}
+
+#edit-button:active {
+	
+  background-color: rgb(200, 200, 200);
+}
+
+
+
+
+
+
+
+
+

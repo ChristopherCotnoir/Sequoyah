@@ -14,7 +14,7 @@
 	@show
 
 	@section('head-custom')
-	@show
+	@show	
 </head>
 @yield('body')
 </html>

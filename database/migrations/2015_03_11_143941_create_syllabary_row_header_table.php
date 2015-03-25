@@ -17,6 +17,7 @@ class CreateSyllabaryRowHeaderTable extends Migration {
 			$table->increments('id');
 			$table->integer('syllabary_id')->unsigned();
 			$table->string('ipa', 10);
+      $table->integer('symbol_id')->unsigned();
 			$table->integer('index')->unsigned();
 			$table->timestamps();
 		});

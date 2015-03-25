@@ -6,6 +6,7 @@
 
 use Sequoyah\Models\SyllabaryColumnHeader;
 use Sequoyah\Models\SyllabaryRowHeader;
+use Sequoyah\Models\Symbol;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
 
@@ -34,13 +35,15 @@ class SyllabaryController extends Controller
         // TODO - Grab the current syllabary ID from the project data.
         $colHeaders = SyllabaryColumnHeader::where('syllabary_id', '=', 1)->
                                              orderBy('index')->get();
-        foreach($colHeaders as $header)
-            array_push($vowels, $header->ipa);
+        foreach($colHeaders as $header) {
+            array_push($vowels, array('ipa' => $header->ipa, 'symbol_id' => $header->symbol_id));
+        }
 
         $rowHeaders = SyllabaryRowHeader::where('syllabary_id', '=', 1)->
                                           orderBy('index')->get();
-        foreach($rowHeaders as $header)
-            array_push($consonants, $header->ipa);
+        foreach($rowHeaders as $header) {
+            array_push($consonants, array('ipa' => $header->ipa, 'symbol_id' => $header->symbol_id));
+        }
 
         return view('pages.syllabary', array(
             'vowels' => $vowels,
@@ -106,56 +109,81 @@ class SyllabaryController extends Controller
         return response()->json(['success' => True]);
 
     }
+    public function GetSymbolData($symbolId)
+    {
+      $symbol = Symbol::find($symbolId);
+
+      if ($symbol == false)
+        return response()->json(array('success' => false));
+
+      return response($symbol->symbol_data, 200)->header('Content-Type', 'image/svg+xml');
+/*
+      return response()->json(array(
+        'success' => true,
+        'data' => $symbol->symbol_data
+      ))
+*/
+    }
+
+    public function TestSvg($symbolId)
+    {
+      $symbol = Symbol::find($symbolId);
+
+      if ($symbol == false)
+        return '<b>Symbol not found!</b>';
+
+      return '<body>' . $symbol->symbol_data . '</body>';
+    }
 
     public function UploadAudioSample($syllabaryId)
     {
-	$targetDir = "/tmp/sequoyah/audioSample/";
-	$targetFile = $targetDir . basename($_FILES['audioSample']['name']);
-	$uploadOk = true;
-	$audioFileType = pathinfo($targetFile, PATHINFO_EXTENSION);
+        $targetDir = "/tmp/sequoyah/audioSample/";
+        $targetFile = $targetDir . basename($_FILES['audioSample']['name']);
+        $uploadOk = true;
+        $audioFileType = pathinfo($targetFile, PATHINFO_EXTENSION);
 
-	// Check if file name is already in use.
+        // Check if file name is already in use.
 
-	if (file_exists($targetFile))
-	{
-	     echo "File already exists.";
-	     $uploadOK = false;
-	}
+        if (file_exists($targetFile))
+        {
+             echo "File already exists.";
+             $uploadOK = false;
+        }
 
-	// Audio format check.
+        // Audio format check.
 
-	if (($audioFileType != "audio/wav") || ($audioFileType != "audio/mpeg") || 
-	      ($audioFileType != "audio/ogg"))
-	{
-	     echo "Unsupported audio format. Use wav, mpeg, or ogg.";
-	     $uploadOk = false;
-	}
+        if (($audioFileType != "audio/wav") || ($audioFileType != "audio/mpeg") || 
+              ($audioFileType != "audio/ogg"))
+        {
+             echo "Unsupported audio format. Use wav, mpeg, or ogg.";
+             $uploadOk = false;
+        }
 
-	// Audio file size check.
+        // Audio file size check.
 
-	if($_Files['audioSample']['size'] > 5242880) // Max size is 5MB.
-	{
-	     echo "File size too large.";
-	     $uploadOK = false;
-	}
-	elseif($_Files['audioSample']['size'] == 0)
-	{
-	     echo "File size too small.";
-	     $uploadOK = false;
-	}
+        if($_Files['audioSample']['size'] > 5242880) // Max size is 5MB.
+        {
+             echo "File size too large.";
+             $uploadOK = false;
+        }
+        elseif($_Files['audioSample']['size'] == 0)
+        {
+             echo "File size too small.";
+             $uploadOK = false;
+        }
 
-	if ($uploadOK == false)
-	{
-	     echo "File was not uploaded.";
-	}
-	elseif(move_uploaded_file($_FILE['audioSample']['tmpName'], $targetFile))
-	{
-	     echo "The file" . basename($_FILE['audioSample']['name']) . " has been uploaded.";
-	}
-	else
-	{
-	     echo "An unexpected error has occured while uploading file.";
-	}
+        if ($uploadOK == false)
+        {
+             echo "File was not uploaded.";
+        }
+        elseif(move_uploaded_file($_FILE['audioSample']['tmpName'], $targetFile))
+        {
+             echo "The file" . basename($_FILE['audioSample']['name']) . " has been uploaded.";
+        }
+        else
+        {
+             echo "An unexpected error has occured while uploading file.";
+        }
     }
 }
 
