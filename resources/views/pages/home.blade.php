@@ -29,6 +29,7 @@
 			</div>
 	
 			<input type='submit' value='Login'>
+			<a id="white-text" href='{{ action('Auth\AuthController@ShowRegister') }}'>Create An Account<i class='hint 			float-right'></i></a>
 		</form>
 		
 	</div>

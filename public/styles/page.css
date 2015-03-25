@@ -241,7 +241,7 @@ input[type='radio']:checked::before, input[type='checkbox']:checked::before {
 .homeContent {
 	
 	background: #f64;
-	height: 400px;
+	height: 450px;
 	
 	background-image:url('../images/home-bg.jpg');
 	background-size: cover;
@@ -314,11 +314,11 @@ input[type='radio']:checked::before, input[type='checkbox']:checked::before {
 
 #home-login {
 	
-	padding-top: 5px;
-	padding-bottom: 70px;
+	padding-top: 3px;
+	padding-bottom: 60px;
 	margin-left: 30%;
 	width:40%;
-	height: 50%;
+	height: 40%;
 }
 
 
