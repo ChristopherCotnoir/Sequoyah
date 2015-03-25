@@ -36,15 +36,13 @@ class SyllabaryController extends Controller
         $colHeaders = SyllabaryColumnHeader::where('syllabary_id', '=', 1)->
                                              orderBy('index')->get();
         foreach($colHeaders as $header) {
-            $symbol = Symbol::find($header->symbol_id);
-            array_push($vowels, array('ipa' => $header->ipa, 'symbol' => $symbol->symbol_data));
+            array_push($vowels, array('ipa' => $header->ipa, 'symbol_id' => $header->symbol_id));
         }
 
         $rowHeaders = SyllabaryRowHeader::where('syllabary_id', '=', 1)->
                                           orderBy('index')->get();
         foreach($rowHeaders as $header) {
-            $symbol = Symbol::find($header->symbol_id);
-            array_push($consonants, array('ipa' => $header->ipa, 'symbol' => $symbol->symbol_data));
+            array_push($consonants, array('ipa' => $header->ipa, 'symbol_id' => $header->symbol_id));
         }
 
         return view('pages.syllabary', array(
@@ -110,6 +108,21 @@ class SyllabaryController extends Controller
         $rowHeader->delete();
         return response()->json(['success' => True]);
 
+    }
+    public function GetSymbolData($symbolId)
+    {
+      $symbol = Symbol::find($symbolId);
+
+      if ($symbol == false)
+        return response()->json(array('success' => false));
+
+      return response($symbol->symbol_data, 200)->header('Content-Type', 'image/svg+xml');
+/*
+      return response()->json(array(
+        'success' => true,
+        'data' => $symbol->symbol_data
+      ))
+*/
     }
 
     public function TestSvg($symbolId)
