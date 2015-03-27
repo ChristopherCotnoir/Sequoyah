@@ -54,7 +54,7 @@ i}
 
 function editSymbol(symbolId)
 {
-  window.location='/svg-edit/svg-editor.html?dimensions=512,512&noStorageOnLoad=1&url=/syllabary/symbol/' + symbolId + '/data';
+  window.location='/svg-edit/svg-editor.html?symbol_id=' + symbolId;
 }
 </script>
 </main>
