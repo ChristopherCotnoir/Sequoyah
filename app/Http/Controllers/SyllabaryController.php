@@ -125,6 +125,19 @@ class SyllabaryController extends Controller
 */
     }
 
+    public function UpdateSymbol($symbolId)
+    {
+        $symbol = Symbol::find($symbolId);
+
+        if($symbol == false || !Input::has('svg'))
+          return response()->json(array('success' => false));
+        
+        $svgData = base64_decode(Input::get('svg'));
+        $symbol->symbol_data = $svgData;
+        $symbol->save();
+        return response()->json(array('success' => true));
+    }
+
     public function TestSvg($symbolId)
     {
       $symbol = Symbol::find($symbolId);

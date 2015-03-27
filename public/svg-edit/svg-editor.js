@@ -128,7 +128,7 @@ TODOS
 				jGraduatePath: 'jgraduate/images/',
 				// DOCUMENT PROPERTIES
 				// Change the following to a preference (already in the Document Properties dialog)?
-				dimensions: [640, 480],
+				dimensions: [512, 512],
 				// EDITOR OPTIONS
 				// Change the following to preferences (already in the Editor Options dialog)?
 				gridSnapping: false,
@@ -145,8 +145,8 @@ TODOS
 				// EXTENSION-RELATED (GRID)
 				showGrid: false, // Set by ext-grid.js
 				// EXTENSION-RELATED (STORAGE)
-				noStorageOnLoad: false, // Some interaction with ext-storage.js; prevent even the loading of previously saved local storage
-				forceStorage: false, // Some interaction with ext-storage.js; strongly discouraged from modification as it bypasses user privacy by preventing them from choosing whether to keep local storage or not
+				noStorageOnLoad: true, // Some interaction with ext-storage.js; prevent even the loading of previously saved local storage
+				forceStorage: true, // Some interaction with ext-storage.js; strongly discouraged from modification as it bypasses user privacy by preventing them from choosing whether to keep local storage or not
 				emptyStorageOnDecline: false // Used by ext-storage.js; empty any prior storage if the user declines to store
 			},
 			/**
@@ -513,6 +513,14 @@ TODOS
 							}
 							return;
 						}
+
+                                                // SEQUOYAH MOD: If the symbol ID is passed through the URL, directly open the symbol
+                                                // data by default.
+                                                if(urldata.symbol_id) {
+                                                        editor.loadFromURL('/syllabary/symbol/' + urldata.symbol_id + '/data');
+                                                        return;
+                                                }
+
 						if (urldata.url) {
 							editor.loadFromURL(urldata.url);
 							return;
@@ -1043,8 +1051,18 @@ TODOS
 				}
 
 				// Opens the SVG in new window
-				var win = wind.open('data:image/svg+xml;base64,' + Utils.encode64(svg));
+				//var win = wind.open('data:image/svg+xml;base64,' + Utils.encode64(svg));
 
+                                // SEQUOYAH MOD: Use a POST request to send the new updated SVG image to the Syllabary controller.
+                                if (urldata.symbol_id == undefined || urldata.symbol_id <= 0) {
+                                        alert('Error: Invalid Symbol Id. Cannot Save Changes.');
+                                        return;
+                                }
+                                $.post('/syllabary/symbol/' + urldata.symbol_id + '/update', {"svg" : Utils.encode64(svg)}, function(data) {
+                                        window.location = '/syllabary';
+                                });
+                                
+                                /*
 				// Alert will only appear the first time saved OR the first time the bug is encountered
 				var done = $.pref('save_notice_done');
 				if (done !== 'all') {
@@ -1067,6 +1085,7 @@ TODOS
 						win.alert(note);
 					}
 				}
+                                */
 			};
 
 			var exportHandler = function(win, data) {
