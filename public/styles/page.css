@@ -235,16 +235,31 @@ input[type='radio']:checked::before, input[type='checkbox']:checked::before {
 	font-family: 'FontAwesome';
 }
 
-
-
-
-.homeContent {
+#home-jumbo {
 	
 	background: #f64;
 	height: 450px;
 	
-	background-image:url('../images/home-bg.jpg');
+	background-image: url('../images/home-bg.jpg');
 	background-size: cover;
+	
+	color: #fff;
+	text-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+	padding: 4em 0;
+	overflow: hidden;
+}
+#home-jumbo form {
+	margin: 0;
+	margin-right: 4%;
+	max-width: 42%;
+	float: right;
+}
+#home-jumbo .about {
+	max-width: 42%;
+	float: left;
+	margin-left: 4%;
+	font-size: 120%;
+	
 }
 
 #strong-title {
@@ -278,40 +293,6 @@ input[type='radio']:checked::before, input[type='checkbox']:checked::before {
 
 }
 
-.home-text-center {
-	
-	
-	text-align: center;
-	text-shadow: none;
-	width: 30%;
-
-}
-
-.home-text-right {
-	
-	
-	text-align: center;
-	text-shadow: none;
-	width: 30%;
-	
-
-}
-
-
-.home-table {
-	
-	width: 100%;
-}
-
-
-#white-text {
-	
-	color: white;
-	text-shadow: none;
-	
-}
-
-
 #home-login {
 	
 	padding-top: 3px;
@@ -321,17 +302,10 @@ input[type='radio']:checked::before, input[type='checkbox']:checked::before {
 	height: 40%;
 }
 
-
-
-#login-home {
-
-	opacity: 0.9;
-
-}
-
 #login-home a { display: block; }
 #login-home i { width: 1em; margin-left: 5px; }
 
+<<<<<<< HEAD
 
 
  .tiles {
@@ -344,16 +318,19 @@ input[type='radio']:checked::before, input[type='checkbox']:checked::before {
     content: "";
     display: table;
     clear: both;
+
+#home-tiles {
+    margin: 4px auto;
+    text-align: center;
 }
 
- .tiles .tile {
+#home-tiles .tile {
     border: 1px solid #dee0df;
-    padding: 25px 15px;
+    padding: 1%;
     border-radius: 4px;
     width: 30%;
-    margin-right: 1%;
-    float: left;
-    text-align: center;
+	min-width: 320px;
+	display: inline-table;
 }
 
  .tiles .tile:last-child {
@@ -370,10 +347,6 @@ input[type='radio']:checked::before, input[type='checkbox']:checked::before {
     font-size: 16px;
     color: #525252;
 }
-
-
-
-
 
 
 #syllabaryGrid {
@@ -395,14 +368,9 @@ input[type='radio']:checked::before, input[type='checkbox']:checked::before {
   height: 100px;
 }
 
-
-
 .symbol {
-	
 	align: center;
 	float: center;
-	
-
 }
 
 .symbol:hover #edit-button {
@@ -411,14 +379,12 @@ input[type='radio']:checked::before, input[type='checkbox']:checked::before {
 
 
 .edit-button {
-	
 	font-size:35%;
 	width: 60%;
 	height: 22px;
 }
 
 #edit-button:active {
-	
   background-color: rgb(200, 200, 200);
 }
 
