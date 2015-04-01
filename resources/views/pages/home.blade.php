@@ -53,14 +53,14 @@
 					</p>
 		
 				    <ul>
-				    <li>
-						Allow the creation of a <a class='link' href='http://en.wikipedia.org/wiki/Syllabary'  						target="_blank">syllabary</a> for the language
-					</li>
-				    <li>
-						Allow assigning custom characters to syllables of the language
-					</li>
-				    <li>Provide the ability to download a <a class='link' href='http://en.wikipedia.org/wiki/TrueType'  						target="_blank">TrueType font</a> of the generated written language to allow typing in the language
-					</li> 
+				    	<li>
+							Allow the creation of a <a class='link' href='http://en.wikipedia.org/wiki/Syllabary'  							target="_blank">syllabary</a> for the language
+						</li>
+						<li>
+							Allow assigning custom characters to syllables of the language
+						</li>
+						<li>Provide the ability to download a <a class='link' href='http://en.wikipedia.org/wiki/TrueType'  							target="_blank">TrueType font</a> of the generated written language to allow typing in the language
+						</li> 
 				    </ul>
 
 				    All of these requirements can be fulfilled by creating a web application using PHP and JavaScript.
@@ -74,6 +74,8 @@
 				</p>
 			</div>
 </div>
+
+
 
 
 
