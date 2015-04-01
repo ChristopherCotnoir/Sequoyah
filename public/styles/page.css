@@ -238,7 +238,6 @@ input[type='radio']:checked::before, input[type='checkbox']:checked::before {
 #home-jumbo {
 	
 	background: #f64;
-	height: 450px;
 	
 	background-image: url('../images/home-bg.jpg');
 	background-size: cover;
@@ -295,29 +294,15 @@ input[type='radio']:checked::before, input[type='checkbox']:checked::before {
 
 #home-login {
 	
-	padding-top: 3px;
-	padding-bottom: 60px;
+	padding-top: 5px;
+	padding-bottom: 70px;
 	margin-left: 30%;
 	width:40%;
-	height: 40%;
+	height: 50%;
 }
 
 #login-home a { display: block; }
 #login-home i { width: 1em; margin-left: 5px; }
-
-<<<<<<< HEAD
-
-
- .tiles {
-	 position: relative;
-    margin: 0 auto;
-    padding: 0 25px 100px 0;
-}
-
- .tiles:after {
-    content: "";
-    display: table;
-    clear: both;
 
 #home-tiles {
     margin: 4px auto;
@@ -331,6 +316,7 @@ input[type='radio']:checked::before, input[type='checkbox']:checked::before {
     width: 30%;
 	min-width: 320px;
 	display: inline-table;
+	padding-bottom: 10px;
 }
 
  .tiles .tile:last-child {
@@ -348,6 +334,11 @@ input[type='radio']:checked::before, input[type='checkbox']:checked::before {
     color: #525252;
 }
 
+
+.tile h2 {
+	
+	color: #f4645f;
+}
 
 #syllabaryGrid {
   width: 100%;
@@ -387,7 +378,6 @@ input[type='radio']:checked::before, input[type='checkbox']:checked::before {
 #edit-button:active {
   background-color: rgb(200, 200, 200);
 }
-
 
 
 
