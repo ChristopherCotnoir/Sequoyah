@@ -122,8 +122,17 @@
 
     function select(cell)
     {
-        unselect();
-        document.getElementById(cell).className = 'headerCell-selected';
+        if(document.getElementById(cell).className=='headerCell-selected')
+        {
+            document.getElementById(cell).className = 'headerCell';
+            hide("row-controls");
+            hide("col-controls");
+        }
+        else
+        {
+            unselect();
+            document.getElementById(cell).className = 'headerCell-selected';
+        }
     }
 
     function unselect()
