@@ -15,14 +15,14 @@
     height: 100px;
     }
 
-    #syllabaryGrid {
+    .syllabaryGrid {
     width: 100%;
     font-size: 200%;
     }
 
-    #col-controls,
-    #row-controls,
-    #gen-controls {
+    .col-controls,
+    .row-controls,
+    .gen-controls {
     display: none;
     }
 
@@ -46,7 +46,8 @@
 <!--===========================================================================================================
                                             Column Control Panel 
 ============================================================================================================-->
-<div id="col-controls">
+@foreach($vowels as $colIndex => $vowel)
+<div class="col-controls" id="col-control-{{{ $colIndex }}}">
 <!--  <form method='post' action='syllabary/{{--{{{ $syllabaryId }}}--}}/column/{{{ Request::input('columnIndex') }}}/add'> -->
     <form method='post'>
     <button type="button" class="btn btn-default">Add Column Left</button>
@@ -60,11 +61,13 @@
     <button type="button" class="btn btn-default">Add Column Right</button>
     </form>
 </div>
+@endforeach
 
 <!--===========================================================================================================
                                              Row Control Panel 
 ============================================================================================================-->
-<div id="row-controls">
+@foreach($consonants as $rowIndex => $consonant)
+<div class="row-controls" id="row-control-{{{ $rowIndex }}}">
 <!-- <form method='post' action='syllabary/{{--{{{ $syllabaryId }}}--}}/row/{{{ Request::input('rowIndex') }}}/add'> -->
     <form method='post'>
     <button type="button" class="btn btn-default">Add Row Left</button>
@@ -78,23 +81,35 @@
     <button type="button" class="btn btn-default">Add Row Right</button>
     </form>
 </div>
+@endforeach
+
 <!--===========================================================================================================
                                             General Control Panel
 ============================================================================================================-->
-<div id="gen-controls">
+@foreach($vowels as $colIndex => $vowel)
+<div class="gen-controls" id="gen-control-col-{{{ $colIndex }}}">
     <form method='post'>
     <button type="button" class="btn btn-default">Edit Symbol</button>
     </form>
 </div>
+@endforeach
+
+@foreach($consonants as $rowIndex => $consonant)
+<div class="gen-controls" id="gen-control-row-{{{ $rowIndex }}}">
+    <form method='post'>
+    <button type="button" class="btn btn-default">Edit Symbol</button>
+    </form>
+</div>
+@endforeach
 </div>
 <!--==========================================================================================================
                                                Syllabary Grid
 ===========================================================================================================-->
-<table id='syllabaryGrid' border='1'>
+<table class='syllabaryGrid' border='1'>
     <tr>
-        <th class='headerCell' onclick='hide("row-controls");hide("col-controls");hide("gen-controls");unselect()'></th>
+        <th class='headerCell' onclick='unselectAll()'></th>
         @foreach($vowels as $colIndex => $vowel)
-        <th class='headerCell' id='col-{{{ $colIndex }}}' onclick='show("col-controls");hide("row-controls");show("gen-controls");select("col-{{{ $colIndex }}}")'>
+        <th class='headerCell' id='col-{{{ $colIndex }}}' onclick='selectColumn("{{{ $colIndex }}}")'>
             <b>{{{ $vowel['ipa'] }}}</b>
             <br>
             <img src="/syllabary/symbol/{{{ $vowel['symbol_id'] }}}/data"></img>
@@ -104,13 +119,13 @@
 
     @foreach($consonants as $rowIndex => $consonant)
     <tr>
-        <th class='headerCell' id='row-{{{ $rowIndex }}}' onclick='show("row-controls");hide("col-controls");show("gen-controls");select("row-{{{ $rowIndex }}}")'>
+        <th class='headerCell' id='row-{{{ $rowIndex }}}' onclick='selectRow("{{{ $rowIndex }}}")'>
             <b>{{{ $consonant['ipa'] }}}</b>
             <br>
             <img src="/syllabary/symbol/{{{ $consonant['symbol_id'] }}}/data"></img>
         </th>
         @foreach($vowels as $colIndex => $vowel)
-        <td onclick='hide("row-controls");hide("col-controls");hide("gen-controls");unselect()'>
+        <td onclick='unselectAll()'>
         {{{ $consonant['ipa'] . $vowel['ipa'] }}}
         </td>
         @endforeach
@@ -119,14 +134,46 @@
 </table>
 
 <script type='text/javascript'>
+    function selectColumn(index)
+    {
+        hide("col-controls");
+        hide("row-controls");
+        hide("gen-controls");
+        show("col-control-" + index);
+        show("gen-control-col-" + index);
+        select("col-" + index)
+    }
+
+    function selectRow(index)
+    {
+        hide("col-controls");
+        hide("row-controls");
+        hide("gen-controls");
+        show("row-control-" + index);
+        show("gen-control-row-" + index);
+        select("row-" + index)
+    }
+
+    function unselectAll()
+    {
+        hide("col-controls");
+        hide("row-controls");
+        hide("gen-controls");
+        unselect()
+    }
+
     function show(panel)
     {
         document.getElementById(panel).style.display = 'block';
     }
 
-    function hide(panel)
+    function hide(panels)
     {
-        document.getElementById(panel).style.display = 'none';
+        var selected = document.getElementsByClassName(panels);
+        for (var i = 0; i < selected.length; i++)
+        {
+            selected[i].style.display = 'none';
+        }
     }
 
     function select(cell)
