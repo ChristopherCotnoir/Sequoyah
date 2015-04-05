@@ -87,7 +87,7 @@
                                             General Control Panel
 ============================================================================================================-->
 @foreach($vowels as $colIndex => $vowel)
-<div class="gen-controls" id="gen-control-col-{{{ $colIndex }}}">
+<div class="gen-controls" id="gen-control-col-{{{ $colIndex }}}" onclick="editSymbol('{{{ $vowel['symbol_id'] }}}')">
     <form method='post'>
     <button type="button" class="btn btn-default">Edit Symbol</button>
     </form>
@@ -97,7 +97,7 @@
 @foreach($consonants as $rowIndex => $consonant)
 <div class="gen-controls" id="gen-control-row-{{{ $rowIndex }}}">
     <form method='post'>
-    <button type="button" class="btn btn-default">Edit Symbol</button>
+    <button type="button" class="btn btn-default" onclick="editSymbol('{{{ $consonant['symbol_id'] }}}')">Edit Symbol</button>
     </form>
 </div>
 @endforeach
