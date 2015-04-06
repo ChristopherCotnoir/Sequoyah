@@ -10,7 +10,11 @@
     height:100px;
     }
 
-    .syllableCell img {
+    .syllableCell {
+    background: #FFFFFF;
+    }
+
+    .syllableCell img, .syllableCell-selected img {
     width: 100px;
     height: 100px;
     }
@@ -22,16 +26,19 @@
 
     .col-controls,
     .row-controls,
+    .cell-controls,
     .gen-controls {
     display: none;
     }
 
-    .headerCell-selected {
+    .headerCell-selected, .syllableCell-selected {
     background: #C43;
     }
 
     .headerCell,
-    .headerCell-selected {
+    .headerCell-selected,
+    .syllableCell,
+    .syllableCell-selected {
     -webkit-transition:background-color 0.4s linear;
     -o-transition:background-color 0.4s linear;
     -moz-transition:background-color 0.4s linear;
@@ -84,12 +91,25 @@
 @endforeach
 
 <!--===========================================================================================================
+                                             Cell Control Panel 
+============================================================================================================-->
+@foreach($vowels as $colIndex => $vowel)
+    @foreach($consonants as $rowIndex => $consonant)
+    <div class="cell-controls" id="cell-control-{{{ $colIndex }}}-{{{ $rowIndex }}}">
+        <form method='post'>
+        <!-- Currently no buttons in this panel -->
+        </form>
+    </div>
+    @endforeach
+@endforeach
+
+<!--===========================================================================================================
                                             General Control Panel
 ============================================================================================================-->
 @foreach($vowels as $colIndex => $vowel)
-<div class="gen-controls" id="gen-control-col-{{{ $colIndex }}}" onclick="editSymbol('{{{ $vowel['symbol_id'] }}}')">
+<div class="gen-controls" id="gen-control-col-{{{ $colIndex }}}">
     <form method='post'>
-    <button type="button" class="btn btn-default">Edit Symbol</button>
+    <button type="button" class="btn btn-default" onclick="editSymbol('{{{ $vowel['symbol_id'] }}}')">Edit Symbol</button>
     </form>
 </div>
 @endforeach
@@ -100,6 +120,16 @@
     <button type="button" class="btn btn-default" onclick="editSymbol('{{{ $consonant['symbol_id'] }}}')">Edit Symbol</button>
     </form>
 </div>
+@endforeach
+
+@foreach($vowels as $colIndex => $vowel)
+    @foreach($consonants as $rowIndex => $consonant)
+    <div class="gen-controls" id="gen-control-cell-{{{ $colIndex }}}-{{{ $rowIndex }}}">
+        <form method='post'>
+        <button type="button" class="btn btn-default">Edit Symbol</button>
+        </form>
+    </div>
+    @endforeach
 @endforeach
 </div>
 <!--==========================================================================================================
@@ -125,7 +155,7 @@
             <img src="/syllabary/symbol/{{{ $consonant['symbol_id'] }}}/data"></img>
         </th>
         @foreach($vowels as $colIndex => $vowel)
-        <td onclick='unselectAll()'>
+        <td class="syllableCell" id='cell-{{{ $colIndex }}}-{{{ $rowIndex }}}' onclick='selectCell("{{{ $colIndex }}}", "{{{ $rowIndex }}}")'>
         {{{ $consonant['ipa'] . $vowel['ipa'] }}}
         </td>
         @endforeach
@@ -138,6 +168,7 @@
     {
         hide("col-controls");
         hide("row-controls");
+        hide("cell-controls");
         hide("gen-controls");
         show("col-control-" + index);
         show("gen-control-col-" + index);
@@ -148,16 +179,29 @@
     {
         hide("col-controls");
         hide("row-controls");
+        hide("cell-controls");
         hide("gen-controls");
         show("row-control-" + index);
         show("gen-control-row-" + index);
         select("row-" + index)
     }
 
+    function selectCell(colIndex, rowIndex)
+    {
+        hide("col-controls");
+        hide("row-controls");
+        hide("cell-controls");
+        hide("gen-controls");
+        show("cell-control-" + colIndex + "-" + rowIndex);
+        show("gen-control-cell-" + colIndex + "-" + rowIndex);
+        select("cell-" + colIndex + "-" + rowIndex)
+    }
+
     function unselectAll()
     {
         hide("col-controls");
         hide("row-controls");
+        hide("cell-controls");
         hide("gen-controls");
         unselect()
     }
@@ -183,12 +227,28 @@
             document.getElementById(cell).className = 'headerCell';
             hide("row-controls");
             hide("col-controls");
+            hide("cell-controls");
+            hide("gen-controls");
+        }
+        else if(document.getElementById(cell).className=='syllableCell-selected')
+        {
+            document.getElementById(cell).className = 'syllableCell';
+            hide("row-controls");
+            hide("col-controls");
+            hide("cell-controls");
             hide("gen-controls");
         }
         else
         {
             unselect();
-            document.getElementById(cell).className = 'headerCell-selected';
+            if(document.getElementById(cell).className=='headerCell')
+            {
+                document.getElementById(cell).className = 'headerCell-selected';
+            }
+            if(document.getElementById(cell).className=='syllableCell')
+            {
+                document.getElementById(cell).className = 'syllableCell-selected';
+            }
         }
     }
 
@@ -199,8 +259,13 @@
         {
             selected[i].className = 'headerCell';
         }
+        var selected = document.getElementsByClassName('syllableCell-selected');
+        for (var i = 0; i < selected.length; i++)
+        {
+            selected[i].className = 'syllableCell';
+        }
     }
-    
+
     function editSymbol(symbolId)
     {
         window.location = '/svg-edit/svg-editor.html?symbol_id=' + symbolId;
