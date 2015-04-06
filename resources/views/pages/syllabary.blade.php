@@ -57,8 +57,14 @@
 <div class="col-controls" id="col-control-{{{ $colIndex }}}">
     <form method='post'>
     <button type="button" class="btn btn-default">Add Column Left</button>
+    </form>
+    <form method='post'>
     <button type="button" class="btn btn-default">Remove Column</button>
+    </form>
+    <form method='post'>
     <button type="button" class="btn btn-default">Add Column Right</button>
+    </form>
+    <form method='post'>
     <button type="button" class="btn btn-default">Edit Vowel</button>
     </form>
 </div>
@@ -71,8 +77,14 @@
 <div class="row-controls" id="row-control-{{{ $rowIndex }}}">
     <form method='post'>
     <button type="button" class="btn btn-default">Add Row Above</button>
+    </form>
+    <form method='post'>
     <button type="button" class="btn btn-default">Remove Row</button>
+    </form>
+    <form method='post'>
     <button type="button" class="btn btn-default">Add Row Below</button>
+    </form>
+    <form method='post'>
     <button type="button" class="btn btn-default">Edit Consonant</button>
     </form>
 </div>
@@ -86,6 +98,8 @@
     <div class="cell-controls" id="cell-control-{{{ $colIndex }}}-{{{ $rowIndex }}}">
         <form method='post'>
         <button type="button" class="btn btn-default">Remove Symbol</button>
+        </form>
+        <form method='post'>
         <button type="button" class="btn btn-default">Restore Symbol</button>
         </form>
     </div>
@@ -97,20 +111,26 @@
 ============================================================================================================-->
 @foreach($vowels as $colIndex => $vowel)
 <div class="gen-controls" id="gen-control-col-{{{ $colIndex }}}">
+    <form method='post'>
     <button type="button" class="btn btn-default" onclick="editSymbol('{{{ $vowel['symbol_id'] }}}')">Edit Symbol</button>
+    </form>
 </div>
 @endforeach
 
 @foreach($consonants as $rowIndex => $consonant)
 <div class="gen-controls" id="gen-control-row-{{{ $rowIndex }}}">
+    <form method='post'>
     <button type="button" class="btn btn-default" onclick="editSymbol('{{{ $consonant['symbol_id'] }}}')">Edit Symbol</button>
+    </form>
 </div>
 @endforeach
 
 @foreach($vowels as $colIndex => $vowel)
     @foreach($consonants as $rowIndex => $consonant)
     <div class="gen-controls" id="gen-control-cell-{{{ $colIndex }}}-{{{ $rowIndex }}}">
+        <form method='post'>
         <button type="button" class="btn btn-default">Edit Symbol</button>
+        </form>
     </div>
     @endforeach
 @endforeach
