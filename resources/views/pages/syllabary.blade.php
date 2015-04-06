@@ -97,10 +97,10 @@
     @foreach($consonants as $rowIndex => $consonant)
     <div class="cell-controls" id="cell-control-{{{ $colIndex }}}-{{{ $rowIndex }}}">
         <form method='post'>
-        <button type="button" class="btn btn-default">Remove Symbol</button>
+        <button type="button" class="btn btn-default">Remove Cell</button>
         </form>
         <form method='post'>
-        <button type="button" class="btn btn-default">Restore Symbol</button>
+        <button type="button" class="btn btn-default">Restore Cell</button>
         </form>
     </div>
     @endforeach
