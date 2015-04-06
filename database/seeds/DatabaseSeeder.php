@@ -30,31 +30,36 @@ class SyllabaryColumnHeaderSeeder extends Seeder {
             'syllabary_id' => 1,
             'ipa' => 'a',
             'symbol_id' => 4,
-            'index' => 0
+            'next_id' => 2,
+            'prev_id' => -1,
         ));
         SyllabaryColumnHeader::create(array(
             'syllabary_id' => 1,
             'ipa' => 'e',
             'symbol_id' => 3,
-            'index' => 1
+            'next_id' => 3,
+            'prev_id' => 1,
         ));
         SyllabaryColumnHeader::create(array(
             'syllabary_id' => 1,
             'ipa' => 'i',
             'symbol_id' => 2,
-            'index' => 2
+            'next_id' => 4,
+            'prev_id' => 2,
         ));
         SyllabaryColumnHeader::create(array(
             'syllabary_id' => 1,
             'ipa' => 'o',
             'symbol_id' => 1,
-            'index' => 3
+            'next_id' => 5,
+            'prev_id' => 3,
         ));
         SyllabaryColumnHeader::create(array(
             'syllabary_id' => 1,
             'ipa' => 'u',
             'symbol_id' => 5,
-            'index' => 4
+            'next_id' => -1,
+            'prev_id' => 4,
         ));
     }
 }
@@ -68,31 +73,36 @@ class SyllabaryRowHeaderSeeder extends Seeder {
             'syllabary_id' => 1,
             'ipa' => 'b',
             'symbol_id' => 1,
-            'index' => 0
+            'next_id' => 2,
+            'prev_id' => -1,
         ));
         SyllabaryRowHeader::create(array(
             'syllabary_id' => 1,
             'ipa' => 'd',
             'symbol_id' => 2,
-            'index' => 1
+            'next_id' => 3,
+            'prev_id' => 1,
         ));
         SyllabaryRowHeader::create(array(
             'syllabary_id' => 1,
             'ipa' => 'f',
             'symbol_id' => 3,
-            'index' => 2
+            'next_id' => 4,
+            'prev_id' => 2
         ));
         SyllabaryRowHeader::create(array(
             'syllabary_id' => 1,
             'ipa' => 'g',
             'symbol_id' => 4,
-            'index' => 3
+            'next_id' => 5,
+            'prev_id' => 3,
         ));
         SyllabaryRowHeader::create(array(
             'syllabary_id' => 1,
             'ipa' => 'h',
             'symbol_id' => 5,
-            'index' => 4
+            'next_id' => -1,
+            'prev_id' => 4,
         ));
     }
 }

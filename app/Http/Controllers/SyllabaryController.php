@@ -28,21 +28,47 @@ class SyllabaryController extends Controller
      * @return Response
      */
     public function ShowGrid()
-  {
+    {
         $vowels = array();
         $consonants = array();
 
-        // TODO - Grab the current syllabary ID from the project data.
-        $colHeaders = SyllabaryColumnHeader::where('syllabary_id', '=', 1)->
-                                             orderBy('index')->get();
-        foreach($colHeaders as $header) {
-            array_push($vowels, array('ipa' => $header->ipa, 'symbol_id' => $header->symbol_id));
+        // TODO - Grab the current syllabary ID from the project data
+        
+        $firstDbColHeader = SyllabaryColumnHeader::where('syllabary_id', '=', 1)->
+                                                   where('prev_id', '=', -1)->first();
+        $dbColHeaders = SyllabaryColumnHeader::where('syllabary_id', '=', 1)->get();
+
+        $colHeaderList = array();
+        foreach($dbColHeaders as $header) {
+            $colHeaderList[$header->id] = $header;
         }
 
-        $rowHeaders = SyllabaryRowHeader::where('syllabary_id', '=', 1)->
-                                          orderBy('index')->get();
-        foreach($rowHeaders as $header) {
-            array_push($consonants, array('ipa' => $header->ipa, 'symbol_id' => $header->symbol_id));
+        $header = $firstDbColHeader;
+        while($header != NULL) {
+          array_push($vowels, array('ipa' => $header->ipa, 'symbol_id' => $header->symbol_id));
+          if ($header->next_id == -1)
+            $header = NULL;
+          else
+            $header = $colHeaderList[$header->next_id];
+        }
+
+
+        $firstDbRowHeader = SyllabaryRowHeader::where('syllabary_id', '=', 1)->
+                                                   where('prev_id', '=', -1)->first();
+        $dbRowHeaders = SyllabaryRowHeader::where('syllabary_id', '=', 1)->get();
+
+        $rowHeaderList = array();
+        foreach($dbRowHeaders as $header) {
+            $rowHeaderList[$header->id] = $header;
+        }
+
+        $header = $firstDbRowHeader;
+        while($header != NULL) {
+          array_push($consonants, array('ipa' => $header->ipa, 'symbol_id' => $header->symbol_id));
+          if ($header->next_id == -1)
+            $header = NULL;
+          else
+            $header = $rowHeaderList[$header->next_id];
         }
 
         return view('pages.syllabary', array(
