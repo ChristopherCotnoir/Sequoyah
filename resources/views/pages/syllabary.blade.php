@@ -49,7 +49,7 @@
 @section('content')
 <main>
 
-<div style="height:300px">
+<div style="height:400px">
 <!--===========================================================================================================
                                             Column Control Panel 
 ============================================================================================================-->
@@ -66,6 +66,9 @@
 <!--  <form method='post' action='syllabary/{{--{{{ $syllabaryId }}}--}}/column/{{{ Request::input('columnIndex') + 1 }}}/add'> -->
     <form method='post'>
     <button type="button" class="btn btn-default">Add Column Right</button>
+    </form>
+    <form method='post'>
+    <button type="button" class="btn btn-default">Edit Vowel</button>
     </form>
 </div>
 @endforeach
@@ -87,6 +90,9 @@
     <form method='post'>
     <button type="button" class="btn btn-default">Add Row Right</button>
     </form>
+    <form method='post'>
+    <button type="button" class="btn btn-default">Edit Consonant</button>
+    </form>
 </div>
 @endforeach
 
@@ -97,7 +103,10 @@
     @foreach($consonants as $rowIndex => $consonant)
     <div class="cell-controls" id="cell-control-{{{ $colIndex }}}-{{{ $rowIndex }}}">
         <form method='post'>
-        <!-- Currently no buttons in this panel -->
+        <button type="button" class="btn btn-default">Remove Symbol</button>
+        </form>
+        <form method='post'>
+        <button type="button" class="btn btn-default">Restore Symbol</button>
         </form>
     </div>
     @endforeach
