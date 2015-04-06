@@ -14,10 +14,10 @@ class CreateSyllabaryColumnHeaderTable extends Migration {
 	{
 		Schema::create('syllabary_column_header', function(Blueprint $table)
 		{
-			$table->increments('id');
-			$table->integer('syllabary_id')->unsigned();
+			$table->bigIncrements('id');
+			$table->bigInteger('syllabary_id')->unsigned();
 			$table->string('ipa', 10);
-      $table->integer('symbol_id')->unsigned();
+      		$table->bigInteger('symbol_id')->unsigned();
 			$table->integer('index')->unsigned();
 			$table->timestamps();
 		});

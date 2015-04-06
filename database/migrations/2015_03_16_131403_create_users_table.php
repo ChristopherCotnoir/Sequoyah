@@ -14,7 +14,7 @@ class CreateUsersTable extends Migration
 	{
 		Schema::create('users', function(Blueprint $table)
 		{
-			$table->bigInteger('id')->unsigned();
+			$table->bigIncrements('id')->unsigned();
 			
 			$table->string('username', 128); //user's publically available user name (i.e. JohnSmith) -- case insensitive
 			

@@ -14,8 +14,8 @@ class CreateSymbolsTable extends Migration {
 	{
 		Schema::create('symbols', function(Blueprint $table)
 		{
-			$table->increments('id');
-      $table->text('symbol_data');
+			$table->bigIncrements('id');
+     		$table->text('symbol_data');
 			$table->timestamps();
 		});
 	}

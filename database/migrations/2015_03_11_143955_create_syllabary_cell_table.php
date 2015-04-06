@@ -14,7 +14,7 @@ class CreateSyllabaryCellTable extends Migration {
 	{
 		Schema::create('syllabary_cell', function(Blueprint $table)
 		{
-			$table->increments('id');
+			$table->bigIncrements('id');
 			$table->timestamps();
 		});
 	}
