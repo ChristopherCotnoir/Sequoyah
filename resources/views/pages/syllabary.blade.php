@@ -1,62 +1,239 @@
 @extends('layouts.plain')
-@section ('head-custom')
+@section('head-custom')
 <style>
-  .headerCell {
+    .headerCell {
     background: #BDC3C7;
-  }
+    }
 
-  .headerCell img {
+    .headerCell img, .headerCell-selected img {
     width:100px;
     height:100px;
-  }
+    }
 
-  .syllableCell img {
-    width: 100px;
-    height: 100px;
-  }
+    .syllableCell {
+    background: #FFFFFF;
+    }
+
+    .syllableCell div, .syllableCell-selected div {
+    position: relative; 
+    }
+
+    .syllableCell div img, .syllableCell-selected div img {
+    width:100px;
+    height:100px;
+    position:absolute;
+    left:0px;
+    top:0px;
+    }
+
+    .syllableCell div img:first-child, .syllableCell-selected div img:first-child{
+    width:100px;
+    height:100px;
+    position:static;
+    }
+
+    .syllabaryGrid {
+    width: 100%;
+    font-size: 200%;
+    }
+
+    .col-controls,
+    .row-controls,
+    .cell-controls,
+    .gen-controls {
+    display: none;
+    }
+
+    .headerCell-selected, .syllableCell-selected {
+    background: #C43;
+    }
+
+    .headerCell,
+    .headerCell-selected,
+    .syllableCell,
+    .syllableCell-selected {
+    -webkit-transition:background-color 0.4s linear;
+    -o-transition:background-color 0.4s linear;
+    -moz-transition:background-color 0.4s linear;
+    transition:background-color 0.4s linear;
+    }
 </style>
 @stop
-
 @section('content')
 <main>
-<table id='syllabaryGrid' border='1'>
-  <tr>
-    <th class='headerCell'></th>
-    @foreach($vowels as $vowel)
-      <th <?php echo 'class="headerCell" onmouseover="show(\'' . $vowel['ipa'] . '\')" onmouseout="hide(\'' . $vowel['ipa'] . '\')">'; ?><b>{{{ $vowel['ipa'] }}} <br /><img src='<?php echo "/syllabary/symbol/$vowel[symbol_id]/data"; ?>'></img><br /><div align="center" style="height:25px"> <?php echo '<button type="button" class="edit-button" id="' . $vowel['ipa'] . '" style="display:none" onclick="editSymbol(\'' . $vowel['symbol_id'] . '\')">Edit Symbol</button>'; ?></div></b></th>
-    @endforeach
-  </tr>
 
-  @foreach($consonants as $consonant)
-    <tr>
-      <td <?php echo 'class="headerCell" onmouseover="show(\'' . $consonant['ipa'] . '\')" onmouseout="hide(\'' . $consonant['ipa'] . '\')">'; ?><b>{{{ $consonant['ipa'] }}}</b> <br /><img src='<?php echo "/syllabary/symbol/$consonant[symbol_id]/data"; ?>'></img><br /><div align="center" style="height:25px">
-        <?php echo '<button type="button" class="edit-button" id="' . $consonant['ipa'] . '" style="display:none" onclick="editSymbol(\'' . $consonant['symbol_id'] . '\')">Edit Symbol</button>'; ?></div></td>
-      @for($i = 0; $i < count($vowels); $i++)
-	  
-         <td <?php echo 'class="syllableCell" onmouseover="show(\'' . $consonant['ipa'] . $vowels[$i]['ipa'] . '\')" 			onmouseout="hide(\'' . $consonant['ipa'] . $vowels[$i]['ipa'] . '\')">'; ?>
-          {{{ $consonant['ipa'] . $vowels[$i]['ipa'] }}}
-          <br />
-         </td> 	
-      @endfor
-    </tr>
-  @endforeach
-</table>
+<div id="grid-div">
+</div>
 
-<script>
-function show(button)
-{
-document.getElementById(button).style.display = 'block';
-}
-function hide(button)
-{
-document.getElementById(button).style.display = 'none';
-i}
+<script type='text/javascript'>
+    var selectedRowId;
+    var selectedColId;
+    // On load
+    $(function() {
+      loadGrid();
+      selectedRowId = -1;
+      selectedColid = -1;
+    });
 
-function editSymbol(symbolId)
-{
-  window.location='/svg-edit/svg-editor.html?symbol_id=' + symbolId;
-}
+    function loadGrid()
+    {
+      $("#grid-div").load("/syllabary/grid/1");
+    }
+
+    function addColumnRight(ipa)
+    {
+      $.post("/syllabary/1/column/add/" + selectedColId, {"ipa": ipa}, function() {
+        loadGrid();
+      });
+    }
+
+    function addColumnLeft(ipa)
+    {
+      $.post("/syllabary/1/column/add/-" + selectedColId, {"ipa": ipa}, function() {
+        loadGrid();
+      });
+    }
+
+    function removeSelectedColumn()
+    {
+      if (selectedColId != -1) {
+        $.post("/syllabary/1/column/" + selectedColId + "/remove", function() {
+          loadGrid();
+        });
+      }
+    }
+
+    function addRowTop(ipa)
+    {
+      $.post("/syllabary/1/row/add/-" + selectedRowId, {"ipa": ipa}, function() {
+        loadGrid();
+      });
+    }
+
+    function addRowBottom(ipa)
+    {
+      $.post("/syllabary/1/row/add/" + selectedRowId, {"ipa": ipa}, function() {
+        loadGrid();
+      });
+    }
+
+    function removeSelectedRow()
+    {
+      if (selectedRowId != -1) {
+        $.post("/syllabary/1/row/" + selectedRowId + "/remove", function() {
+          loadGrid();
+        });
+      }
+    }
+
+    function selectColumn(index)
+    {
+        selectedColId = $("#col-" + index).attr("colId");
+        hide("col-controls");
+        hide("row-controls");
+        hide("cell-controls");
+        hide("gen-controls");
+        show("col-control-" + index);
+        show("gen-control-col-" + index);
+        select("col-" + index)
+    }
+
+    function selectRow(index)
+    {
+        selectedRowId = $("#row-" + index).attr("rowId");
+        hide("col-controls");
+        hide("row-controls");
+        hide("cell-controls");
+        hide("gen-controls");
+        show("row-control-" + index);
+        show("gen-control-row-" + index);
+        select("row-" + index)
+    }
+
+    function selectCell(colIndex, rowIndex)
+    {
+        hide("col-controls");
+        hide("row-controls");
+        hide("cell-controls");
+        hide("gen-controls");
+        show("cell-control-" + colIndex + "-" + rowIndex);
+        show("gen-control-cell-" + colIndex + "-" + rowIndex);
+        select("cell-" + colIndex + "-" + rowIndex)
+    }
+
+    function unselectAll()
+    {
+        hide("col-controls");
+        hide("row-controls");
+        hide("cell-controls");
+        hide("gen-controls");
+        unselect()
+    }
+
+    function show(panel)
+    {
+        document.getElementById(panel).style.display = 'block';
+    }
+
+    function hide(panels)
+    {
+        var selected = document.getElementsByClassName(panels);
+        for (var i = 0; i < selected.length; i++)
+        {
+            selected[i].style.display = 'none';
+        }
+    }
+
+    function select(cell)
+    {
+        if(document.getElementById(cell).className=='headerCell-selected')
+        {
+            document.getElementById(cell).className = 'headerCell';
+            hide("row-controls");
+            hide("col-controls");
+            hide("cell-controls");
+            hide("gen-controls");
+        }
+        else if(document.getElementById(cell).className=='syllableCell-selected')
+        {
+            document.getElementById(cell).className = 'syllableCell';
+            hide("row-controls");
+            hide("col-controls");
+            hide("cell-controls");
+            hide("gen-controls");
+        }
+        else
+        {
+            unselect();
+            if(document.getElementById(cell).className=='headerCell')
+            {
+                document.getElementById(cell).className = 'headerCell-selected';
+            }
+            if(document.getElementById(cell).className=='syllableCell')
+            {
+                document.getElementById(cell).className = 'syllableCell-selected';
+            }
+        }
+    }
+
+    function unselect()
+    {
+        var selected = document.getElementsByClassName('headerCell-selected');
+        for (var i = 0; i < selected.length; i++)
+        {
+            selected[i].className = 'headerCell';
+        }
+        var selected = document.getElementsByClassName('syllableCell-selected');
+        for (var i = 0; i < selected.length; i++)
+        {
+            selected[i].className = 'syllableCell';
+        }
+    }
+
+    function editSymbol(symbolId)
+    {
+        window.location = '/svg-edit/svg-editor.html?symbol_id=' + symbolId;
+    }
 </script>
 </main>
 @stop
-
