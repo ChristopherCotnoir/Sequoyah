@@ -14,9 +14,22 @@
     background: #FFFFFF;
     }
 
-    .syllableCell img, .syllableCell-selected img {
-    width: 100px;
-    height: 100px;
+    .syllableCell div, .syllableCell-selected div {
+    position: relative; 
+    }
+
+    .syllableCell div img, .syllableCell-selected div img {
+    width:100px;
+    height:100px;
+    position:absolute;
+    left:0px;
+    top:0px;
+    }
+
+    .syllableCell div img:first-child, .syllableCell-selected div img:first-child{
+    width:100px;
+    height:100px;
+    position:static;
     }
 
     .syllabaryGrid {
@@ -156,7 +169,12 @@
         </th>
         @foreach($vowels as $colIndex => $vowel)
         <td class="syllableCell" id='cell-{{{ $colIndex }}}-{{{ $rowIndex }}}' onclick='selectCell("{{{ $colIndex }}}", "{{{ $rowIndex }}}")'>
-        {{{ $consonant['ipa'] . $vowel['ipa'] }}}
+          <b>{{{ $consonant['ipa'] . $vowel['ipa'] }}}</b>
+          <br>
+          <div>
+            <img src="/syllabary/symbol/{{{ $consonant['symbol_id'] }}}/data"></img>
+            <img src="/syllabary/symbol/{{{ $vowel['symbol_id'] }}}/data"></img>
+          </div>
         </td>
         @endforeach
     </tr>
