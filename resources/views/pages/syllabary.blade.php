@@ -1,43 +1,51 @@
 @extends('layouts.plain')
 @section('head-custom')
 <style>
-    .headerCell {
+    .headerCell
+    {
     background: #BDC3C7;
     }
 
-    .headerCell img, .headerCell-selected img {
+    .headerCell img, .headerCell-selected img
+    {
     width:100px;
     height:100px;
     }
 
-    .syllableCell {
+    .syllableCell
+    {
     background: #FFFFFF;
     }
 
-    .syllableCell img, .syllableCell-selected img {
+    .syllableCell img, .syllableCell-selected img
+    {
     width: 100px;
     height: 100px;
     }
 
-    .syllabaryGrid {
+    .syllabaryGrid
+    {
     width: 100%;
     font-size: 200%;
     }
 
     .col-controls,
     .row-controls,
-    .cell-controls {
+    .cell-controls
+    {
     display: none;
     }
 
-    .headerCell-selected, .syllableCell-selected {
+    .headerCell-selected, .syllableCell-selected
+    {
     background: #C43;
     }
 
     .headerCell,
     .headerCell-selected,
     .syllableCell,
-    .syllableCell-selected {
+    .syllableCell-selected
+    {
     -webkit-transition:background-color 0.4s linear;
     -o-transition:background-color 0.4s linear;
     -moz-transition:background-color 0.4s linear;
