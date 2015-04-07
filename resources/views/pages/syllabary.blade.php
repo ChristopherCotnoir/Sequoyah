@@ -19,7 +19,7 @@
 
 @section('content')
 <main>
-<table id='syllabaryGrid' border='1'>
+<table id='syllabary-grid'>
   <tr>
     <th class='headerCell'></th>
     @foreach($vowels as $vowel)

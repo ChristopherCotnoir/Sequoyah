@@ -1,8 +1,10 @@
 <?php
 
 Route::get('/', 'HomeController@ShowIndex');
+Route::get('/settings', 'SettingsController@ShowIndex');
 Route::get('sleep', function() { return Redirect::away('http://Ncnl.tumblr.com'); });
 Route::get('fuck', function() { return 'FUCK'; });
+
 
 Route::get('syllabary', 'SyllabaryController@ShowGrid');
 Route::get('syllabary/testsvg/{symbolId}', 'SyllabaryController@TestSvg');
