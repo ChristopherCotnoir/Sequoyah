@@ -26,8 +26,7 @@
 
     .col-controls,
     .row-controls,
-    .cell-controls,
-    .gen-controls {
+    .cell-controls {
     display: none;
     }
 
@@ -67,6 +66,9 @@
     <form method='post'>
     <button type="button" class="btn btn-default">Edit Vowel</button>
     </form>
+    <form method='post'>
+    <button type="button" class="btn btn-default" onclick="editSymbol('{{{ $vowel['symbol_id'] }}}')">Edit Symbol</button>
+    </form>
 </div>
 @endforeach
 
@@ -87,6 +89,9 @@
     <form method='post'>
     <button type="button" class="btn btn-default">Edit Consonant</button>
     </form>
+    <form method='post'>
+    <button type="button" class="btn btn-default" onclick="editSymbol('{{{ $consonant['symbol_id'] }}}')">Edit Symbol</button>
+    </form>
 </div>
 @endforeach
 
@@ -102,38 +107,13 @@
         <form method='post'>
         <button type="button" class="btn btn-default">Restore Cell</button>
         </form>
-    </div>
-    @endforeach
-@endforeach
-
-<!--===========================================================================================================
-                                            General Control Panel
-============================================================================================================-->
-@foreach($vowels as $colIndex => $vowel)
-<div class="gen-controls" id="gen-control-col-{{{ $colIndex }}}">
-    <form method='post'>
-    <button type="button" class="btn btn-default" onclick="editSymbol('{{{ $vowel['symbol_id'] }}}')">Edit Symbol</button>
-    </form>
-</div>
-@endforeach
-
-@foreach($consonants as $rowIndex => $consonant)
-<div class="gen-controls" id="gen-control-row-{{{ $rowIndex }}}">
-    <form method='post'>
-    <button type="button" class="btn btn-default" onclick="editSymbol('{{{ $consonant['symbol_id'] }}}')">Edit Symbol</button>
-    </form>
-</div>
-@endforeach
-
-@foreach($vowels as $colIndex => $vowel)
-    @foreach($consonants as $rowIndex => $consonant)
-    <div class="gen-controls" id="gen-control-cell-{{{ $colIndex }}}-{{{ $rowIndex }}}">
         <form method='post'>
         <button type="button" class="btn btn-default">Edit Symbol</button>
         </form>
     </div>
     @endforeach
 @endforeach
+
 </div>
 <!--==========================================================================================================
                                                Syllabary Grid
@@ -172,9 +152,7 @@
         hide("col-controls");
         hide("row-controls");
         hide("cell-controls");
-        hide("gen-controls");
         show("col-control-" + index);
-        show("gen-control-col-" + index);
         select("col-" + index)
     }
 
@@ -183,9 +161,7 @@
         hide("col-controls");
         hide("row-controls");
         hide("cell-controls");
-        hide("gen-controls");
         show("row-control-" + index);
-        show("gen-control-row-" + index);
         select("row-" + index)
     }
 
@@ -194,9 +170,7 @@
         hide("col-controls");
         hide("row-controls");
         hide("cell-controls");
-        hide("gen-controls");
         show("cell-control-" + colIndex + "-" + rowIndex);
-        show("gen-control-cell-" + colIndex + "-" + rowIndex);
         select("cell-" + colIndex + "-" + rowIndex)
     }
 
@@ -205,7 +179,6 @@
         hide("col-controls");
         hide("row-controls");
         hide("cell-controls");
-        hide("gen-controls");
         unselect()
     }
 
@@ -231,7 +204,6 @@
             hide("row-controls");
             hide("col-controls");
             hide("cell-controls");
-            hide("gen-controls");
         }
         else if(document.getElementById(cell).className=='syllableCell-selected')
         {
@@ -239,7 +211,6 @@
             hide("row-controls");
             hide("col-controls");
             hide("cell-controls");
-            hide("gen-controls");
         }
         else
         {
