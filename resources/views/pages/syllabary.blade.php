@@ -62,128 +62,73 @@
 @section('content')
 <main>
 
-<div style="height:300px">
-<!--===========================================================================================================
-                                            Column Control Panel 
-============================================================================================================-->
-@foreach($vowels as $colIndex => $vowel)
-<div class="col-controls" id="col-control-{{{ $colIndex }}}">
-<!--  <form method='post' action='syllabary/{{--{{{ $syllabaryId }}}--}}/column/{{{ Request::input('columnIndex') }}}/add'> -->
-    <form method='post'>
-    <button type="button" class="btn btn-default">Add Column Left</button>
-    </form>
-<!-- <form method='post' action='syllabary/{{--{{{ $syllabaryId }}}--}}/column/{{{ Request::input('columnIndex') }}}/remove'> -->
-    <form method='post'>
-    <button type="button" class="btn btn-default">Remove Column</button>
-    </form>
-<!--  <form method='post' action='syllabary/{{--{{{ $syllabaryId }}}--}}/column/{{{ Request::input('columnIndex') + 1 }}}/add'> -->
-    <form method='post'>
-    <button type="button" class="btn btn-default">Add Column Right</button>
-    </form>
+<div id="grid-div">
 </div>
-@endforeach
-
-<!--===========================================================================================================
-                                             Row Control Panel 
-============================================================================================================-->
-@foreach($consonants as $rowIndex => $consonant)
-<div class="row-controls" id="row-control-{{{ $rowIndex }}}">
-<!-- <form method='post' action='syllabary/{{--{{{ $syllabaryId }}}--}}/row/{{{ Request::input('rowIndex') }}}/add'> -->
-    <form method='post'>
-    <button type="button" class="btn btn-default">Add Row Left</button>
-    </form>
-<!--  <form method='post' action='syllabary/{{--{{{ $syllabaryId }}}--}}/row/{{{ Request::input('rowIndex') }}}/remove'> -->
-    <form method='post'>
-    <button type="button" class="btn btn-default">Remove Row</button>
-    </form>
-<!--  <form method='post' action='syllabary/{{--{{{ $syllabaryId }}}--}}/row/{{{ Request::input('rowIndex') + 1 }}}/add'> -->
-    <form method='post'>
-    <button type="button" class="btn btn-default">Add Row Right</button>
-    </form>
-</div>
-@endforeach
-
-<!--===========================================================================================================
-                                             Cell Control Panel 
-============================================================================================================-->
-@foreach($vowels as $colIndex => $vowel)
-    @foreach($consonants as $rowIndex => $consonant)
-    <div class="cell-controls" id="cell-control-{{{ $colIndex }}}-{{{ $rowIndex }}}">
-        <form method='post'>
-        <!-- Currently no buttons in this panel -->
-        </form>
-    </div>
-    @endforeach
-@endforeach
-
-<!--===========================================================================================================
-                                            General Control Panel
-============================================================================================================-->
-@foreach($vowels as $colIndex => $vowel)
-<div class="gen-controls" id="gen-control-col-{{{ $colIndex }}}">
-    <form method='post'>
-    <button type="button" class="btn btn-default" onclick="editSymbol('{{{ $vowel['symbol_id'] }}}')">Edit Symbol</button>
-    </form>
-</div>
-@endforeach
-
-@foreach($consonants as $rowIndex => $consonant)
-<div class="gen-controls" id="gen-control-row-{{{ $rowIndex }}}">
-    <form method='post'>
-    <button type="button" class="btn btn-default" onclick="editSymbol('{{{ $consonant['symbol_id'] }}}')">Edit Symbol</button>
-    </form>
-</div>
-@endforeach
-
-@foreach($vowels as $colIndex => $vowel)
-    @foreach($consonants as $rowIndex => $consonant)
-    <div class="gen-controls" id="gen-control-cell-{{{ $colIndex }}}-{{{ $rowIndex }}}">
-        <form method='post'>
-        <button type="button" class="btn btn-default">Edit Symbol</button>
-        </form>
-    </div>
-    @endforeach
-@endforeach
-</div>
-<!--==========================================================================================================
-                                               Syllabary Grid
-===========================================================================================================-->
-<table class='syllabaryGrid' border='1'>
-    <tr>
-        <th class='headerCell' onclick='unselectAll()'></th>
-        @foreach($vowels as $colIndex => $vowel)
-        <th class='headerCell' id='col-{{{ $colIndex }}}' onclick='selectColumn("{{{ $colIndex }}}")'>
-            <b>{{{ $vowel['ipa'] }}}</b>
-            <br>
-            <img src="/syllabary/symbol/{{{ $vowel['symbol_id'] }}}/data"></img>
-        </th>
-        @endforeach
-    </tr>
-
-    @foreach($consonants as $rowIndex => $consonant)
-    <tr>
-        <th class='headerCell' id='row-{{{ $rowIndex }}}' onclick='selectRow("{{{ $rowIndex }}}")'>
-            <b>{{{ $consonant['ipa'] }}}</b>
-            <br>
-            <img src="/syllabary/symbol/{{{ $consonant['symbol_id'] }}}/data"></img>
-        </th>
-        @foreach($vowels as $colIndex => $vowel)
-        <td class="syllableCell" id='cell-{{{ $colIndex }}}-{{{ $rowIndex }}}' onclick='selectCell("{{{ $colIndex }}}", "{{{ $rowIndex }}}")'>
-          <b>{{{ $consonant['ipa'] . $vowel['ipa'] }}}</b>
-          <br>
-          <div>
-            <img src="/syllabary/symbol/{{{ $consonant['symbol_id'] }}}/data"></img>
-            <img src="/syllabary/symbol/{{{ $vowel['symbol_id'] }}}/data"></img>
-          </div>
-        </td>
-        @endforeach
-    </tr>
-    @endforeach
-</table>
 
 <script type='text/javascript'>
+    var selectedRowId;
+    var selectedColId;
+    // On load
+    $(function() {
+      loadGrid();
+      selectedRowId = -1;
+      selectedColid = -1;
+    });
+
+    function loadGrid()
+    {
+      $("#grid-div").load("/syllabary/grid/1");
+    }
+
+    function addColumnRight(ipa)
+    {
+      $.post("/syllabary/1/column/add/" + selectedColId, {"ipa": ipa}, function() {
+        loadGrid();
+      });
+    }
+
+    function addColumnLeft(ipa)
+    {
+      $.post("/syllabary/1/column/add/-" + selectedColId, {"ipa": ipa}, function() {
+        loadGrid();
+      });
+    }
+
+    function removeSelectedColumn()
+    {
+      if (selectedColId != -1) {
+        $.post("/syllabary/1/column/" + selectedColId + "/remove", function() {
+          loadGrid();
+        });
+      }
+    }
+
+    function addRowTop(ipa)
+    {
+      $.post("/syllabary/1/row/add/-" + selectedRowId, {"ipa": ipa}, function() {
+        loadGrid();
+      });
+    }
+
+    function addRowBottom(ipa)
+    {
+      $.post("/syllabary/1/row/add/" + selectedRowId, {"ipa": ipa}, function() {
+        loadGrid();
+      });
+    }
+
+    function removeSelectedRow()
+    {
+      if (selectedRowId != -1) {
+        $.post("/syllabary/1/row/" + selectedRowId + "/remove", function() {
+          loadGrid();
+        });
+      }
+    }
+
     function selectColumn(index)
     {
+        selectedColId = $("#col-" + index).attr("colId");
         hide("col-controls");
         hide("row-controls");
         hide("cell-controls");
@@ -195,6 +140,7 @@
 
     function selectRow(index)
     {
+        selectedRowId = $("#row-" + index).attr("rowId");
         hide("col-controls");
         hide("row-controls");
         hide("cell-controls");

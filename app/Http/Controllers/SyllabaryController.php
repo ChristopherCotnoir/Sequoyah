@@ -29,6 +29,11 @@ class SyllabaryController extends Controller
      */
     public function ShowGrid()
     {
+        return view('pages.syllabary');
+    }
+
+    public function GetGrid($syllabaryId)
+    {
         $vowels = array();
         $consonants = array();
 
@@ -45,7 +50,7 @@ class SyllabaryController extends Controller
 
         $header = $firstDbColHeader;
         while($header != NULL) {
-          array_push($vowels, array('ipa' => $header->ipa, 'symbol_id' => $header->symbol_id));
+          array_push($vowels, array('ipa' => $header->ipa, 'symbol_id' => $header->symbol_id, 'header_id' => $header->id));
           if ($header->next_id == -1)
             $header = NULL;
           else
@@ -64,77 +69,195 @@ class SyllabaryController extends Controller
 
         $header = $firstDbRowHeader;
         while($header != NULL) {
-          array_push($consonants, array('ipa' => $header->ipa, 'symbol_id' => $header->symbol_id));
+          array_push($consonants, array('ipa' => $header->ipa, 'symbol_id' => $header->symbol_id, 'header_id' => $header->id));
           if ($header->next_id == -1)
             $header = NULL;
           else
             $header = $rowHeaderList[$header->next_id];
         }
 
-        return view('pages.syllabary', array(
+        return view('sections.syllabary-grid', array(
             'vowels' => $vowels,
             'consonants' => $consonants,
-            'starting_symbol' => 9985 // The starting wingdings symbol hex code in decimal.
         ));
     }
 
-    public function AddColumn($syllabaryId)
+    public function AddColumn($syllabaryId, $relativeId = NULL)
     {
         $ipa = Input::get('ipa');
         if ($ipa == False)
             return response()->json(['success' => False]);
 
-        $headerCount = SyllabaryColumnHeader::where('syllabary_id', '=', $syllabaryId)->count();
+        $headers = SyllabaryColumnHeader::where('syllabary_id', '=', 1)->get();
 
-        SyllabaryColumnHeader::create(array(
+        // If we specify that we want to add to the right of a given header.
+        if ($relativeId != NULL) {
+          // If we pass a negative relative column ID, that means we want to add to
+          // to the left of that column instead of the right.
+
+          if ($relativeId < 0) {
+            $leftHeader = $headers->find(($relativeId * -1));
+            $leftHeader = $headers->find($leftHeader->prev_id);
+          } else {
+            $leftHeader = $headers->find($relativeId);
+          }
+          
+          if ($leftHeader == NULL)
+            return response()->json(array('success' => False));
+
+          $rightHeader = $headers->find($leftHeader->next_id);
+
+          $newHeader = SyllabaryColumnHeader::create(array(
+              'syllabary_id' => $syllabaryId,
+              'ipa' => $ipa,
+              'symbol_id' => 1,
+              'prev_id' => $leftHeader->id,
+              'next_id' => ($rightHeader != NULL) ? $rightHeader->id : -1,
+           ));
+
+           $leftHeader->next_id = $newHeader->id;
+           $leftHeader->save();
+
+           if ($rightHeader != NULL) {
+             $rightHeader->prev_id = $newHeader->id;
+             $rightHeader->save();
+           }
+        } else { // If we want to just add to the end of the list.
+          $lastHeader = SyllabaryColumnHeader::where('syllabary_id', '=', 1)->
+                                               orderBy('next_id')->first();
+
+          $newHeader = SyllabaryColumnHeader::create(array(
             'syllabary_id' => $syllabaryId,
             'ipa' => $ipa,
-            'index' => $headerCount - 1
-        ));
+            'symbol_id' => 1,
+            'prev_id' => ($lastHeader != NULL) ? $lastHeader->id : -1,
+            'next_id' => -1,
+         ));
+
+         if ($lastHeader != NULL) {
+           $lastHeader->next_id = $newHeader->id;
+           $lastHeader->save();
+         }
+        }
+
 
         return response()->json(['success' => True]);
     }
 
-    public function RemoveColumn($syllabaryId, $columnIndex)
+    public function RemoveColumn($syllabaryId, $columnId)
     {
-        $colHeader = SyllabaryColumnHeader::where('syllabary_id', '=', $syllabaryId)->
-                                            where('index', '=', $columnIndex)->first();
-        if ($colHeader == NULL)
-            return response()->json(['success' => False]);
+        $colHeaders = SyllabaryColumnHeader::where('syllabary_id', '=', $syllabaryId)->get();
 
-        $colHeader->delete();
+        $selectedHeader = $colHeaders->find($columnId);
+
+        if ($selectedHeader == NULL)
+          return response()->json(['success' => False]);
+
+        if ($selectedHeader->prev_id != -1) {
+          $prevHeader = $colHeaders->find($selectedHeader->prev_id);
+          $prevHeader->next_id = $selectedHeader->next_id;
+          $prevHeader->save();
+        }
+
+        if ($selectedHeader->next_id != -1) {
+          $nextHeader = $colHeaders->find($selectedHeader->next_id);
+          $nextHeader->prev_id = $selectedHeader->prev_id;
+          $nextHeader->save();
+        }
+
+        $selectedHeader->delete();
+
         return response()->json(['success' => True]);
     }
 
-    public function AddRow($syllabaryId)
+    public function AddRow($syllabaryId, $relativeId)
     {
         $ipa = Input::get('ipa');
         if ($ipa == False)
             return response()->json(['success' => False]);
 
-        $headerCount = SyllabaryRowHeader::where('syllabary_id', '=', $syllabaryId)->count();
+        $headers = SyllabaryRowHeader::where('syllabary_id', '=', 1)->get();
 
-        SyllabaryRowHeader::create(array(
+        // If we specify that we want to add to the bottom of a given header.
+        if ($relativeId != NULL) {
+          // If we pass a negative relative row ID, that means we want to add to
+          // to the top of that row instead of the right.
+
+          if ($relativeId < 0) {
+            $topHeader = $headers->find(($relativeId * -1));
+            $topHeader = $headers->find($topHeader->prev_id);
+          } else {
+            $topHeader = $headers->find($relativeId);
+          }
+          
+          if ($topHeader == NULL)
+            return response()->json(array('success' => False));
+
+          $bottomHeader = $headers->find($topHeader->next_id);
+
+          $newHeader = SyllabaryRowHeader::create(array(
+              'syllabary_id' => $syllabaryId,
+              'ipa' => $ipa,
+              'symbol_id' => 1,
+              'prev_id' => $topHeader->id,
+              'next_id' => ($bottomHeader != NULL) ? $bottomHeader->id : -1,
+           ));
+
+           $topHeader->next_id = $newHeader->id;
+           $topHeader->save();
+
+           if ($bottomHeader != NULL) {
+             $bottomHeader->prev_id = $newHeader->id;
+             $bottomHeader->save();
+           }
+        } else { // If we want to just add to the end of the list.
+          $lastHeader = SyllabaryRowHeader::where('syllabary_id', '=', 1)->
+                                            orderBy('next_id')->first();
+
+          $newHeader = SyllabaryRowHeader::create(array(
             'syllabary_id' => $syllabaryId,
             'ipa' => $ipa,
-            'index' => $headerCount - 1
-        ));
+            'symbol_id' => 1,
+            'prev_id' => ($lastHeader != NULL) ? $lastHeader->id : -1,
+            'next_id' => -1,
+         ));
+
+         if ($lastHeader != NULL) {
+           $lastHeader->next_id = $newHeader->id;
+           $lastHeader->save();
+         }
+        }
 
         return response()->json(['success' => True]);
-
     }
 
-    public function RemoveRow($syllabaryId, $rowIndex)
+    public function RemoveRow($syllabaryId, $rowId)
     {
-        $rowHeader = SyllabaryColumnHeader::where('syllabary_id', '=', $syllabaryId)->
-                                            where('index', '=', $columnIndex)->first();
-        if ($rowHeader == NULL)
-            return response()->json(['success' => False]);
+        $rowHeaders = SyllabaryRowHeader::where('syllabary_id', '=', $syllabaryId)->get();
 
-        $rowHeader->delete();
+        $selectedHeader = $rowHeaders->find($rowId);
+
+        if ($selectedHeader == NULL)
+          return response()->json(['success' => False]);
+
+        if ($selectedHeader->prev_id != -1) {
+          $prevHeader = $rowHeaders->find($selectedHeader->prev_id);
+          $prevHeader->next_id = $selectedHeader->next_id;
+          $prevHeader->save();
+        }
+
+        if ($selectedHeader->next_id != -1) {
+          $nextHeader = $rowHeaders->find($selectedHeader->next_id);
+          $nextHeader->prev_id = $selectedHeader->prev_id;
+          $nextHeader->save();
+        }
+
+        $selectedHeader->delete();
+
         return response()->json(['success' => True]);
 
     }
+
     public function GetSymbolData($symbolId)
     {
       $symbol = Symbol::find($symbolId);
