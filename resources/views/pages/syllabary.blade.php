@@ -1,16 +1,19 @@
 @extends('layouts.plain')
 @section('head-custom')
 <style>
-    .headerCell {
+    .headerCell
+    {
     background: #BDC3C7;
     }
 
-    .headerCell img, .headerCell-selected img {
+    .headerCell img, .headerCell-selected img
+    {
     width:100px;
     height:100px;
     }
 
-    .syllableCell {
+    .syllableCell
+    {
     background: #FFFFFF;
     }
 
@@ -32,26 +35,29 @@
     position:static;
     }
 
-    .syllabaryGrid {
+    .syllabaryGrid
+    {
     width: 100%;
     font-size: 200%;
     }
 
     .col-controls,
     .row-controls,
-    .cell-controls,
-    .gen-controls {
+    .cell-controls
+    {
     display: none;
     }
 
-    .headerCell-selected, .syllableCell-selected {
+    .headerCell-selected, .syllableCell-selected
+    {
     background: #C43;
     }
 
     .headerCell,
     .headerCell-selected,
     .syllableCell,
-    .syllableCell-selected {
+    .syllableCell-selected
+    {
     -webkit-transition:background-color 0.4s linear;
     -o-transition:background-color 0.4s linear;
     -moz-transition:background-color 0.4s linear;
@@ -132,9 +138,7 @@
         hide("col-controls");
         hide("row-controls");
         hide("cell-controls");
-        hide("gen-controls");
         show("col-control-" + index);
-        show("gen-control-col-" + index);
         select("col-" + index)
     }
 
@@ -144,9 +148,7 @@
         hide("col-controls");
         hide("row-controls");
         hide("cell-controls");
-        hide("gen-controls");
         show("row-control-" + index);
-        show("gen-control-row-" + index);
         select("row-" + index)
     }
 
@@ -155,9 +157,7 @@
         hide("col-controls");
         hide("row-controls");
         hide("cell-controls");
-        hide("gen-controls");
         show("cell-control-" + colIndex + "-" + rowIndex);
-        show("gen-control-cell-" + colIndex + "-" + rowIndex);
         select("cell-" + colIndex + "-" + rowIndex)
     }
 
@@ -166,7 +166,6 @@
         hide("col-controls");
         hide("row-controls");
         hide("cell-controls");
-        hide("gen-controls");
         unselect()
     }
 
@@ -192,7 +191,6 @@
             hide("row-controls");
             hide("col-controls");
             hide("cell-controls");
-            hide("gen-controls");
         }
         else if(document.getElementById(cell).className=='syllableCell-selected')
         {
@@ -200,7 +198,6 @@
             hide("row-controls");
             hide("col-controls");
             hide("cell-controls");
-            hide("gen-controls");
         }
         else
         {
