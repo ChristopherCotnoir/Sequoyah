@@ -17,10 +17,22 @@
     background: #FFFFFF;
     }
 
-    .syllableCell img, .syllableCell-selected img
-    {
-    width: 100px;
-    height: 100px;
+    .syllableCell div, .syllableCell-selected div {
+    position: relative; 
+    }
+
+    .syllableCell div img, .syllableCell-selected div img {
+    width:100px;
+    height:100px;
+    position:absolute;
+    left:0px;
+    top:0px;
+    }
+
+    .syllableCell div img:first-child, .syllableCell-selected div img:first-child{
+    width:100px;
+    height:100px;
+    position:static;
     }
 
     .syllabaryGrid
@@ -56,110 +68,73 @@
 @section('content')
 <main>
 
-<div style="height:400px">
-<!--===========================================================================================================
-                                            Column Control Panel 
-============================================================================================================-->
-@foreach($vowels as $colIndex => $vowel)
-<div class="col-controls" id="col-control-{{{ $colIndex }}}">
-    <form method='post'>
-    <button type="button" class="btn btn-default">Add Column Left</button>
-    </form>
-    <form method='post'>
-    <button type="button" class="btn btn-default">Remove Column</button>
-    </form>
-    <form method='post'>
-    <button type="button" class="btn btn-default">Add Column Right</button>
-    </form>
-    <form method='post'>
-    <button type="button" class="btn btn-default">Edit Vowel</button>
-    </form>
-    <form method='post'>
-    <button type="button" class="btn btn-default" onclick="editSymbol('{{{ $vowel['symbol_id'] }}}')">Edit Symbol</button>
-    </form>
-    <button type="button" class="btn btn-default" id="vowel-audio">Pronounce Vowel</button>
+<div id="grid-div">
 </div>
-@endforeach
-
-<!--===========================================================================================================
-                                             Row Control Panel 
-============================================================================================================-->
-@foreach($consonants as $rowIndex => $consonant)
-<div class="row-controls" id="row-control-{{{ $rowIndex }}}">
-    <form method='post'>
-    <button type="button" class="btn btn-default">Add Row Above</button>
-    </form>
-    <form method='post'>
-    <button type="button" class="btn btn-default">Remove Row</button>
-    </form>
-    <form method='post'>
-    <button type="button" class="btn btn-default">Add Row Below</button>
-    </form>
-    <form method='post'>
-    <button type="button" class="btn btn-default">Edit Consonant</button>
-    </form>
-    <form method='post'>
-    <button type="button" class="btn btn-default" onclick="editSymbol('{{{ $consonant['symbol_id'] }}}')">Edit Symbol</button>
-    </form>
-    <button type="button" class="btn btn-default" id="consonant-audio">Pronounce Consonant</button>
-</div>
-@endforeach
-
-<!--===========================================================================================================
-                                             Cell Control Panel 
-============================================================================================================-->
-@foreach($vowels as $colIndex => $vowel)
-    @foreach($consonants as $rowIndex => $consonant)
-    <div class="cell-controls" id="cell-control-{{{ $colIndex }}}-{{{ $rowIndex }}}">
-        <form method='post'>
-        <button type="button" class="btn btn-default">Remove Cell</button>
-        </form>
-        <form method='post'>
-        <button type="button" class="btn btn-default">Restore Cell</button>
-        </form>
-        <form method='post'>
-        <button type="button" class="btn btn-default">Edit Symbol</button>
-        </form>
-        <button type="button" class="btn btn-default" id="syllable-audio">Pronounce Syllable</button>
-    </div>
-    @endforeach
-@endforeach
-
-</div>
-<!--==========================================================================================================
-                                               Syllabary Grid
-===========================================================================================================-->
-<table class='syllabaryGrid' border='1'>
-    <tr>
-        <th class='headerCell' onclick='unselectAll()'></th>
-        @foreach($vowels as $colIndex => $vowel)
-        <th class='headerCell' id='col-{{{ $colIndex }}}' onclick='selectColumn("{{{ $colIndex }}}")'>
-            <b>{{{ $vowel['ipa'] }}}</b>
-            <br>
-            <img src="/syllabary/symbol/{{{ $vowel['symbol_id'] }}}/data"></img>
-        </th>
-        @endforeach
-    </tr>
-
-    @foreach($consonants as $rowIndex => $consonant)
-    <tr>
-        <th class='headerCell' id='row-{{{ $rowIndex }}}' onclick='selectRow("{{{ $rowIndex }}}")'>
-            <b>{{{ $consonant['ipa'] }}}</b>
-            <br>
-            <img src="/syllabary/symbol/{{{ $consonant['symbol_id'] }}}/data"></img>
-        </th>
-        @foreach($vowels as $colIndex => $vowel)
-        <td class="syllableCell" id='cell-{{{ $colIndex }}}-{{{ $rowIndex }}}' onclick='selectCell("{{{ $colIndex }}}", "{{{ $rowIndex }}}")'>
-        {{{ $consonant['ipa'] . $vowel['ipa'] }}}
-        </td>
-        @endforeach
-    </tr>
-    @endforeach
-</table>
 
 <script type='text/javascript'>
+    var selectedRowId;
+    var selectedColId;
+    // On load
+    $(function() {
+      loadGrid();
+      selectedRowId = -1;
+      selectedColid = -1;
+    });
+
+    function loadGrid()
+    {
+      $("#grid-div").load("/syllabary/grid/1");
+    }
+
+    function addColumnRight(ipa)
+    {
+      $.post("/syllabary/1/column/add/" + selectedColId, {"ipa": ipa}, function() {
+        loadGrid();
+      });
+    }
+
+    function addColumnLeft(ipa)
+    {
+      $.post("/syllabary/1/column/add/-" + selectedColId, {"ipa": ipa}, function() {
+        loadGrid();
+      });
+    }
+
+    function removeSelectedColumn()
+    {
+      if (selectedColId != -1) {
+        $.post("/syllabary/1/column/" + selectedColId + "/remove", function() {
+          loadGrid();
+        });
+      }
+    }
+
+    function addRowTop(ipa)
+    {
+      $.post("/syllabary/1/row/add/-" + selectedRowId, {"ipa": ipa}, function() {
+        loadGrid();
+      });
+    }
+
+    function addRowBottom(ipa)
+    {
+      $.post("/syllabary/1/row/add/" + selectedRowId, {"ipa": ipa}, function() {
+        loadGrid();
+      });
+    }
+
+    function removeSelectedRow()
+    {
+      if (selectedRowId != -1) {
+        $.post("/syllabary/1/row/" + selectedRowId + "/remove", function() {
+          loadGrid();
+        });
+      }
+    }
+
     function selectColumn(index)
     {
+        selectedColId = $("#col-" + index).attr("colId");
         hide("col-controls");
         hide("row-controls");
         hide("cell-controls");
@@ -169,6 +144,7 @@
 
     function selectRow(index)
     {
+        selectedRowId = $("#row-" + index).attr("rowId");
         hide("col-controls");
         hide("row-controls");
         hide("cell-controls");
