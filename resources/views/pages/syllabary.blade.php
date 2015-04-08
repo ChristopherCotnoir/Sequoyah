@@ -77,6 +77,7 @@
     <form method='post'>
     <button type="button" class="btn btn-default" onclick="editSymbol('{{{ $vowel['symbol_id'] }}}')">Edit Symbol</button>
     </form>
+    <button type="button" class="btn btn-default" id="vowel-audio">Pronounce Vowel</button>
 </div>
 @endforeach
 
@@ -100,6 +101,7 @@
     <form method='post'>
     <button type="button" class="btn btn-default" onclick="editSymbol('{{{ $consonant['symbol_id'] }}}')">Edit Symbol</button>
     </form>
+    <button type="button" class="btn btn-default" id="consonant-audio">Pronounce Consonant</button>
 </div>
 @endforeach
 
@@ -118,6 +120,7 @@
         <form method='post'>
         <button type="button" class="btn btn-default">Edit Symbol</button>
         </form>
+        <button type="button" class="btn btn-default" id="syllable-audio">Pronounce Syllable</button>
     </div>
     @endforeach
 @endforeach
