@@ -1,5 +1,8 @@
 <?php namespace Sequoyah\Http\Controllers;
 
+use Sequoyah\Models\ProjectMembers;
+use 
+
 class AccountController extends Controller
 {
     /** 
@@ -10,7 +13,7 @@ class AccountController extends Controller
 
     public function_construct()
     {
-        //
+        //$this->middleware('auth');
     }
 
     public function GetUserAccessPermissions($projectId, $userId)
@@ -22,34 +25,15 @@ class AccountController extends Controller
         //project_id         bigint(20) unsigned            Not NULL          NULL
         // access                 smallin(6)	                            Not NULL 	    0
 
-        $servername = "localhost";
-        $username = "userid";
-        $password = "password";
-        $dbname = "sequoyah";
+        $projectMember = ProjectMembers::where('project_id','=',$projectId)->
+                                                    where('user_id','=',$userId)->get();
 
-       //create connection
-       $conn = new mysqli($servername,$username,$password,$dbname);
-
-        //check connection
-        if($conn->connect_error)
+        if($projectMember == false)
         {
-            die("Connection failed:".$conn->connect_error);
-        }
-
-        $mysql = "SELECT access FROM project_members WHERE project_id = '$projectId' and user_id = '$userId'";
-        $result = conn->query($mysql);
-
-        if($row = $result->fetch_assoc())
-        {
-            echo $row['access'];
+            return '<b>Project member not found!</b>';
         }
         else
         {
-            echo "An unexpected error has occured.";
+            retrun $projectMember->access;
         }
-
-        mysql_free_result($result);
-
-        $conn->close();
     }
-}
