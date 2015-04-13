@@ -2,17 +2,12 @@
 
 class AudioController extends Controller
 {
-    public function GenerateAudio($inputString)
-    {
-
-    }
-
     /* @arguments:
             Format: clip.extension
         @output:
             matches the output file extension.
     */
-    public function MergeAudio($clip1, $clip2, $output)
+    public function MergeAudio($syllabaryId, $clip1, $clip2, $output)
     {
         if(Storage::exists('audioSample/' . $clip1))
         {
@@ -20,7 +15,7 @@ class AudioController extends Controller
             {
                 if(Storage::exists('scripts/mmcat.sh'))
                 {
-                    $command = 'sh scripts/mmcat.sh audioSample/' . $clip1Path . ' audioSample/' . $clip2Path . ' audioSample/' . $outputName;
+                    $command = 'sox -m audioSample/' . $clip1Path . ' audioSample/' . $clip2Path . ' audioSample/' . $outputName;
                     exec($command);
                 }
                 else
