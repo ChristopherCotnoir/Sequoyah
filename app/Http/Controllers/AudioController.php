@@ -15,7 +15,7 @@ class AudioController extends Controller
         {
             if(Storage::exists('audioSample/' . $clip2))
             {
-                $command = 'sox -m audioSample/' . $clip1Path . ' audioSample/' . $clip2Path . ' audioSample/' . $outputName;
+                $command = 'sox -m audioSample/' . $clip1 . ' audioSample/' . $clip2 . ' audioSample/' . $outputName;
                 exec($command);
             }
             else
