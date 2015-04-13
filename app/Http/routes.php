@@ -8,6 +8,7 @@ Route::get('syllabary', 'SyllabaryController@ShowGrid');
 Route::get('syllabary/grid/{syllabaryId}', 'SyllabaryController@GetGrid');
 Route::get('syllabary/testsvg/{symbolId}', 'SyllabaryController@TestSvg');
 Route::get('syllabary/symbol/{symbolId}/data', 'SyllabaryController@GetSymbolData');
+Route::get('settings', 'AccountController@ShowPage');
 
 Route::post('syllabary/symbol/{symbolId}/update', 'SyllabaryController@UpdateSymbol');
 Route::post('syllabary/{syllabaryId}/column/add/{relativeId?}', 'SyllabaryController@AddColumn');
