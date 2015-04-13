@@ -6,21 +6,50 @@ class AudioController extends Controller
     {
 
     }
-    public function MergeAudio($clip1Path, $clip2Path)
+
+    /* @arguments:
+            Format: clip.extension
+        @output:
+            matches the output file extension.
+    */
+    public function MergeAudio($clip1, $clip2, $output)
     {
+        if(Storage::exists('audioSample/' . $clip1))
+        {
+            if(Storage::exists('audioSample/' . $clip2))
+            {
+                if(Storage::exists('scripts/mmcat.sh'))
+                {
+                    $command = 'sh scripts/mmcat.sh audioSample/' . $clip1Path . ' audioSample/' . $clip2Path . ' audioSample/' . $outputName;
+                    exec($command);
+                }
+                else
+                {
+                    echo "Could not find audio merging script.";
+                }
+            }
+            else
+            {
+                echo "Could not find audioSample/" . $clip2;
+            }
+        }
+        else
+        {
+            echo "Could not find audioSample" . $clip1;
+        }
 
     }
 
     public function UploadAudioSample($syllabaryId)
     {
-        $targetDir = "/tmp/sequoyah/audioSample/";
+        $targetDir = "audioSample/";
         $targetFile = $targetDir . basename($_FILES['audioSample']['name']);
         $uploadOk = true;
         $audioFileType = pathinfo($targetFile, PATHINFO_EXTENSION);
 
         // Check if file name is already in use.
 
-        if (file_exists($targetFile))
+        if (Storage::exists($targetFile))
         {
              echo "File already exists.";
              $uploadOK = false;
@@ -52,7 +81,7 @@ class AudioController extends Controller
         {
              echo "File was not uploaded.";
         }
-        elseif(move_uploaded_file($_FILE['audioSample']['tmpName'], $targetFile))
+        elseif(Storage::move($_FILE['audioSample']['tmpName'], $targetFile))
         {
              echo "The file" . basename($_FILE['audioSample']['name']) . " has been uploaded.";
         }
