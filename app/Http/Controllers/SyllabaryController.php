@@ -38,7 +38,7 @@ class SyllabaryController extends Controller
         $consonants = array();
 
         // TODO - Grab the current syllabary ID from the project data
-        
+
         $firstDbColHeader = SyllabaryColumnHeader::where('syllabary_id', '=', 1)->
                                                    where('prev_id', '=', -1)->first();
         $dbColHeaders = SyllabaryColumnHeader::where('syllabary_id', '=', 1)->get();
@@ -97,26 +97,25 @@ class SyllabaryController extends Controller
 
           if ($relativeId < 0) {
             $leftHeader = $headers->find(($relativeId * -1));
+            $rightHeader = $leftHeader;
             $leftHeader = $headers->find($leftHeader->prev_id);
           } else {
             $leftHeader = $headers->find($relativeId);
+            $rightHeader = $headers->find($leftHeader->next_id);
           }
-          
-          if ($leftHeader == NULL)
-            return response()->json(array('success' => False));
-
-          $rightHeader = $headers->find($leftHeader->next_id);
 
           $newHeader = SyllabaryColumnHeader::create(array(
               'syllabary_id' => $syllabaryId,
               'ipa' => $ipa,
               'symbol_id' => 1,
-              'prev_id' => $leftHeader->id,
+              'prev_id' => ($leftHeader != NULL) ? $leftHeader->id : -1,
               'next_id' => ($rightHeader != NULL) ? $rightHeader->id : -1,
            ));
 
-           $leftHeader->next_id = $newHeader->id;
-           $leftHeader->save();
+           if ($leftHeader != NULL) {
+             $leftHeader->next_id = $newHeader->id;
+             $leftHeader->save();
+           }
 
            if ($rightHeader != NULL) {
              $rightHeader->prev_id = $newHeader->id;
@@ -185,26 +184,25 @@ class SyllabaryController extends Controller
 
           if ($relativeId < 0) {
             $topHeader = $headers->find(($relativeId * -1));
+            $bottomHeader = $topHeader;
             $topHeader = $headers->find($topHeader->prev_id);
           } else {
             $topHeader = $headers->find($relativeId);
+            $bottomHeader = $headers->find($topHeader->next_id);
           }
-          
-          if ($topHeader == NULL)
-            return response()->json(array('success' => False));
-
-          $bottomHeader = $headers->find($topHeader->next_id);
 
           $newHeader = SyllabaryRowHeader::create(array(
               'syllabary_id' => $syllabaryId,
               'ipa' => $ipa,
               'symbol_id' => 1,
-              'prev_id' => $topHeader->id,
+              'prev_id' => ($topHeader != NULL) ? $topHeader->id : -1,
               'next_id' => ($bottomHeader != NULL) ? $bottomHeader->id : -1,
            ));
 
-           $topHeader->next_id = $newHeader->id;
-           $topHeader->save();
+           if ($topHeader != NULL) {
+             $topHeader->next_id = $newHeader->id;
+             $topHeader->save();
+           }
 
            if ($bottomHeader != NULL) {
              $bottomHeader->prev_id = $newHeader->id;
@@ -280,7 +278,7 @@ class SyllabaryController extends Controller
 
         if($symbol == false || !Input::has('svg'))
           return response()->json(array('success' => false));
-        
+
         $svgData = base64_decode(Input::get('svg'));
         $symbol->symbol_data = $svgData;
         $symbol->save();
@@ -295,57 +293,6 @@ class SyllabaryController extends Controller
         return '<b>Symbol not found!</b>';
 
       return '<body>' . $symbol->symbol_data . '</body>';
-    }
-
-    public function UploadAudioSample($syllabaryId)
-    {
-        $targetDir = "/tmp/sequoyah/audioSample/";
-        $targetFile = $targetDir . basename($_FILES['audioSample']['name']);
-        $uploadOk = true;
-        $audioFileType = pathinfo($targetFile, PATHINFO_EXTENSION);
-
-        // Check if file name is already in use.
-
-        if (file_exists($targetFile))
-        {
-             echo "File already exists.";
-             $uploadOK = false;
-        }
-
-        // Audio format check.
-
-        if (($audioFileType != "audio/wav") || ($audioFileType != "audio/mpeg") || 
-              ($audioFileType != "audio/ogg"))
-        {
-             echo "Unsupported audio format. Use wav, mpeg, or ogg.";
-             $uploadOk = false;
-        }
-
-        // Audio file size check.
-
-        if($_Files['audioSample']['size'] > 5242880) // Max size is 5MB.
-        {
-             echo "File size too large.";
-             $uploadOK = false;
-        }
-        elseif($_Files['audioSample']['size'] == 0)
-        {
-             echo "File size too small.";
-             $uploadOK = false;
-        }
-
-        if ($uploadOK == false)
-        {
-             echo "File was not uploaded.";
-        }
-        elseif(move_uploaded_file($_FILE['audioSample']['tmpName'], $targetFile))
-        {
-             echo "The file" . basename($_FILE['audioSample']['name']) . " has been uploaded.";
-        }
-        else
-        {
-             echo "An unexpected error has occured while uploading file.";
-        }
     }
 }
 
