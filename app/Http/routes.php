@@ -15,6 +15,7 @@ Route::post('syllabary/{syllabaryId}/column/add/{relativeId?}', 'SyllabaryContro
 Route::post('syllabary/{syllabaryId}/column/{columnId}/remove', 'SyllabaryController@RemoveColumn');
 Route::post('syllabary/{syllabaryId}/row/add/{relativeId?}', 'SyllabaryController@AddRow');
 Route::post('syllabary/{syllabaryId}/row/{rowId}/remove', 'SyllabaryController@RemoveRow');
+Route::post('syllabary/{syllabaryId}/upload', 'AudioController@UploadAudioSample');
 
 Route::group(['namespace' => 'Auth', 'prefix' => 'auth'], function()
 {
