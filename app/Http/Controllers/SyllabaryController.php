@@ -99,6 +99,10 @@ class SyllabaryController extends Controller
 
         $headers = SyllabaryColumnHeader::where('syllabary_id', '=', 1)->get();
 
+        $newSymbol = Symbol::create(array(
+            'symbol_data' => '',
+        ));
+
         // If we specify that we want to add to the right of a given header.
         if ($relativeId != NULL) {
           // If we pass a negative relative column ID, that means we want to add to
@@ -116,7 +120,7 @@ class SyllabaryController extends Controller
           $newHeader = SyllabaryColumnHeader::create(array(
               'syllabary_id' => $syllabaryId,
               'ipa' => $ipa,
-              'symbol_id' => 1,
+              'symbol_id' => $newSymbol->id,
               'prev_id' => ($leftHeader != NULL) ? $leftHeader->id : -1,
               'next_id' => ($rightHeader != NULL) ? $rightHeader->id : -1,
            ));
@@ -137,7 +141,7 @@ class SyllabaryController extends Controller
           $newHeader = SyllabaryColumnHeader::create(array(
             'syllabary_id' => $syllabaryId,
             'ipa' => $ipa,
-            'symbol_id' => 1,
+            'symbol_id' => $newSymbol->id,
             'prev_id' => ($lastHeader != NULL) ? $lastHeader->id : -1,
             'next_id' => -1,
          ));
@@ -186,6 +190,10 @@ class SyllabaryController extends Controller
 
         $headers = SyllabaryRowHeader::where('syllabary_id', '=', 1)->get();
 
+        $newSymbol = Symbol::create(array(
+            'symbol_data' => '',
+        ));
+
         // If we specify that we want to add to the bottom of a given header.
         if ($relativeId != NULL) {
           // If we pass a negative relative row ID, that means we want to add to
@@ -203,7 +211,7 @@ class SyllabaryController extends Controller
           $newHeader = SyllabaryRowHeader::create(array(
               'syllabary_id' => $syllabaryId,
               'ipa' => $ipa,
-              'symbol_id' => 1,
+              'symbol_id' => $newSymbol->id,
               'prev_id' => ($topHeader != NULL) ? $topHeader->id : -1,
               'next_id' => ($bottomHeader != NULL) ? $bottomHeader->id : -1,
            ));
@@ -224,7 +232,7 @@ class SyllabaryController extends Controller
           $newHeader = SyllabaryRowHeader::create(array(
             'syllabary_id' => $syllabaryId,
             'ipa' => $ipa,
-            'symbol_id' => 1,
+            'symbol_id' => $newSymbol->id,
             'prev_id' => ($lastHeader != NULL) ? $lastHeader->id : -1,
             'next_id' => -1,
          ));
@@ -309,6 +317,10 @@ class SyllabaryController extends Controller
       if ($symbol == false)
         return response()->json(array('success' => false));
 
+      // If there is no data in the symbol, return a blank placeholder.
+      if ($symbol->symbol_data == "") {
+        $symbol->symbol_data = "<?xml version='1.0'?><svg width='512' height='512' xmlns='http://www.w3.org/2000/svg' xmlns:svg='http://www.w3.org/2000/svg'></svg>";
+      }
       return response($symbol->symbol_data, 200)->header('Content-Type', 'image/svg+xml');
 /*
       return response()->json(array(
