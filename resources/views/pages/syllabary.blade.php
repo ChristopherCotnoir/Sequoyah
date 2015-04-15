@@ -35,6 +35,9 @@
     position:static;
     }
 
+    .deletedCell {
+    visibility:hidden;
+    }
     .syllabaryGrid
     {
     width: 100%;
@@ -130,6 +133,13 @@
           loadGrid();
         });
       }
+    }
+
+    function uploadAudio()
+    {
+        $.post("/syllabary/1/upload", function() {
+          loadGrid();
+        });
     }
 
     function selectColumn(index)
@@ -230,6 +240,20 @@
     function editSymbol(symbolId)
     {
         window.location = '/svg-edit/svg-editor.html?symbol_id=' + symbolId;
+    }
+
+    function removeCell(rowId, colId)
+    {
+      $.post("/syllabary/1/cell/" + rowId + "/" + colId + "/remove", function() {
+        loadGrid();
+      });
+    }
+
+    function addCell(rowId, colId)
+    {
+      $.post("/syllabary/1/cell/" + rowId + "/" + colId + "/add", function() {
+        loadGrid();
+      });
     }
 </script>
 </main>
