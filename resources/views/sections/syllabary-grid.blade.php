@@ -58,7 +58,7 @@
     @foreach($consonants as $rowIndex => $consonant)
     <div class="cell-controls" id="cell-control-{{{ $colIndex }}}-{{{ $rowIndex }}}">
         <form method='post'>
-        <button type="button" class="btn btn-default">Remove Cell</button>
+        <button type="button" class="btn btn-default" onclick="removeCell({{{ $rowIndex + 1 }}}, {{{ $colIndex + 1 }}})">Remove Cell</button>
         </form>
         <form method='post'>
         <button type="button" class="btn btn-default">Restore Cell</button>
@@ -98,7 +98,17 @@
             <img src="/syllabary/symbol/{{{ $consonant['symbol_id'] }}}/data"></img>
         </th>
         @foreach($vowels as $colIndex => $vowel)
-        <td class="syllableCell" id='cell-{{{ $colIndex }}}-{{{ $rowIndex }}}' onclick='selectCell("{{{ $colIndex }}}", "{{{ $rowIndex }}}")'>
+        <?php
+          if (isset($cells[$consonant['header_id']][$vowel['header_id']])) {
+            $cell = $cells[$consonant['header_id']][$vowel['header_id']];
+            $cellDeleted = $cell->deleted;
+          } else {
+            $cellDeleted = false;
+          }
+        ?>
+
+        <?php if (!$cellDeleted) { ?>
+        <td class="syllableCell" id='cell-{{{ $colIndex }}}-{{{ $rowIndex }}}' colId="{{{$vowel['header_id']}}}" rowId="{{{$consonant['header_id']}}}" onclick='selectCell("{{{ $colIndex }}}", "{{{ $rowIndex }}}")'>
           <b>{{{ $consonant['ipa'] . $vowel['ipa'] }}}</b>
           <br>
           <div>
@@ -106,6 +116,14 @@
             <img src="/syllabary/symbol/{{{ $vowel['symbol_id'] }}}/data"></img>
           </div>
         </td>
+        <?php } else { ?>
+        <td class="syllableCell deletedCell" id='cell-{{{ $colIndex }}}-{{{ $rowIndex }}}' colId="{{{$vowel['header_id']}}}" rowId="{{{$consonant['header_id']}}}" onclick='selectCell("{{{ $colIndex }}}", "{{{ $rowIndex }}}")'>
+          <b>{{{ $consonant['ipa'] . $vowel['ipa'] }}}</b>
+          <br>
+          <div>
+          </div>
+        </td>
+        <?php } ?>
         @endforeach
     </tr>
     @endforeach

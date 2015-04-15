@@ -6,6 +6,7 @@
 
 use Sequoyah\Models\SyllabaryColumnHeader;
 use Sequoyah\Models\SyllabaryRowHeader;
+use Sequoyah\Models\SyllabaryCell;
 use Sequoyah\Models\Symbol;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
@@ -76,9 +77,17 @@ class SyllabaryController extends Controller
             $header = $rowHeaderList[$header->next_id];
         }
 
+        $cells = array(array());
+        $dbCells = SyllabaryCell::where('syllabary_id', '=', 1)->get();
+        
+        foreach($dbCells as $cell) {
+          $cells[$cell->row_id][$cell->col_id] = $cell;
+        }
+
         return view('sections.syllabary-grid', array(
             'vowels' => $vowels,
             'consonants' => $consonants,
+            'cells' => $cells,
         ));
     }
 
@@ -254,6 +263,43 @@ class SyllabaryController extends Controller
 
         return response()->json(['success' => True]);
 
+    }
+
+    public function AddCell($syllabaryId, $rowId, $colId)
+    {
+      $cell = SyllabaryCell::where('row_id', '=', $rowId)->
+                             where('col_id', '=', $colId)->first();
+      if ($cell != NULL) {
+        $cell->deleted = false;
+        $cell->save();
+      } else {
+        $cell = SyllabaryCell::create(array(
+          'syllabary_id' => 1,
+          'row_id' => $rowId,
+          'col_id' => $colId,
+          'deleted' => false,
+        ));
+      }
+
+      return response()->json(array('success' => true));
+    }
+
+    public function RemoveCell($syllabaryId, $rowId, $colId)
+    {
+      $cell = SyllabaryCell::where('row_id', '=', $rowId)->
+                             where('col_id', '=', $colId)->first();
+      if ($cell != NULL) {
+        $cell->deleted = true;
+        $cell->save();
+      } else {
+        SyllabaryCell::create(array(
+          'syllabary_id' => 1,
+          'row_id' => $rowId,
+          'col_id' => $colId,
+          'deleted' => true,
+        ));
+      }
+      return response()->json(array('success' => true));
     }
 
     public function GetSymbolData($symbolId)
