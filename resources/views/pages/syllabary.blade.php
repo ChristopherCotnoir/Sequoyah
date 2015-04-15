@@ -135,6 +135,13 @@
       }
     }
 
+    function uploadAudio()
+    {
+        $.post("/syllabary/1/upload", function() {
+          loadGrid();
+        });
+    }
+
     function selectColumn(index)
     {
         selectedColId = $("#col-" + index).attr("colId");

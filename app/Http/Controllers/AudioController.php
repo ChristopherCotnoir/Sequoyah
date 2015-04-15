@@ -2,31 +2,21 @@
 
 class AudioController extends Controller
 {
-    public function GenerateAudio($inputString)
-    {
-
-    }
-
     /* @arguments:
             Format: clip.extension
         @output:
             matches the output file extension.
+        @requirements:
+            Requires sox to be installed onto server
     */
-    public function MergeAudio($clip1, $clip2, $output)
+    public function MergeAudio($syllabaryId, $clip1, $clip2, $output)
     {
         if(Storage::exists('audioSample/' . $clip1))
         {
             if(Storage::exists('audioSample/' . $clip2))
             {
-                if(Storage::exists('scripts/mmcat.sh'))
-                {
-                    $command = 'sh scripts/mmcat.sh audioSample/' . $clip1Path . ' audioSample/' . $clip2Path . ' audioSample/' . $outputName;
-                    exec($command);
-                }
-                else
-                {
-                    echo "Could not find audio merging script.";
-                }
+                $command = 'sox -m audioSample/' . $clip1 . ' audioSample/' . $clip2 . ' audioSample/' . $outputName;
+                exec($command);
             }
             else
             {

@@ -1,4 +1,4 @@
-<div style="height:500px">
+<div style="height:600px">
 <!--===========================================================================================================
                                             Column Control Panel 
 ============================================================================================================-->
@@ -18,6 +18,9 @@
     </form>
     <form method='post'>
     <button type="button" class="btn btn-default" onclick="editSymbol('{{{ $vowel['symbol_id'] }}}')">Edit Symbol</button>
+    </form>
+    <form method='post'>
+    <button type="button" class="btn btn-default" onclick="uploadAudio()">Upload Audio</button>
     </form>
     <form method='post'>
     <button type="button" class="btn btn-default" id="vowel-audio">Pronounce Vowel</button>
@@ -44,6 +47,9 @@
     </form>
     <form method='post'>
     <button type="button" class="btn btn-default" onclick="editSymbol('{{{ $consonant['symbol_id'] }}}')">Edit Symbol</button>
+    </form>
+    <form method='post'>
+    <button type="button" class="btn btn-default" onclick="uploadAudio()">Upload Audio</button>
     </form>
     <form method='post'>
     <button type="button" class="btn btn-default" id="vowel-audio">Pronounce Consonant</button>
