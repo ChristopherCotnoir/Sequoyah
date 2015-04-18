@@ -6,6 +6,7 @@
 
 use Sequoyah\Models\SyllabaryColumnHeader;
 use Sequoyah\Models\SyllabaryRowHeader;
+use Sequoyah\Models\SyllabaryCell;
 use Sequoyah\Models\Symbol;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
@@ -38,7 +39,7 @@ class SyllabaryController extends Controller
         $consonants = array();
 
         // TODO - Grab the current syllabary ID from the project data
-        
+
         $firstDbColHeader = SyllabaryColumnHeader::where('syllabary_id', '=', 1)->
                                                    where('prev_id', '=', -1)->first();
         $dbColHeaders = SyllabaryColumnHeader::where('syllabary_id', '=', 1)->get();
@@ -76,9 +77,17 @@ class SyllabaryController extends Controller
             $header = $rowHeaderList[$header->next_id];
         }
 
+        $cells = array(array());
+        $dbCells = SyllabaryCell::where('syllabary_id', '=', 1)->get();
+        
+        foreach($dbCells as $cell) {
+          $cells[$cell->row_id][$cell->col_id] = $cell;
+        }
+
         return view('sections.syllabary-grid', array(
             'vowels' => $vowels,
             'consonants' => $consonants,
+            'cells' => $cells,
         ));
     }
 
@@ -90,6 +99,10 @@ class SyllabaryController extends Controller
 
         $headers = SyllabaryColumnHeader::where('syllabary_id', '=', 1)->get();
 
+        $newSymbol = Symbol::create(array(
+            'symbol_data' => '',
+        ));
+
         // If we specify that we want to add to the right of a given header.
         if ($relativeId != NULL) {
           // If we pass a negative relative column ID, that means we want to add to
@@ -97,26 +110,25 @@ class SyllabaryController extends Controller
 
           if ($relativeId < 0) {
             $leftHeader = $headers->find(($relativeId * -1));
+            $rightHeader = $leftHeader;
             $leftHeader = $headers->find($leftHeader->prev_id);
           } else {
             $leftHeader = $headers->find($relativeId);
+            $rightHeader = $headers->find($leftHeader->next_id);
           }
-          
-          if ($leftHeader == NULL)
-            return response()->json(array('success' => False));
-
-          $rightHeader = $headers->find($leftHeader->next_id);
 
           $newHeader = SyllabaryColumnHeader::create(array(
               'syllabary_id' => $syllabaryId,
               'ipa' => $ipa,
-              'symbol_id' => 1,
-              'prev_id' => $leftHeader->id,
+              'symbol_id' => $newSymbol->id,
+              'prev_id' => ($leftHeader != NULL) ? $leftHeader->id : -1,
               'next_id' => ($rightHeader != NULL) ? $rightHeader->id : -1,
            ));
 
-           $leftHeader->next_id = $newHeader->id;
-           $leftHeader->save();
+           if ($leftHeader != NULL) {
+             $leftHeader->next_id = $newHeader->id;
+             $leftHeader->save();
+           }
 
            if ($rightHeader != NULL) {
              $rightHeader->prev_id = $newHeader->id;
@@ -129,7 +141,7 @@ class SyllabaryController extends Controller
           $newHeader = SyllabaryColumnHeader::create(array(
             'syllabary_id' => $syllabaryId,
             'ipa' => $ipa,
-            'symbol_id' => 1,
+            'symbol_id' => $newSymbol->id,
             'prev_id' => ($lastHeader != NULL) ? $lastHeader->id : -1,
             'next_id' => -1,
          ));
@@ -178,6 +190,10 @@ class SyllabaryController extends Controller
 
         $headers = SyllabaryRowHeader::where('syllabary_id', '=', 1)->get();
 
+        $newSymbol = Symbol::create(array(
+            'symbol_data' => '',
+        ));
+
         // If we specify that we want to add to the bottom of a given header.
         if ($relativeId != NULL) {
           // If we pass a negative relative row ID, that means we want to add to
@@ -185,26 +201,25 @@ class SyllabaryController extends Controller
 
           if ($relativeId < 0) {
             $topHeader = $headers->find(($relativeId * -1));
+            $bottomHeader = $topHeader;
             $topHeader = $headers->find($topHeader->prev_id);
           } else {
             $topHeader = $headers->find($relativeId);
+            $bottomHeader = $headers->find($topHeader->next_id);
           }
-          
-          if ($topHeader == NULL)
-            return response()->json(array('success' => False));
-
-          $bottomHeader = $headers->find($topHeader->next_id);
 
           $newHeader = SyllabaryRowHeader::create(array(
               'syllabary_id' => $syllabaryId,
               'ipa' => $ipa,
-              'symbol_id' => 1,
-              'prev_id' => $topHeader->id,
+              'symbol_id' => $newSymbol->id,
+              'prev_id' => ($topHeader != NULL) ? $topHeader->id : -1,
               'next_id' => ($bottomHeader != NULL) ? $bottomHeader->id : -1,
            ));
 
-           $topHeader->next_id = $newHeader->id;
-           $topHeader->save();
+           if ($topHeader != NULL) {
+             $topHeader->next_id = $newHeader->id;
+             $topHeader->save();
+           }
 
            if ($bottomHeader != NULL) {
              $bottomHeader->prev_id = $newHeader->id;
@@ -217,7 +232,7 @@ class SyllabaryController extends Controller
           $newHeader = SyllabaryRowHeader::create(array(
             'syllabary_id' => $syllabaryId,
             'ipa' => $ipa,
-            'symbol_id' => 1,
+            'symbol_id' => $newSymbol->id,
             'prev_id' => ($lastHeader != NULL) ? $lastHeader->id : -1,
             'next_id' => -1,
          ));
@@ -258,6 +273,43 @@ class SyllabaryController extends Controller
 
     }
 
+    public function AddCell($syllabaryId, $rowId, $colId)
+    {
+      $cell = SyllabaryCell::where('row_id', '=', $rowId)->
+                             where('col_id', '=', $colId)->first();
+      if ($cell != NULL) {
+        $cell->deleted = false;
+        $cell->save();
+      } else {
+        $cell = SyllabaryCell::create(array(
+          'syllabary_id' => 1,
+          'row_id' => $rowId,
+          'col_id' => $colId,
+          'deleted' => false,
+        ));
+      }
+
+      return response()->json(array('success' => true));
+    }
+
+    public function RemoveCell($syllabaryId, $rowId, $colId)
+    {
+      $cell = SyllabaryCell::where('row_id', '=', $rowId)->
+                             where('col_id', '=', $colId)->first();
+      if ($cell != NULL) {
+        $cell->deleted = true;
+        $cell->save();
+      } else {
+        SyllabaryCell::create(array(
+          'syllabary_id' => 1,
+          'row_id' => $rowId,
+          'col_id' => $colId,
+          'deleted' => true,
+        ));
+      }
+      return response()->json(array('success' => true));
+    }
+
     public function GetSymbolData($symbolId)
     {
       $symbol = Symbol::find($symbolId);
@@ -265,6 +317,10 @@ class SyllabaryController extends Controller
       if ($symbol == false)
         return response()->json(array('success' => false));
 
+      // If there is no data in the symbol, return a blank placeholder.
+      if ($symbol->symbol_data == "") {
+        $symbol->symbol_data = "<?xml version='1.0'?><svg width='512' height='512' xmlns='http://www.w3.org/2000/svg' xmlns:svg='http://www.w3.org/2000/svg'></svg>";
+      }
       return response($symbol->symbol_data, 200)->header('Content-Type', 'image/svg+xml');
 /*
       return response()->json(array(
@@ -280,7 +336,7 @@ class SyllabaryController extends Controller
 
         if($symbol == false || !Input::has('svg'))
           return response()->json(array('success' => false));
-        
+
         $svgData = base64_decode(Input::get('svg'));
         $symbol->symbol_data = $svgData;
         $symbol->save();
@@ -295,57 +351,6 @@ class SyllabaryController extends Controller
         return '<b>Symbol not found!</b>';
 
       return '<body>' . $symbol->symbol_data . '</body>';
-    }
-
-    public function UploadAudioSample($syllabaryId)
-    {
-        $targetDir = "/tmp/sequoyah/audioSample/";
-        $targetFile = $targetDir . basename($_FILES['audioSample']['name']);
-        $uploadOk = true;
-        $audioFileType = pathinfo($targetFile, PATHINFO_EXTENSION);
-
-        // Check if file name is already in use.
-
-        if (file_exists($targetFile))
-        {
-             echo "File already exists.";
-             $uploadOK = false;
-        }
-
-        // Audio format check.
-
-        if (($audioFileType != "audio/wav") || ($audioFileType != "audio/mpeg") || 
-              ($audioFileType != "audio/ogg"))
-        {
-             echo "Unsupported audio format. Use wav, mpeg, or ogg.";
-             $uploadOk = false;
-        }
-
-        // Audio file size check.
-
-        if($_Files['audioSample']['size'] > 5242880) // Max size is 5MB.
-        {
-             echo "File size too large.";
-             $uploadOK = false;
-        }
-        elseif($_Files['audioSample']['size'] == 0)
-        {
-             echo "File size too small.";
-             $uploadOK = false;
-        }
-
-        if ($uploadOK == false)
-        {
-             echo "File was not uploaded.";
-        }
-        elseif(move_uploaded_file($_FILE['audioSample']['tmpName'], $targetFile))
-        {
-             echo "The file" . basename($_FILE['audioSample']['name']) . " has been uploaded.";
-        }
-        else
-        {
-             echo "An unexpected error has occured while uploading file.";
-        }
     }
 }
 

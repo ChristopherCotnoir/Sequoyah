@@ -1,7 +1,6 @@
 <?php namespace Sequoyah\Http\Controllers;
 
 use Sequoyah\Models\ProjectMembers;
-use 
 
 class AccountController extends Controller
 {
@@ -11,9 +10,14 @@ class AccountController extends Controller
       * @return void
       */
 
-    public function_construct()
+    public function __construct()
     {
         //$this->middleware('auth');
+    }
+
+    public function ShowPage()
+    {
+        return view('pages.settings');
     }
 
     public function GetUserAccessPermissions($projectId, $userId)
@@ -34,6 +38,7 @@ class AccountController extends Controller
         }
         else
         {
-            retrun $projectMember->access;
+            return $projectMember->access;
         }
     }
+}
