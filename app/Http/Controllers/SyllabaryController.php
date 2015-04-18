@@ -51,7 +51,7 @@ class SyllabaryController extends Controller
 
         $header = $firstDbColHeader;
         while($header != NULL) {
-          array_push($vowels, array('ipa' => $header->ipa, 'symbol_id' => $header->symbol_id, 'header_id' => $header->id));
+          array_push($vowels, array('ipa' => $header->ipa, 'symbol_id' => $header->symbol_id, 'header_id' => $header->id, 'audio_sample' => $header->audio_sample));
           if ($header->next_id == -1)
             $header = NULL;
           else
@@ -70,7 +70,7 @@ class SyllabaryController extends Controller
 
         $header = $firstDbRowHeader;
         while($header != NULL) {
-          array_push($consonants, array('ipa' => $header->ipa, 'symbol_id' => $header->symbol_id, 'header_id' => $header->id));
+          array_push($consonants, array('ipa' => $header->ipa, 'symbol_id' => $header->symbol_id, 'header_id' => $header->id, 'audio_sample' => $header->audio_sample));
           if ($header->next_id == -1)
             $header = NULL;
           else
@@ -273,7 +273,7 @@ class SyllabaryController extends Controller
 
     }
 
-    public function AddCell($syllabaryId, $rowId, $colId)
+    public function RestoreCell($syllabaryId, $rowId, $colId)
     {
       $cell = SyllabaryCell::where('row_id', '=', $rowId)->
                              where('col_id', '=', $colId)->first();
