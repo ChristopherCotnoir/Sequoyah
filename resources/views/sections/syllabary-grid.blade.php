@@ -113,23 +113,18 @@
           }
         ?>
 
-        <?php if (!$cellDeleted) { ?>
         <td class="syllableCell" id='cell-{{{ $colIndex }}}-{{{ $rowIndex }}}' colId="{{{$vowel['header_id']}}}" rowId="{{{$consonant['header_id']}}}" onclick='selectCell("{{{ $colIndex }}}", "{{{ $rowIndex }}}")'>
-          <b>{{{ $consonant['ipa'] . $vowel['ipa'] }}}</b>
-          <br>
-          <div>
-            <img src="/syllabary/symbol/{{{ $consonant['symbol_id'] }}}/data"></img>
-            <img src="/syllabary/symbol/{{{ $vowel['symbol_id'] }}}/data"></img>
-          </div>
-        </td>
-        <?php } else { ?>
-        <td class="syllableCell deletedCell" id='cell-{{{ $colIndex }}}-{{{ $rowIndex }}}' colId="{{{$vowel['header_id']}}}" rowId="{{{$consonant['header_id']}}}" onclick='selectCell("{{{ $colIndex }}}", "{{{ $rowIndex }}}")'>
-          <b>{{{ $consonant['ipa'] . $vowel['ipa'] }}}</b>
-          <br>
-          <div>
-          </div>
-        </td>
+        <?php if (!$cellDeleted) { ?>
+		<b>{{{ $consonant['ipa'] . $vowel['ipa'] }}}</b>
+		<?php } ?>
+        <br>
+        <div>
+        <?php if (!$cellDeleted) { ?>
+		<img src="/syllabary/symbol/{{{ $consonant['symbol_id'] }}}/data"></img>
+        <img src="/syllabary/symbol/{{{ $vowel['symbol_id'] }}}/data"></img>
         <?php } ?>
+		</div>
+        </td>
         @endforeach
     </tr>
     @endforeach
