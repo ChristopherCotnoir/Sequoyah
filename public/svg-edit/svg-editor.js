@@ -105,7 +105,7 @@ TODOS
 				canvasName: 'default',
 				canvas_expansion: 3,
 				initFill: {
-					color: 'FF0000', // solid red
+					color: '000000', // solid red
 					opacity: 1
 				},
 				initStroke: {
