@@ -33,7 +33,7 @@ class SyllabaryController extends Controller
         return view('pages.syllabary');
     }
 
-    public function GetGridData($SyllabaryId)
+    public function GetGrid($SyllabaryId)
     {
         $vowels = array();
         $consonants = array();
@@ -84,29 +84,64 @@ class SyllabaryController extends Controller
           $cells[$cell->row_id][$cell->col_id] = $cell;
         }
 
-        return
-        [
-            'cells' => $cells,
-            'vowels' => $vowels,
-            'consonants' => $consonants
-        ];
-    }
-
-    public function GetGrid($SyllabaryId)
-    {
-        $data = $this->GetGridData($SyllabaryId);
-
         return view('sections.syllabary-grid', array(
-            'vowels' => $data['vowels'],
-            'consonants' => $data['consonants'],
-            'cells' => $data['cells'],
+            'vowels' => $vowels,
+            'consonants' => $consonants,
+            'cells' => $cells,
         ));
     }
     public function GetGridJson($SyllabaryId)
     {
-        $data = $this->GetGridData($SyllabaryId);
+        $vowels = array();
+        $consonants = array();
 
-        return response()->json($data);
+        // TODO - Grab the current syllabary ID from the project data
+
+        $firstDbColHeader = SyllabaryColumnHeader::where('syllabary_id', '=', 1)->
+                                                   where('prev_id', '=', -1)->first();
+        $dbColHeaders = SyllabaryColumnHeader::where('syllabary_id', '=', 1)->get();
+
+        $colHeaderList = array();
+        foreach($dbColHeaders as $header) {
+            $colHeaderList[$header->id] = $header;
+        }
+
+        $header = $firstDbColHeader;
+        while($header != NULL) {
+          array_push($vowels, array('ipa' => $header->ipa, 'symbol' => $header->symbol, 'header_id' => $header->id, 'audio_sample' => $header->audio_sample));
+          if ($header->next_id == -1)
+            $header = NULL;
+          else
+            $header = $colHeaderList[$header->next_id];
+        }
+
+
+        $firstDbRowHeader = SyllabaryRowHeader::where('syllabary_id', '=', 1)->
+                                                   where('prev_id', '=', -1)->first();
+        $dbRowHeaders = SyllabaryRowHeader::where('syllabary_id', '=', 1)->get();
+
+        $rowHeaderList = array();
+        foreach($dbRowHeaders as $header) {
+            $rowHeaderList[$header->id] = $header;
+        }
+
+        $header = $firstDbRowHeader;
+        while($header != NULL) {
+          array_push($consonants, array('ipa' => $header->ipa, 'symbol' => $header->symbol, 'header_id' => $header->id, 'audio_sample' => $header->audio_sample));
+          if ($header->next_id == -1)
+            $header = NULL;
+          else
+            $header = $rowHeaderList[$header->next_id];
+        }
+
+        $cells = array(array());
+        $dbCells = SyllabaryCell::where('syllabary_id', '=', 1)->get();
+        
+        foreach($dbCells as $cell) {
+          $cells[$cell->row_id][$cell->col_id] = $cell;
+        }
+
+        return response()->json([ 'test' => null, 'cells' => $cells, 'vowels' => $vowels, 'consonants' => $consonants ]);
     }
 
 
