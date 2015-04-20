@@ -135,7 +135,7 @@ return [
 		'Illuminate\Translation\TranslationServiceProvider',
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
-
+		
 		/*
 		 * Application Service Providers...
 		 */
@@ -144,6 +144,8 @@ return [
 		'Sequoyah\Providers\ConfigServiceProvider',
 		'Sequoyah\Providers\EventServiceProvider',
 		'Sequoyah\Providers\RouteServiceProvider',
+		
+		
 
 	],
 
@@ -192,6 +194,8 @@ return [
 		'URL'       => 'Illuminate\Support\Facades\URL',
 		'Validator' => 'Illuminate\Support\Facades\Validator',
 		'View'      => 'Illuminate\Support\Facades\View',
+		
+		
 
 	],
 

@@ -10,6 +10,8 @@ use Sequoyah\Models\SyllabaryCell;
 use Sequoyah\Models\Symbol;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
+use Illuminate\Html\HtmlServiceProvider;
+
 
 class SyllabaryController extends Controller
 {

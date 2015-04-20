@@ -1,87 +1,13 @@
 @extends('layouts.plain')
 @section('head-custom')
-<style>
-    .headerCell
-    {
-    background: #BDC3C7;
-    }
 
-    .headerCell img, .headerCell-selected img
-    {
-    width:100px;
-    height:100px;
-    }
-
-    .syllableCell
-    {
-    background: #FFFFFF;
-    }
-
-    .syllableCell div, .syllableCell-selected div {
-    position: relative; 
-    }
-
-    .syllableCell div img, .syllableCell-selected div img {
-    width:100px;
-    height:100px;
-    position:absolute;
-    left:0px;
-    top:0px;
-    }
-
-    .syllableCell div img:first-child, .syllableCell-selected div img:first-child{
-    width:100px;
-    height:100px;
-    position:static;
-    }
-
-    .syllableCell img.placeholder {
-    visibility:hidden;
-    }
-
-    .headerCell img.sampleBtn,
-    .headerCell-selected img.sampleBtn,
-    .syllableCell img.sampleBtn,
-    .syllableCell-selected img.sampleBtn {
-    width:48px;
-    height:48px;
-    float:right;
-    }
-
-    .deletedCell {
-    visibility:hidden;
-    }
-    .syllabaryGrid
-    {
-    width: 100%;
-    font-size: 200%;
-    }
-
-    .col-controls,
-    .row-controls,
-    .cell-controls
-    {
-    display: none;
-    }
-
-    .headerCell-selected, .syllableCell-selected
-    {
-    background: #C43;
-    }
-
-    .headerCell,
-    .headerCell-selected,
-    .syllableCell,
-    .syllableCell-selected
-    {
-    -webkit-transition:background-color 0.4s linear;
-    -o-transition:background-color 0.4s linear;
-    -moz-transition:background-color 0.4s linear;
-    transition:background-color 0.4s linear;
-    }
-</style>
 @stop
 @section('content')
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
 <main>
 
 <audio id="audio-container"></audio>
@@ -91,11 +17,13 @@
 <script type='text/javascript'>
     var selectedRowId;
     var selectedColId;
+    var openModal;
     // On load
     $(function() {
       loadGrid();
       selectedRowId = -1;
       selectedColid = -1;
+      openModal = undefined;
     });
 
     function loadGrid()
@@ -107,6 +35,7 @@
     {
       $.post("/syllabary/1/column/add/" + selectedColId, {"ipa": ipa}, function() {
         loadGrid();
+        closeOpenModal();
       });
     }
 
@@ -114,6 +43,7 @@
     {
       $.post("/syllabary/1/column/add/-" + selectedColId, {"ipa": ipa}, function() {
         loadGrid();
+        closeOpenModal();
       });
     }
 
@@ -122,6 +52,7 @@
       if (selectedColId != -1) {
         $.post("/syllabary/1/column/" + selectedColId + "/remove", function() {
           loadGrid();
+          closeOpenModal();
         });
       }
     }
@@ -130,6 +61,7 @@
     {
       $.post("/syllabary/1/row/add/-" + selectedRowId, {"ipa": ipa}, function() {
         loadGrid();
+        closeOpenModal();
       });
     }
 
@@ -137,6 +69,7 @@
     {
       $.post("/syllabary/1/row/add/" + selectedRowId, {"ipa": ipa}, function() {
         loadGrid();
+        closeOpenModal();
       });
     }
 
@@ -145,6 +78,7 @@
       if (selectedRowId != -1) {
         $.post("/syllabary/1/row/" + selectedRowId + "/remove", function() {
           loadGrid();
+          closeOpenModal();
         });
       }
     }
@@ -163,6 +97,7 @@
         success: function(data) {
           alert('Sample uploaded successfully!');
           loadGrid();
+          closeOpenModal();
         },
       });
     }
@@ -175,30 +110,24 @@
     function selectColumn(index)
     {
         selectedColId = $("#col-" + index).attr("colId");
-        hide("col-controls");
-        hide("row-controls");
-        hide("cell-controls");
-        show("col-control-" + index);
-        select("col-" + index)
+        select("col-" + index);
+		    openModal = $("#edit-column-modal-" + index);
+        openModal.modal('show');
     }
 
     function selectRow(index)
     {
         selectedRowId = $("#row-" + index).attr("rowId");
-        hide("col-controls");
-        hide("row-controls");
-        hide("cell-controls");
-        show("row-control-" + index);
-        select("row-" + index)
+        select("row-" + index);
+		    openModal = $("#edit-row-modal-" + "index");
+        openModal.modal('show');
     }
 
     function selectCell(colIndex, rowIndex)
     {
-        hide("col-controls");
-        hide("row-controls");
-        hide("cell-controls");
-        show("cell-control-" + colIndex + "-" + rowIndex);
-        select("cell-" + colIndex + "-" + rowIndex)
+       select("cell-" + colIndex + "-" + rowIndex);
+		   openModal = $("#edit-symbol-modal-" + colIndex + "-" + rowIndex)
+       openModal.modal('show');
     }
 
     function unselectAll()
@@ -221,6 +150,12 @@
         {
             selected[i].style.display = 'none';
         }
+    }
+
+    function closeOpenModal()
+    {
+      if (openModal != undefined)
+        openModal.modal('hide');
     }
 
     function select(cell)
@@ -276,6 +211,7 @@
     {
       $.post("/syllabary/1/cell/" + rowId + "/" + colId + "/remove", function() {
         loadGrid();
+        closeOpenModal();
       });
     }
 
@@ -283,6 +219,7 @@
     {
       $.post("/syllabary/1/cell/" + rowId + "/" + colId + "/restore", function() {
         loadGrid();
+        closeOpenModal();
       });
     }
 
@@ -302,5 +239,7 @@
       $('#audio-container')[0].play();
     }
 </script>
+
+	
 </main>
-@stop
+@stop 
