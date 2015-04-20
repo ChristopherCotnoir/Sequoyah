@@ -28,57 +28,60 @@
 
     function loadGrid()
     {
-      $("#grid-div").load("/syllabary/grid/1");
+      // Ensure any open modals are closed first.
+      closeOpenModal(function() {
+        $("#grid-div").load("/syllabary/grid/1");
+      });
     }
 
     function addColumnRight(ipa)
     {
+      
       $.post("/syllabary/1/column/add/" + selectedColId, {"ipa": ipa}, function() {
         loadGrid();
-        closeOpenModal();
       });
     }
 
     function addColumnLeft(ipa)
     {
+      
       $.post("/syllabary/1/column/add/-" + selectedColId, {"ipa": ipa}, function() {
         loadGrid();
-        closeOpenModal();
       });
     }
 
     function removeSelectedColumn()
     {
+      
       if (selectedColId != -1) {
         $.post("/syllabary/1/column/" + selectedColId + "/remove", function() {
           loadGrid();
-          closeOpenModal();
         });
       }
     }
 
     function addRowTop(ipa)
     {
+      
       $.post("/syllabary/1/row/add/-" + selectedRowId, {"ipa": ipa}, function() {
         loadGrid();
-        closeOpenModal();
       });
     }
 
     function addRowBottom(ipa)
     {
+      
       $.post("/syllabary/1/row/add/" + selectedRowId, {"ipa": ipa}, function() {
         loadGrid();
-        closeOpenModal();
       });
     }
 
     function removeSelectedRow()
     {
+      
       if (selectedRowId != -1) {
         $.post("/syllabary/1/row/" + selectedRowId + "/remove", function() {
           loadGrid();
-          closeOpenModal();
         });
       }
     }
@@ -97,7 +100,7 @@
         success: function(data) {
           alert('Sample uploaded successfully!');
           loadGrid();
-          closeOpenModal();
+          
         },
       });
     }
@@ -152,10 +155,16 @@
         }
     }
 
-    function closeOpenModal()
+    function closeOpenModal(callback)
     {
-      if (openModal != undefined)
+      if (openModal != undefined) {
+        if (callback != undefined)
+          openModal.one('hidden.bs.modal', callback);
         openModal.modal('hide');
+      } else {
+        if (callback != undefined)
+          callback();
+      }
     }
 
     function select(cell)
@@ -208,18 +217,17 @@
     }
 
     function removeCell(rowId, colId)
-    {
+    { 
       $.post("/syllabary/1/cell/" + rowId + "/" + colId + "/remove", function() {
         loadGrid();
-        closeOpenModal();
       });
     }
 
     function restoreCell(rowId, colId)
     {
+      
       $.post("/syllabary/1/cell/" + rowId + "/" + colId + "/restore", function() {
         loadGrid();
-        closeOpenModal();
       });
     }
 
