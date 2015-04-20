@@ -9,7 +9,7 @@ use Sequoyah\Models\SyllabaryRowHeader;
 use Sequoyah\Models\SyllabaryCell;
 use Sequoyah\Models\Symbol;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Http\Request;
+use Request;
 
 class SyllabaryController extends Controller
 {
@@ -33,7 +33,7 @@ class SyllabaryController extends Controller
         return view('pages.syllabary');
     }
 
-    public function GetGrid($syllabaryId)
+    public function GetGridData($SyllabaryId)
     {
         $vowels = array();
         $consonants = array();
@@ -84,12 +84,31 @@ class SyllabaryController extends Controller
           $cells[$cell->row_id][$cell->col_id] = $cell;
         }
 
-        return view('sections.syllabary-grid', array(
-            'vowels' => $vowels,
-            'consonants' => $consonants,
+        return
+        [
             'cells' => $cells,
+            'vowels' => $vowels,
+            'consonants' => $consonants
+        ];
+    }
+
+    public function GetGrid($SyllabaryId)
+    {
+        $data = $this->GetGridData($SyllabaryId);
+
+        return view('sections.syllabary-grid', array(
+            'vowels' => $data['vowels'],
+            'consonants' => $data['consonants'],
+            'cells' => $data['cells'],
         ));
     }
+    public function GetGridJson($SyllabaryId)
+    {
+        $data = $this->GetGridData($SyllabaryId);
+
+        return response()->json($data);
+    }
+
 
     public function AddColumn($syllabaryId, $relativeId = NULL)
     {
