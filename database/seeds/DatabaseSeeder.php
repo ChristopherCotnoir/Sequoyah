@@ -3,6 +3,10 @@
 use Sequoyah\Models\SyllabaryColumnHeader;
 use Sequoyah\Models\SyllabaryRowHeader;
 use Sequoyah\Models\Symbol;
+use Sequoyah\Models\User;
+use Sequoyah\Models\Syllabary;
+use Sequoyah\Models\Project;
+use Sequoyah\Models\ProjectMembers;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder {
@@ -14,11 +18,63 @@ class DatabaseSeeder extends Seeder {
      */
     public function run()
     {
+        $this->call('UsersSeeder');
+        $this->call('SyllabarySeeder');
+        $this->call('ProjectsSeeder');
+        $this->call('ProjectRolesTableSeeder');
+        $this->call('ProjectMembersSeeder');
         $this->call('SyllabaryColumnHeaderSeeder');
         $this->call('SyllabaryRowHeaderSeeder');
         $this->call('SymbolsSeeder');
     }
 
+}
+
+class UsersSeeder extends Seeder {
+
+  public function run()
+  {
+    DB::table('users')->truncate();
+
+    User::create([
+      'name' => 'Tester',
+      'username' => 'tester',
+      'password' => '$2y$10$aAe3xBMIG6dBiAa8kbXyc.rbQLWwv0wzaQaUiOSH8MJOyzUBF2u1a'
+    ]);
+  }
+}
+
+class SyllabarySeeder extends Seeder {
+  public function run()
+  {
+    DB::table('syllabaries')->truncate();
+    Syllabary::create([
+      'name' => 'Sequoyah Test',
+    ]);
+  }
+}
+
+class ProjectsSeeder extends Seeder {
+  public function run()
+  {
+    DB::table('projects')->truncate();
+    Project::create([
+      'name' => 'Demo Project',
+      'syllabary_id' => 1,
+    ]);
+  }
+}
+
+class ProjectMembersSeeder extends Seeder {
+  public function run()
+  {
+    DB::table('project_members')->truncate();
+    ProjectMembers::create([
+      'user_id' => 1,
+      'project_id' => 1,
+      'access' => 3, // Read/Write access
+    ]);
+  }
 }
 
 class SyllabaryColumnHeaderSeeder extends Seeder {

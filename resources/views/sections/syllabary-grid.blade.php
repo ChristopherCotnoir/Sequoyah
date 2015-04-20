@@ -19,11 +19,9 @@
     <form method='post'>
     <button type="button" class="btn btn-default" onclick="editSymbol('{{{ $vowel['symbol_id'] }}}')">Edit Symbol</button>
     </form>
-    <form method='post'>
-    <button type="button" class="btn btn-default" onclick="uploadAudio()">Upload Audio</button>
-    </form>
-    <form method='post'>
-    <button type="button" class="btn btn-default" id="vowel-audio">Pronounce Vowel</button>
+    <form method='post' action='/syllabary/1/column/{{{ $vowel["header_id"] }}}/uploadAudio' enctype="multipart/form-data">
+    <button type="submit" class="btn btn-default">Upload Audio</button>
+    <input type="file" name="audioSample"/>
     </form>
 </div>
 @endforeach
@@ -48,11 +46,9 @@
     <form method='post'>
     <button type="button" class="btn btn-default" onclick="editSymbol('{{{ $consonant['symbol_id'] }}}')">Edit Symbol</button>
     </form>
-    <form method='post'>
-    <button type="button" class="btn btn-default" onclick="uploadAudio()">Upload Audio</button>
-    </form>
-    <form method='post'>
-    <button type="button" class="btn btn-default" id="vowel-audio">Pronounce Consonant</button>
+    <form method='post' action='/syllabary/1/row/{{{ $consonant["header_id"] }}}/uploadAudio' enctype="multipart/form-data">
+    <button type="submit" class="btn btn-default">Upload Audio</button>
+    <input type="file" name="audioSample"/>
     </form>
 </div>
 @endforeach
@@ -67,13 +63,10 @@
         <button type="button" class="btn btn-default" onclick="removeCell({{{ $rowIndex + 1 }}}, {{{ $colIndex + 1 }}})">Remove Cell</button>
         </form>
         <form method='post'>
-        <button type="button" class="btn btn-default">Restore Cell</button>
+        <button type="button" class="btn btn-default"  onclick="restoreCell({{{ $rowIndex + 1 }}}, {{{ $colIndex + 1 }}})">Restore Cell</button>
         </form>
         <form method='post'>
         <button type="button" class="btn btn-default">Edit Symbol</button>
-        </form>
-        <form method='post'>
-        <button type="button" class="btn btn-default" id="vowel-audio">Pronounce Syllable</button>
         </form>
     </div>
     @endforeach
@@ -89,6 +82,9 @@
         <th class='headerCell' onclick='unselectAll()'></th>
         @foreach($vowels as $colIndex => $vowel)
         <th class='headerCell' id='col-{{{ $colIndex }}}' colId="{{{$vowel['header_id']}}}" onclick='selectColumn("{{{ $colIndex }}}")'>
+            @if ($vowel['audio_sample'] != NULL)
+            <img class="sampleBtn" src="/images/speaker.png" onclick="pronounceVowel('{{{ $vowel['header_id'] }}}')"></img>
+            @endif
             <b>{{{ $vowel['ipa'] }}}</b>
             <br>
             <img src="/syllabary/symbol/{{{ $vowel['symbol_id'] }}}/data"></img>
@@ -99,6 +95,9 @@
     @foreach($consonants as $rowIndex => $consonant)
     <tr>
         <th class='headerCell' id='row-{{{ $rowIndex }}}' rowId="{{{$consonant['header_id']}}}" onclick='selectRow("{{{ $rowIndex }}}")'>
+            @if ($consonant['audio_sample'] != NULL)
+            <img class="sampleBtn" src="/images/speaker.png" onclick="pronounceConsonant('{{{ $consonant['header_id'] }}}')"></img>
+            @endif
             <b>{{{ $consonant['ipa'] }}}</b>
             <br>
             <img src="/syllabary/symbol/{{{ $consonant['symbol_id'] }}}/data"></img>
@@ -123,10 +122,10 @@
           </div>
         </td>
         <?php } else { ?>
-        <td class="syllableCell deletedCell" id='cell-{{{ $colIndex }}}-{{{ $rowIndex }}}' colId="{{{$vowel['header_id']}}}" rowId="{{{$consonant['header_id']}}}" onclick='selectCell("{{{ $colIndex }}}", "{{{ $rowIndex }}}")'>
-          <b>{{{ $consonant['ipa'] . $vowel['ipa'] }}}</b>
+        <td class="syllableCell" id='cell-{{{ $colIndex }}}-{{{ $rowIndex }}}' colId="{{{$vowel['header_id']}}}" rowId="{{{$consonant['header_id']}}}" onclick='selectCell("{{{ $colIndex }}}", "{{{ $rowIndex }}}")'>
           <br>
           <div>
+            <img src='data:image/svg+xml;utf8,<?xml version="1.0"?><svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"></svg>'></img>
           </div>
         </td>
         <?php } ?>

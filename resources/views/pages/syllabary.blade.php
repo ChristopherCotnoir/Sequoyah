@@ -35,6 +35,19 @@
     position:static;
     }
 
+    .syllableCell img.placeholder {
+    visibility:hidden;
+    }
+
+    .headerCell img.sampleBtn,
+    .headerCell-selected img.sampleBtn,
+    .syllableCell img.sampleBtn,
+    .syllableCell-selected img.sampleBtn {
+    width:48px;
+    height:48px;
+    float:right;
+    }
+
     .deletedCell {
     visibility:hidden;
     }
@@ -71,6 +84,7 @@
 @section('content')
 <main>
 
+<audio id="audio-container"></audio>
 <div id="grid-div">
 </div>
 
@@ -135,11 +149,27 @@
       }
     }
 
-    function uploadAudio()
+    function uploadRowAudioSample(rowId)
     {
-        $.post("/syllabary/1/upload", function() {
+      var fd = new FormData($('#audioUpload-row-' + rowId)[0]);
+      $.ajax({
+        method: 'POST',
+        url:  '/syllabary/1/row/' + rowId + '/uploadAudio',
+        data: fd,
+        cache: false,
+        enctype: 'multipart/form-data',
+        contentType: false,
+        processData: false,
+        success: function(data) {
+          alert('Sample uploaded successfully!');
           loadGrid();
-        });
+        },
+      });
+    }
+
+    function uploadColumnAudioSample(colId)
+    {
+      alert("Uploaded to column " + colId);
     }
 
     function selectColumn(index)
@@ -249,11 +279,27 @@
       });
     }
 
-    function addCell(rowId, colId)
+    function restoreCell(rowId, colId)
     {
-      $.post("/syllabary/1/cell/" + rowId + "/" + colId + "/add", function() {
+      $.post("/syllabary/1/cell/" + rowId + "/" + colId + "/restore", function() {
         loadGrid();
       });
+    }
+
+    function pronounceVowel(colId)
+    {
+      // We append a date on the end as a cache-busting parameter, ensuring any new audio files are loaded
+      // instead of cached ones.
+      $('#audio-container').attr('src', '/syllabary/1/column/' + colId + '/getAudio?cb=' + new Date().getTime());
+      $('#audio-container')[0].play();
+    }
+
+    function pronounceConsonant(rowId)
+    {
+      // We append a date on the end as a cache-busting parameter, ensuring any new audio files are loaded
+      // instead of cached ones.
+      $('#audio-container').attr('src', '/syllabary/1/row/' + rowId + '/getAudio?cb=' + new Date().getTime());
+      $('#audio-container')[0].play();
     }
 </script>
 </main>

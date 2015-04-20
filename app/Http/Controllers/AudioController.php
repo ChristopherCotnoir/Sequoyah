@@ -1,5 +1,12 @@
 <?php namespace Sequoyah\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use Request;
+use Response;
+use Sequoyah\Models\SyllabaryColumnHeader;
+use Sequoyah\Models\SyllabaryRowHeader;
+
 class AudioController extends Controller
 {
     /* @arguments:
@@ -9,7 +16,7 @@ class AudioController extends Controller
         @requirements:
             Requires sox to be installed onto server
     */
-    public function MergeAudio($syllabaryId, $clip1, $clip2, $output)
+    public function GenerateSyllableAudio($syllabaryId, $clip1, $clip2, $output)
     {
         if(Storage::exists('audioSample/' . $clip1))
         {
@@ -30,54 +37,132 @@ class AudioController extends Controller
 
     }
 
-    public function UploadAudioSample($syllabaryId)
+    public function GetRowAudioSample($syllabaryId, $rowId)
     {
+       $row = SyllabaryColumnHeader::where('syllabary_id', '=', $syllabaryId)->
+                                     where('id', '=', $rowId)->first();
+       
+       if ($row == NULL || $row->audio_sample == NULL)
+         return '';
+
+       return response()->make(Storage::get($row->audio_sample));
+    }
+
+    public function GetColumnAudioSample($syllabaryId, $columnId)
+    {
+       $column = SyllabaryColumnHeader::where('syllabary_id', '=', $syllabaryId)->
+                                        where('id', '=', $columnId)->first();
+       
+       if ($column == NULL || $column->audio_sample == NULL)
+         return '';
+
+       return response()->make(Storage::get($column->audio_sample));
+    }
+
+    public function UploadRowHeaderSample($syllabaryId, $rowId)
+    {
+      $row = SyllabaryRowHeader::where('syllabary_id', '=', $syllabaryId)->
+                                 where('id', '=', $rowId)->first();
+
+      if ($row == NULL)
+        return response()->json(['success' => false]);
+
+      $uploadStatus = $this->_UploadAudioSample();
+      if ($uploadStatus['success'] == false)
+        return response()->json(['success' => false]);
+
+      $row->audio_sample = $uploadStatus['file_path'];
+      $row->save();
+
+      return response()->json(['success' => true]);
+    }
+
+    public function UploadColumnHeaderSample($syllabaryId, $columnId)
+    {
+      $column = SyllabaryColumnHeader::where('syllabary_id', '=', $syllabaryId)->
+                                       where('id', '=', $columnId)->first();
+
+      if ($column == NULL)
+        return response()->json(['success' => false]);
+
+      $uploadStatus = $this->_UploadAudioSample();
+      if ($uploadStatus['success'] == false)
+        return response()->json(['success' => false]);
+
+      $column->audio_sample = $uploadStatus['file_path'];
+      $column->save();
+
+      return response()->json(['success' => true]);
+    }
+
+    public function UploadSyllableSample($syllabaryId, $syllableCellId)
+    {
+    }
+
+    private function _UploadAudioSample()
+    {
+        $audioFileType = pathinfo(basename($_FILES['audioSample']['name']), PATHINFO_EXTENSION);
         $targetDir = "audioSample/";
-        $targetFile = $targetDir . basename($_FILES['audioSample']['name']);
+        $targetFile = $targetDir . uniqid() . '.' .  $audioFileType;
         $uploadOk = true;
-        $audioFileType = pathinfo($targetFile, PATHINFO_EXTENSION);
 
         // Check if file name is already in use.
 
         if (Storage::exists($targetFile))
         {
-             echo "File already exists.";
-             $uploadOK = false;
+             $statusArray = [
+               'success' => false,
+               'error' => 'File already exists.',
+             ];
+             return $statusArray;
         }
 
         // Audio format check.
 
-        if (($audioFileType != "audio/wav") || ($audioFileType != "audio/mpeg") ||
-              ($audioFileType != "audio/ogg"))
+        if (($audioFileType != "wav") && ($audioFileType != "mp3") &&
+              ($audioFileType != "ogg"))
         {
-             echo "Unsupported audio format. Use wav, mpeg, or ogg.";
-             $uploadOk = false;
+             $statusArray = [
+               'success' => false,
+               'error' => 'Unsupported audio format. Use wav, mp3, or ogg.', 
+             ];
+             return $statusArray;
         }
 
         // Audio file size check.
 
-        if($_Files['audioSample']['size'] > 5242880) // Max size is 5MB.
+        if($_FILES['audioSample']['size'] > 5242880) // Max size is 5MB.
         {
-             echo "File size too large.";
-             $uploadOK = false;
+             $statusArray = [
+               'success' => false,
+               'error' => 'File size too large.',
+             ];
+             return $statusArray;
         }
-        elseif($_Files['audioSample']['size'] == 0)
+        elseif($_FILES['audioSample']['size'] == 0)
         {
-             echo "File size too small.";
-             $uploadOK = false;
+             $statusArray = [
+               'success' => false,
+               'error' => 'File size too small.',
+             ];
+             return $statusArray;
         }
 
-        if ($uploadOK == false)
+        if ($uploadOk == false)
         {
-             echo "File was not uploaded.";
+              $statusArray = [
+               'success' => false,
+               'error' => 'File was not uploaded. ' . $targetFile,
+             ];
         }
-        elseif(Storage::move($_FILE['audioSample']['tmpName'], $targetFile))
+        elseif(Storage::put($targetFile, File::get(Request::file('audioSample'))))
         {
-             echo "The file" . basename($_FILE['audioSample']['name']) . " has been uploaded.";
+             $statusArray = [
+               'success' => true,
+               'file_path' => $targetFile
+             ];
         }
-        else
-        {
-             echo "An unexpected error has occured while uploading file.";
-        }
+
+        return $statusArray;
     }
 }
