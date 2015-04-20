@@ -122,7 +122,7 @@
     {
         selectedRowId = $("#row-" + index).attr("rowId");
         select("row-" + index);
-		    openModal = $("#edit-row-modal-" + "index");
+		    openModal = $("#edit-row-modal-" + index);
         openModal.modal('show');
     }
 
