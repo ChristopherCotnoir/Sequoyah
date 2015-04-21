@@ -29,11 +29,8 @@ class AccountController extends Controller
         $Projects[Syllabaries]
         $Projects[Syllabaries]->index
         $Projects[Syllabaries]-name
-        
-                
-        $Users       
-        $Users[index]->UserIndex
-        $Users[index]->Name
+        $Projects[Users]
+        $Projects[Users]->index
         
     */
     public function ShowPage($UserId)
