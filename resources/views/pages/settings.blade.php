@@ -1,11 +1,10 @@
 @extends('layouts.plain')
 @section('content')
 <main>
-<!-- $UserProjects is a list of the projects the User accessing this page has access to.
-$UserRole is the role of the User accessing this page.
-$Users is a list of all users in the database.-->
-<!-- The following code is commented out until these variables are passed to this page, so the page doesn't break when accessed. Code has not been tested. -->
-<!--
+<!-- $UserProjects is a list of the projects the User accessing this page has access to. Each Project has a Name, a Role for the current User, a list of Syllabary Names, and a list of User Names.
+$AllUsers is a list of the names of all users in the database.-->
+<!-- Code has not been fully tested. Layout is preliminary. -->
+
 @if(count($UserProjects)>1)
     <select id="Projects">
     @foreach($UserProjects as $ProjectIndex => $Project)
@@ -19,26 +18,28 @@ $Users is a list of all users in the database.-->
     </script>
 @endif
 
+<button type="button" onclick="createProject()">Create Project</button>
+
 @foreach($UserProjects as $ProjectIndex => $Project)
     <div id="Project-{{{ $ProjectIndex }}}" class="Project" style="display:none">
-    {{{ Project['Name'] }}}
+    {{{ $Project['Name'] }}}
     <br>
-    @if($UserRole=="Admin")
+    @if($Project['Role']=='Admin')
         <select id="Users">
-        @foreach($Users as $UserIndex => $User)
-            <option value="{{{ $UserIndex }}}">{{{ $User['Name'] }}}</option>
+        @foreach($AllUsers as $UserIndex => $User)
+            <option value="{{{ $UserIndex }}}">{{{ $User }}}</option>
         @endforeach
         </select>
         <button type="button" onclick="addUser()">Add User to Project</button>
-        <select id="CurrentUsersRemove">   
+        <select id="CurrentUsersRemove">
         @foreach($Project['Users'] as $UserIndex => $User)
-            <option value="{{{ $UserIndex }}}">{{{ $User['Name'] }}}</option>
+            <option value="{{{ $UserIndex }}}">{{{ $User }}}</option>
         @endforeach
         </select>
-        <button type="button" onclick="removeUser()">Remove User to Project</button>
+        <button type="button" onclick="removeUser()">Remove User from Project</button>
         <select id="CurrentUsersChange">   
         @foreach($Project['Users'] as $UserIndex => $User)
-            <option value="{{{ $UserIndex }}}">{{{ $User['Name'] }}}</option>
+            <option value="{{{ $UserIndex }}}">{{{ $User }}}</option>
         @endforeach
         </select>
         <select id="Roles">
@@ -50,14 +51,12 @@ $Users is a list of all users in the database.-->
     @endif
     <select id="Syllabaries">
     @foreach($Project['Syllabaries'] as $SyllabaryIndex => $Syllabary)
-        <option value="{{{ $SyllabaryIndex }}}">{{{ $Syllabary['Name'] }}}</option>
+        <option value="{{{ $SyllabaryIndex }}}">{{{ $Syllabary }}}</option>
     @endforeach
     </select>
     <button type="button" onclick="loadSyllabary()">Go to Syllabary</button>
     </div>
 @endforeach
-
-<button type="button" onclick="createProject()">Create Project</button>
 
 <script type='text/javascript'>
     function showProject(isSelected)
@@ -78,21 +77,21 @@ $Users is a list of all users in the database.-->
     
     function createProject()
     {
-    --><!-- function to create a new Project here --><!--
+    <!-- function to create a new Project here -->
     }
     
     function addUser()
     {
         var dropdown = document.getElementById("Users");
         var index = dropdown.options[dropdown.selectedIndex].value;
-        --><!-- function to add user $Users[index] to project --><!--
+        <!-- function to add user $AllUsers[index] to project -->
     }
     
     function removeUser()
     {
         var dropdown = document.getElementById("CurrentUsersRemove");
         var index = dropdown.options[dropdown.selectedIndex].value;
-        --><!-- function to remove user $Project['Users'][index] from project --><!--
+        <!-- function to remove user $Project['Users'][index] from project -->
     }
     
     function changeRole()
@@ -101,16 +100,15 @@ $Users is a list of all users in the database.-->
         var index = dropdown.options[dropdown.selectedIndex].value;
         var dropdown2 = document.getElementById("Roles");
         var role = dropdown.options[dropdown.selectedIndex].value;
-        --><!-- function to change role of user $Project['Users'][index] to role --><!--
+        <!-- function to change role of user $Project['Users'][index] to role -->
     }
     
     function loadSyllabary()
     {
         var dropdown = document.getElementById("Syllabaries");
         var index = dropdown.options[dropdown.selectedIndex].value;
-        --><!-- function to load syllabary $Project['Syllabaries'][index] --><!--
+        <!-- function to load syllabary $Project['Syllabaries'][index] -->
     }
 </script>
--->
 </main>
 @stop
