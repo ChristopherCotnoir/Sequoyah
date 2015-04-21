@@ -102,10 +102,10 @@ TODOS
 			defaultConfig = {
 				// Todo: svgcanvas.js also sets and checks: show_outside_canvas, selectNew; add here?
 				// Change the following to preferences and add pref controls to the UI (e.g., initTool, wireframe, showlayers)?
-				canvasName: 'default',
+				canvasName: 'Character',
 				canvas_expansion: 3,
 				initFill: {
-					color: '000000', // solid red
+					color: '000000',
 					opacity: 1
 				},
 				initStroke: {
@@ -132,7 +132,7 @@ TODOS
 				// EDITOR OPTIONS
 				// Change the following to preferences (already in the Editor Options dialog)?
 				gridSnapping: false,
-				gridColor: '#000',
+				gridColor: '#666',
 				baseUnit: 'px',
 				snappingStep: 10,
 				showRulers: true,
@@ -143,7 +143,7 @@ TODOS
 				lockExtensions: false, // Disallowed in URL setting
 				noDefaultExtensions: false, // noDefaultExtensions can only be meaningfully used in config.js or in the URL
 				// EXTENSION-RELATED (GRID)
-				showGrid: false, // Set by ext-grid.js
+				showGrid: true, // Set by ext-grid.js
 				// EXTENSION-RELATED (STORAGE)
 				noStorageOnLoad: true, // Some interaction with ext-storage.js; prevent even the loading of previously saved local storage
 				forceStorage: true, // Some interaction with ext-storage.js; strongly discouraged from modification as it bypasses user privacy by preventing them from choosing whether to keep local storage or not
