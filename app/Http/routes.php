@@ -8,6 +8,7 @@ Route::get('fuck', function() { return 'FUCK'; });
 
 Route::get('syllabary', 'SyllabaryController@ShowGrid');
 Route::get('syllabary/grid/{syllabaryId}', 'SyllabaryController@GetGrid');
+Route::get('json/syllabary/grid/{syllabaryId}', 'SyllabaryController@GetGridJson');
 Route::get('syllabary/testsvg/{symbolId}', 'SyllabaryController@TestSvg');
 Route::get('syllabary/symbol/{symbolId}/data', 'SyllabaryController@GetSymbolData');
 Route::get('syllabary/{syllabaryId}/column/{columnId}/getAudio', 'AudioController@GetColumnAudioSample');
