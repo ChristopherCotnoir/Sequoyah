@@ -149,8 +149,6 @@ class SyllabaryController extends Controller
     public function AddColumn($syllabaryId, $relativeId = NULL)
     {
         $ipa = Input::get('ipa');
-        if ($ipa == False)
-            return response()->json(['success' => False]);
 
         $headers = SyllabaryColumnHeader::where('syllabary_id', '=', 1)->get();
 
@@ -240,8 +238,6 @@ class SyllabaryController extends Controller
     public function AddRow($syllabaryId, $relativeId)
     {
         $ipa = Input::get('ipa');
-        if ($ipa == False)
-            return response()->json(['success' => False]);
 
         $headers = SyllabaryRowHeader::where('syllabary_id', '=', 1)->get();
 

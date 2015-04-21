@@ -11,9 +11,9 @@
             </div>
             <div class="modal-body">
                 
-				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="addColumnLeft('-');unselectAll()">Add Column Left</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="addColumnLeft('');unselectAll()">Add Column Left</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="removeSelectedColumn();unselectAll()">Remove Column</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="addColumnRight('-');unselectAll()">Add Column Right</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="addColumnRight('');unselectAll()">Add Column Right</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="unselectAll()">Edit Vowel</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="editSymbol('{{{ $vowel['symbol_id'] 				}}}');unselectAll()">Edit Symbol</button>
             </div>
@@ -39,9 +39,9 @@
             </div>
             <div class="modal-body">
                 
-				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="addRowTop('-');unselectAll()">Add Row Top</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="addRowTop('');unselectAll()">Add Row Top</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="removeSelectedRow();unselectAll()">Remove Row</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="addRowBottom('-');unselectAll()">Add Row 				Bottom</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="addRowBottom('');unselectAll()">Add Row 				Bottom</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="unselectAll()">Edit Consonant</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="editSymbol('{{{ $consonant['symbol_id'] 				}}}');unselectAll()">Edit Symbol</button>
 				
