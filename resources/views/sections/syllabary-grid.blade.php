@@ -68,8 +68,8 @@
 				</div>
 				<div class="modal-body">
                 
-					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="removeCell({{{ $rowIndex+1 }}}, {{{ $colIndex+1 }}});unselectAll()">Remove Cell</button>
-					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="restoreCell({{{ $rowIndex+1 }}}, {{{ $colIndex+1 }}});unselectAll()">Restore Cell</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="removeCell({{{ $consonant['header_id'] }}}, {{{ $vowel['header_id'] }}});unselectAll()">Remove Cell</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="restoreCell({{{ $consonant['header_id'] }}}, {{{ $vowel['header_id'] }}});unselectAll()">Restore Cell</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="unselectAll()">Edit Symbol</button>
 				
 				</div>

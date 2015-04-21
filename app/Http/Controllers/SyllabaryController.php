@@ -232,6 +232,13 @@ class SyllabaryController extends Controller
 
         $selectedHeader->delete();
 
+        $cells = SyllabaryCell::where('col_id', '=', $columnId)->get();
+        foreach($cells as $cell)
+        {
+            $cell->deleted = false;
+            $cell->save();
+        }
+
         return response()->json(['success' => True]);
     }
 
@@ -319,6 +326,13 @@ class SyllabaryController extends Controller
         }
 
         $selectedHeader->delete();
+        
+        $cells = SyllabaryCell::where('row_id', '=', $rowId)->get();
+        foreach($cells as $cell)
+        {
+            $cell->deleted = false;
+            $cell->save();
+        }
 
         return response()->json(['success' => True]);
 
