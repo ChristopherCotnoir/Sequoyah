@@ -15,6 +15,23 @@ class AccountController extends Controller
         //$this->middleware('auth');
     }
 
+    /*
+        Passes data to the Settings page
+        
+        Expeced data
+        
+        $UserIndex
+        $UserRole
+        
+        $Projects    array
+        $Project[index]->Name
+        $Projects[index]
+        
+        $Users       array
+        $Users[index]->UserIndex
+        $Users[index]->Name
+        
+    */
     public function ShowPage()
     {
         return view('pages.settings');
