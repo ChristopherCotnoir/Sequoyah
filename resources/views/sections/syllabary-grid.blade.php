@@ -117,8 +117,10 @@
           if (isset($cells[$consonant['header_id']][$vowel['header_id']])) {
             $cell = $cells[$consonant['header_id']][$vowel['header_id']];
             $cellDeleted = $cell->deleted;
+            $cellSymbolId = $cell->symbol_id;
           } else {
             $cellDeleted = false;
+            unset($cellSymbolId);
           }
         ?>
 
@@ -127,8 +129,12 @@
           <b>{{{ $consonant['ipa'] . $vowel['ipa'] }}}</b>
           <br>
           <div>
-            <img src="/syllabary/symbol/{{{ $consonant['symbol_id'] }}}/data"></img>
-            <img src="/syllabary/symbol/{{{ $vowel['symbol_id'] }}}/data"></img>
+            @if (isset($cellSymbolId))
+              <img src="/syllabary/symbol/{{{ $cellSymbolId }}}/data"></img>
+            @else
+              <img src="/syllabary/symbol/{{{ $consonant['symbol_id'] }}}/data"></img>
+              <img src="/syllabary/symbol/{{{ $vowel['symbol_id'] }}}/data"></img>
+            @endif
           </div>
         </td>
         <?php } else { ?>

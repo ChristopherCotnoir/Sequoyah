@@ -336,11 +336,13 @@ class SyllabaryController extends Controller
             $cell->deleted = false;
             $cell->save();
         } else {
+            $symbol = Symbol::create(['symbol_data' => '']);
             $cell = SyllabaryCell::create(array(
                 'syllabary_id' => 1,
                 'row_id' => $rowId,
                 'col_id' => $colId,
                 'deleted' => false,
+                'symbol_id' => $symbol->id,
                 ));
         }
 
