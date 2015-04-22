@@ -76,7 +76,7 @@
 
                        <button type="button" class="red" data-dismiss="modal" onclick="removeCell({{{ $consonant['header_id'] }}}, {{{ $vowel['header_id'] }}})">Remove Cell</button>
                        <button type="button" class="" data-dismiss="modal" onclick="restoreCell({{{ $consonant['header_id'] }}}, {{{ $vowel['header_id'] }}})">Restore Cell</button>
-                       <button type="button" class="" data-dismiss="modal">Edit Symbol</button>
+                       <button type="button" class="" data-dismiss="modal"  onclick="editSyllableSymbol({{{ $consonant['header_id'] }}}, {{{ $vowel['header_id'] }}})">Edit Symbol</button>
 
                    </div>
                    <div class="modal-footer">
