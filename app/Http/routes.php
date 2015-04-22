@@ -10,12 +10,16 @@ Route::get('syllabary', 'SyllabaryController@ShowGrid');
 Route::get('syllabary/grid/{syllabaryId}', 'SyllabaryController@GetGrid');
 Route::get('syllabary/testsvg/{symbolId}', 'SyllabaryController@TestSvg');
 Route::get('syllabary/symbol/{symbolId}/data', 'SyllabaryController@GetSymbolData');
+Route::get('settings', 'AccountController@ShowPage');
 
 Route::post('syllabary/symbol/{symbolId}/update', 'SyllabaryController@UpdateSymbol');
 Route::post('syllabary/{syllabaryId}/column/add/{relativeId?}', 'SyllabaryController@AddColumn');
 Route::post('syllabary/{syllabaryId}/column/{columnId}/remove', 'SyllabaryController@RemoveColumn');
 Route::post('syllabary/{syllabaryId}/row/add/{relativeId?}', 'SyllabaryController@AddRow');
 Route::post('syllabary/{syllabaryId}/row/{rowId}/remove', 'SyllabaryController@RemoveRow');
+Route::post('syllabary/{syllabaryId}/cell/{rowId}/{colId}/remove', 'SyllabaryController@RemoveCell');
+Route::post('syllabary/{syllabaryId}/cell/{rowId}/{colId}/add', 'SyllabaryController@AddCell');
+Route::post('syllabary/{syllabaryId}/upload', 'AudioController@UploadAudioSample');
 
 Route::group(['namespace' => 'Auth', 'prefix' => 'auth'], function()
 {

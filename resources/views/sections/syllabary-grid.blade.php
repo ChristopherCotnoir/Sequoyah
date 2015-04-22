@@ -1,4 +1,41 @@
-<div style="height:300px">
+
+
+<!--==========================================================================================================
+                                               Syllabary Grid
+===========================================================================================================-->
+<table class='syllabaryGrid' border='1'>
+    <tr>
+        <th class='headerCell' onclick='unselectAll()'></th>
+        @foreach($vowels as $colIndex => $vowel)
+        <th class='headerCell' id='col-{{{ $colIndex }}}' colId="{{{$vowel['header_id']}}}" onclick='selectColumn("{{{ $colIndex }}}")'>
+            <b>{{{ $vowel['ipa'] }}}</b>
+            <br>
+            <img src="/syllabary/symbol/{{{ $vowel['symbol_id'] }}}/data"></img>
+        </th>
+        @endforeach
+    </tr>
+
+    @foreach($consonants as $rowIndex => $consonant)
+    <tr>
+        <th class='headerCell' id='row-{{{ $rowIndex }}}' rowId="{{{$consonant['header_id']}}}" onclick='selectRow("{{{ $rowIndex }}}")'>
+            <b>{{{ $consonant['ipa'] }}}</b>
+            <br>
+            <img src="/syllabary/symbol/{{{ $consonant['symbol_id'] }}}/data"></img>
+        </th>
+        @foreach($vowels as $colIndex => $vowel)
+        <td class="syllableCell" id='cell-{{{ $colIndex }}}-{{{ $rowIndex }}}' onclick='selectCell("{{{ $colIndex }}}", "{{{ $rowIndex }}}")'>
+          <b>{{{ $consonant['ipa'] . $vowel['ipa'] }}}</b>
+          <br>
+          <div>
+            <img src="/syllabary/symbol/{{{ $consonant['symbol_id'] }}}/data"></img>
+            <img src="/syllabary/symbol/{{{ $vowel['symbol_id'] }}}/data"></img>
+          </div>
+        </td>
+        @endforeach
+    </tr>
+    @endforeach
+</table>
+
 <!--===========================================================================================================
                                             Column Control Panel 
 ============================================================================================================-->
@@ -87,39 +124,3 @@
 @endforeach
 
 </div>
-
-<!--==========================================================================================================
-                                               Syllabary Grid
-===========================================================================================================-->
-<table class='syllabaryGrid' border='1'>
-    <tr>
-        <th class='headerCell' onclick='unselectAll()'></th>
-        @foreach($vowels as $colIndex => $vowel)
-        <th class='headerCell' id='col-{{{ $colIndex }}}' colId="{{{$vowel['header_id']}}}" onclick='selectColumn("{{{ $colIndex }}}")'>
-            <b>{{{ $vowel['ipa'] }}}</b>
-            <br>
-            <img src="/syllabary/symbol/{{{ $vowel['symbol_id'] }}}/data"></img>
-        </th>
-        @endforeach
-    </tr>
-
-    @foreach($consonants as $rowIndex => $consonant)
-    <tr>
-        <th class='headerCell' id='row-{{{ $rowIndex }}}' rowId="{{{$consonant['header_id']}}}" onclick='selectRow("{{{ $rowIndex }}}")'>
-            <b>{{{ $consonant['ipa'] }}}</b>
-            <br>
-            <img src="/syllabary/symbol/{{{ $consonant['symbol_id'] }}}/data"></img>
-        </th>
-        @foreach($vowels as $colIndex => $vowel)
-        <td class="syllableCell" id='cell-{{{ $colIndex }}}-{{{ $rowIndex }}}' onclick='selectCell("{{{ $colIndex }}}", "{{{ $rowIndex }}}")'>
-          <b>{{{ $consonant['ipa'] . $vowel['ipa'] }}}</b>
-          <br>
-          <div>
-            <img src="/syllabary/symbol/{{{ $consonant['symbol_id'] }}}/data"></img>
-            <img src="/syllabary/symbol/{{{ $vowel['symbol_id'] }}}/data"></img>
-          </div>
-        </td>
-        @endforeach
-    </tr>
-    @endforeach
-</table>
