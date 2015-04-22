@@ -2,6 +2,7 @@
 
 Route::get('/', 'HomeController@ShowIndex');
 Route::get('/settings', 'SettingsController@ShowIndex');
+Route::get('/projectmanagement', 'PMController@ShowIndex');
 Route::get('sleep', function() { return Redirect::away('http://Ncnl.tumblr.com'); });
 Route::get('fuck', function() { return 'FUCK'; });
 

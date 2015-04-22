@@ -55,6 +55,7 @@ $AllUsers is a list of the names of all users in the database.-->
     @endif
     <select id="Syllabaries">
     @foreach($Project['Syllabaries'] as $SyllabaryIndex => $Syllabary)
+        t
         <option value="{{{ $SyllabaryIndex }}}">{{{ $Syllabary }}}</option>
     @endforeach
     </select>
@@ -116,3 +117,4 @@ $AllUsers is a list of the names of all users in the database.-->
 </script>
 </main>
 @stop
+

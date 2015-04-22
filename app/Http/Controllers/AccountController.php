@@ -4,6 +4,7 @@ use Sequoyah\Models\ProjectMembers;
 use Sequoyah\Models\Project;
 use Sequoyah\Models\Syllabary;
 use Sequoyah\Models\User;
+use Auth;
 
 class AccountController extends Controller
 {
@@ -38,8 +39,8 @@ class AccountController extends Controller
     */
     public function ShowPage()
     {
-        //$UserId = 1; //Temporary placeholder until there is a way to get the current user.
-        $UserId = Auth::user()->id;
+        $UserId = 1; //Temporary placeholder until there is a way to get the current user.
+        //$UserId = Auth::user()->id;
         $UserProjects = array();
         foreach($Projects as $project)
         {
