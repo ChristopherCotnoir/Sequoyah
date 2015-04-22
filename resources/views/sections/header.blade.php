@@ -16,7 +16,9 @@
 	</h1>
 	<nav>
 		<a a class= "nav {{ (Request::path() == '/')  ? "active" : "" }}" href='{{ action('HomeController@ShowIndex') }}' 		title='Home'>Home</a>
-		<a a class= "nav {{ (Request::path() == 'syllabary')  ? "active" : "" }}" href='{{ action('SyllabaryController@ShowGrid') }}' 		title='Syllabary Editor'>Syllabary Editor</a>
+		@if (Auth::check())
+			<a a class= "nav {{ (Request::path() == 'syllabary')  ? "active" : "" }}" href='{{ action('SyllabaryController@ShowGrid') 			}}' 		title='Syllabary Editor'>Syllabary Editor</a>
+		@endif
 		<a class='nav' target='_blank' href='https://bitbucket.org/411blacks15/sequoyah' title='Bitbucket (External Link)'><i 		class='fa fa-bitbucket'></i> Bitbucket</a>
 		@if (Auth::check())
 			<a class= "nav {{ (Request::path() == 'settings')  ? "active" : "" }}" href='{{ action('SettingsController@ShowIndex') 			}}' 		title='Settings'>Settings</a>
