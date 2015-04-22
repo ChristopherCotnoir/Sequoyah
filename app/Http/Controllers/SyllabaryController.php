@@ -422,12 +422,29 @@ class SyllabaryController extends Controller
     
     public function EditVowel($syllabaryId, $columnId, $vowel)
     {
+        $column = SyllabaryColumnHeader::where('syllabary_id', '=', $syllabaryId)->
+                                         where('id', '=', $columnId)->first();
+        if($column == NULL)
+            return response()->json(['success' => false]);
+
+        $column->ipa = $vowel;
+        $column->save();
+
+        return response()->json(['success' => true]);
     
     }
     
     public function EditConsonant($syllabaryId, $rowId, $consonant)    
     {
-    
+        $row = SyllabaryRowHeader::where('syllabary_id', '=', $syllabaryId)->
+                                   where('id', '=', $rowId)->first();
+        if($row == NULL)
+            return response()->json(['success' => false]);
+
+        $row->ipa = $consonant;
+        $row->save();
+
+        return response()->json(['success' => true]);    
     }
 }
 
