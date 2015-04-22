@@ -4,8 +4,33 @@
 <script src='https://code.jquery.com/jquery.min.js'></script>
 <script src='opentype.js'></script>
 <script src='fontgen.js'></script>
+<style>
+html, button {
+	font-family: sans-serif;
+}
+button {
+	border: none;
+	color: #fff;
+	background: #68a;
+	padding: 8px 16px;
+	display: block;
+	margin: 4px;
+	font-size: 100%;
+	transition: 0.5s all;
+}
+button:hover {
+	background: #8ac;
+}
+button:active {
+	background: #468;
+}
+output {
+	display: block;
+}
+</style>
 </head>
 <body>
 	<button onclick='ExportSyllabary(1, "test", function(Font) { console.log(Font); Font.download(); })'>Export Syllabary 1 to OTF</button>
+	<button onclick='ExportSyllabary(1, "test", function(Font) { console.log(Font); })'>Debug font generator</button>
 </body>
 </html>

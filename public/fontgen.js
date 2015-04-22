@@ -14,8 +14,11 @@ function ExportSyllabary(SyllabaryId, FontName, Callback)
 	$.ajax('/json/syllabary/grid/' + SyllabaryId)
 	.done(function(Data)
 	{
-		for (var i in Data.consonants)
-			glyphs.push(CreateGlyph(Data.consonants[i].symbol.symbol_data));
+		for (var i in Data.vowels)
+		{
+			var s = Data.vowels[i];
+			glyphs.push(CreateGlyph(s.ipa.charCodeAt(0), s.symbol.symbol_data));
+		}
 
 		//not defined glyph (required)
 		var ndp = new opentype.Path();
@@ -33,7 +36,8 @@ function ExportSyllabary(SyllabaryId, FontName, Callback)
 		{
 			familyName: FontName || "Sequoyah Font",
 			designer: 'Sequoyah',
-			glyphs: glyphs
+			glyphs: glyphs,
+			//unitsPerEm (1000)
 			//styleName
 			//encoding
 			//copyright
@@ -41,20 +45,18 @@ function ExportSyllabary(SyllabaryId, FontName, Callback)
 			//version
 			//license
 			//licenseURL
-			//unitsPerEm (1000)
-
 		});
 
-		Callback(font);
+		if (Callback)
+			Callback(font);
 	})
 	.fail(function(Err)
 	{
 		console.log("FAILED", Err);
 	});
 }
-var n = 0;
 //Creates a glyph and returns the opentype glyph
-function CreateGlyph(SvgData)
+function CreateGlyph(CharCode, SvgData)
 {
 	var $svg = $($.parseXML(SvgData)).children('svg');
 
@@ -69,12 +71,11 @@ function CreateGlyph(SvgData)
 
 	var glyph = new opentype.Glyph(
 	{
-		name: String.fromCharCode(97 + n),
-		unicode: 97 + n,
+		name: String.fromCharCode(CharCode),
+		unicode: CharCode,
 		advanceWidth: wid,
 		path: chPath
 	});
-	n++;
 	return glyph;
 }
 
@@ -106,29 +107,64 @@ function SvgToPath(Path, $Node, DocWidth, DocHeight)
 
 			else if (c == 'm') //move to
 			{
-				var sub = m.match(/m\s*(-?[\d.]+)[, ]+(-?[\d.]+)/i); //requires well-formed
+				var sub = m.match(/m\s*(-?[\d.]+)[,\s]+(-?[\d.]+)/i); //requires well-formed
 				
 				var dx = parseInt(sub[1]), dy = parseInt(sub[2]);
 				if (isCap)
+				{
 					Path.moveTo(dx, dy);
+					x = dx;
+					y = dy;
+				}
 				else
+				{
 					Path.moveTo(x + dx, y + dy);
-
-				x = dx;
-				y = dy;
+					x += dx;
+					y += dy;
+				}
 			}
 			else if (c == 'l') //line to
 			{
-				var sub = m.match(/l\s*(-?[\d.]+)[, ]+(-?[\d.]+)/i); //requires well-formed
+				var sub = m.match(/l\s*(-?[\d.]+)[,\s]+(-?[\d.]+)/i); //requires well-formed
 				
 				var dx = parseInt(sub[1]), dy = parseInt(sub[2]);
 				if (isCap)
+				{
 					Path.lineTo(dx, dy);
+					x = dx;
+					y = dy;
+				}
 				else
+				{
 					Path.lineTo(x + dx, y + dy);
+					x += dx;
+					y += dy;
+				}
+			}
+			else if (c == 'c') //cubic curve to
+			{
+				var sub = m.match(/(-?[\d.]+)/gi); //requires well-formed
 
-				x = dx;
-				y = dy;
+				var d1x = parseInt(sub[0]), d1y = parseInt(sub[1]);
+				var d2x = parseInt(sub[2]), d2y = parseInt(sub[3]);
+				var dx = parseInt(sub[4]), dy = parseInt(sub[5]);
+
+				if (isCap)
+				{
+					Path.curveTo(d1x, d1y, d2x, d2y, dx, dy);
+					x = dx;
+					y = dy;
+				}
+				else
+				{
+					Path.curveTo(x + d1x, y + d1y, x + d2x, y + d2y, x + dx, y + dy);
+					x += dx;
+					y += dy;
+				}
+			}
+			else if (c == 'q') //quadratic curve to
+			{
+				//todo
 			}
 		}
 	}
