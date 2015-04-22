@@ -115,6 +115,9 @@
         selectedColId = $("#col-" + index).attr("colId");
         select("col-" + index);
 		    openModal = $("#edit-column-modal-" + index);
+            openModal.on('hide.bs.modal', function () {
+            unselectAll();
+            })
         openModal.modal('show');
     }
 
@@ -123,6 +126,9 @@
         selectedRowId = $("#row-" + index).attr("rowId");
         select("row-" + index);
 		    openModal = $("#edit-row-modal-" + index);
+            openModal.on('hide.bs.modal', function () {
+            unselectAll();
+            })
         openModal.modal('show');
     }
 
@@ -130,6 +136,9 @@
     {
        select("cell-" + colIndex + "-" + rowIndex);
 		   openModal = $("#edit-symbol-modal-" + colIndex + "-" + rowIndex)
+            openModal.on('hide.bs.modal', function () {
+            unselectAll();
+            })
        openModal.modal('show');
     }
 
