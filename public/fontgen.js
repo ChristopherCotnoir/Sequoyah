@@ -76,6 +76,13 @@ function CreateGlyph(CharCode, SvgData)
 	return glyph;
 }
 
+function NormUnits(Value, Scale)
+{
+	if (!Value)
+		return 0;
+
+	return parseInt(Value) * (Value.indexOf('%') >= 0 ? Scale / 100 : 1);
+}
 function SvgToPath(Path, $Node, DocWidth, DocHeight)
 {
 	var tag = $Node.prop('tagName');
@@ -188,18 +195,12 @@ function SvgToPath(Path, $Node, DocWidth, DocHeight)
 		if (!w || w <= 0)
 			w = 1;
 		else
-			w = parseInt(w) * (w.indexOf('%') >= 0 ? DocWidth / 100 : 1);
+			w = NormUnits(wm DocWidth);
 
-		var x1 = $Node.attr('x1');
-		var y1 = $Node.attr('y1');
-		var x2 = $Node.attr('x2');
-		var y2 = $Node.attr('y2');
-
-		//handle relative; other units ignored
-		x1 = parseInt(x1) * (x1.indexOf('%') >= 0 ? DocWidth / 100 : 1);
-		y1 = parseInt(y1) * (y1.indexOf('%') >= 0 ? DocHeight / 100 : 1);
-		x2 = parseInt(x2) * (x2.indexOf('%') >= 0 ? DocWidth / 100 : 1);
-		y2 = parseInt(y2) * (y2.indexOf('%') >= 0 ? DocHeight / 100 : 1);
+		var x1 = NormUnits($Node.attr('x1'), DocWidth);
+		var y1 = NormUnits($Node.attr('y1'), DocHeight);
+		var x2 = NormUnits($Node.attr('x2'), DocWidth);
+		var y2 = NormUnits($Node.attr('y2'), DocHeight);
 
 		var dx = x2 - x1;
 		var dy = y2 - y1;
@@ -218,6 +219,16 @@ function SvgToPath(Path, $Node, DocWidth, DocHeight)
 		Path.lineTo(x2 + nx, DocHeight - (y2 + ny));
 		Path.lineTo(x2 - nx, DocHeight - (y2 - ny));
 		Path.lineTo(x1 - nx, DocHeight - (y1 - ny));
+		Path.close();
+	}
+	else if (tag == 'circle')
+	{
+		var cx = NormUnits($Node.attr('cx'), DocWidth);
+		var cy = NormUnits($Node.attr('cy'), DocHeight);
+		var r = NormUnits($Node.attr('r'), DocHeight);
+
+		Path.moveTo(cx - r, cy);
+		//Path.curveTo();
 		Path.close();
 	}
 }
