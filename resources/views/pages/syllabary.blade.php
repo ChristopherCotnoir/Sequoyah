@@ -255,6 +255,22 @@
       $('#audio-container').attr('src', '/syllabary/1/row/' + rowId + '/getAudio?cb=' + new Date().getTime());
       $('#audio-container')[0].play();
     }
+    
+    function editVowel(vowel)
+    {
+        var newVowel = prompt("Please enter the vowel", vowel);
+        $.post("/syllabary/1/column/" + selectedColId + "/vowel/" + newVowel, function() {
+          loadGrid();
+        });
+    }
+    
+    function editConsonant(consonant)
+    {
+        var newConsonant = prompt("Please enter the consonant", consonant);
+        $.post("/syllabary/1/row/" + selectedRowId + "/consonant/" + newConsonant, function() {
+          loadGrid();
+        });
+    }
 </script>
 
 	

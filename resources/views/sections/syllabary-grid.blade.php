@@ -14,7 +14,7 @@
 				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="addColumnLeft('')">Add Column Left</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="removeSelectedColumn()">Remove Column</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="addColumnRight('')">Add Column Right</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="unselectAll()">Edit Vowel</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="editVowel('{{{ $vowel['ipa'] }}}')">Edit Vowel</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="editSymbol('{{{ $vowel['symbol_id'] 				}}}')">Edit Symbol</button>
             </div>
             <div class="modal-footer">
@@ -42,7 +42,7 @@
 				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="addRowTop('')">Add Row Top</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="removeSelectedRow()">Remove Row</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="addRowBottom('')">Add Row 				Bottom</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="unselectAll()">Edit Consonant</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="editConsonant('{{{ $consonant['ipa'] }}}')">Edit Consonant</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="editSymbol('{{{ $consonant['symbol_id'] 				}}}')">Edit Symbol</button>
 				
             </div>

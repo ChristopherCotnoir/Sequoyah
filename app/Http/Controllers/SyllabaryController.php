@@ -417,5 +417,15 @@ class SyllabaryController extends Controller
 
         return '<body>' . $symbol->symbol_data . '</body>';
     }
+    
+    public function EditVowel($syllabaryId, $columnId, $vowel)
+    {
+    
+    }
+    
+    public function EditConsonant($syllabaryId, $rowId, $consonant)    
+    {
+    
+    }
 }
 
