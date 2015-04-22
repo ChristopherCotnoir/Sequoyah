@@ -5,6 +5,7 @@ Route::get('/settings', 'SettingsController@ShowIndex');
 Route::get('/projectmanagement', 'PMController@ShowIndex');
 Route::get('sleep', function() { return Redirect::away('http://Ncnl.tumblr.com'); });
 Route::get('fuck', function() { return 'FUCK'; });
+Route::get('glyphs', function() { return Redirect::away('http://nodebox.github.io/opentype.js/glyph-inspector.html'); });
 
 
 Route::get('syllabary', 'SyllabaryController@ShowGrid');

@@ -356,7 +356,7 @@ table, th, td {
 }
 
 .headerCell {
-  background: #fed;
+  background: #ddd;
 }
 
 .headerCell svg {
@@ -662,7 +662,9 @@ input[type="button"]:active, input[type="submit"]:active, input[type="reset"]:ac
 }
 
 
-
+#font-dl {
+	margin-top: 4px;
+}
 
 
 
