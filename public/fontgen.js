@@ -11,12 +11,6 @@ function ExportSyllabary(SyllabaryId, FontName, Callback)
 	$.ajax('/json/syllabary/grid/' + SyllabaryId)
 	.done(function(Data)
 	{
-		for (var i in Data.vowels)
-		{
-			var s = Data.vowels[i];
-			glyphs.push(CreateGlyph(s.ipa.charCodeAt(0), s.symbol.symbol_data));
-		}
-
 		//not defined glyph (required)
 		var ndp = new opentype.Path();
 		ndp.moveTo(0, 0);
@@ -28,6 +22,12 @@ function ExportSyllabary(SyllabaryId, FontName, Callback)
 			advanceWidth: 100,
 			path: ndp
 		}));
+
+		for (var i in Data.vowels)
+		{
+			var s = Data.vowels[i];
+			glyphs.push(CreateGlyph(s.ipa.charCodeAt(0), s.symbol.symbol_data));
+		}
 
 		var font = new opentype.Font(
 		{
@@ -83,6 +83,7 @@ function NormUnits(Value, Scale)
 
 	return parseInt(Value) * (Value.indexOf('%') >= 0 ? Scale / 100 : 1);
 }
+//Note, all Y coordinates are flipped
 function SvgToPath(Path, $Node, DocWidth, DocHeight)
 {
 	var tag = $Node.prop('tagName');
@@ -191,11 +192,10 @@ function SvgToPath(Path, $Node, DocWidth, DocHeight)
 	else if (tag == 'line')
 	{
 		var w = $Node[0].getAttribute('stroke-width');
-		console.log(w);
 		if (!w || w <= 0)
 			w = 1;
 		else
-			w = NormUnits(wm DocWidth);
+			w = NormUnits(w, DocWidth);
 
 		var x1 = NormUnits($Node.attr('x1'), DocWidth);
 		var y1 = NormUnits($Node.attr('y1'), DocHeight);
@@ -221,14 +221,64 @@ function SvgToPath(Path, $Node, DocWidth, DocHeight)
 		Path.lineTo(x1 - nx, DocHeight - (y1 - ny));
 		Path.close();
 	}
-	else if (tag == 'circle')
+	else if (tag == 'circle') //simulated with cubic bezier curves
 	{
 		var cx = NormUnits($Node.attr('cx'), DocWidth);
 		var cy = NormUnits($Node.attr('cy'), DocHeight);
-		var r = NormUnits($Node.attr('r'), DocHeight);
+		var r = NormUnits($Node.attr('r'), DocWidth);
 
-		Path.moveTo(cx - r, cy);
-		//Path.curveTo();
+		var d = r * 0.551784; //good approximation for cubic bezier circle
+
+		Path.moveTo(cx - r, DocHeight - cy);
+		Path.curveTo(cx - r, DocHeight - (cy + d), cx - d, DocHeight - (cy + r), cx, DocHeight - (cy + r));
+		Path.curveTo(cx + d, DocHeight - (cy + r), cx + r, DocHeight - (cy + d), cx + r, DocHeight - cy);
+		Path.curveTo(cx + r, DocHeight - (cy - d), cx + d, DocHeight - (cy - r), cx, DocHeight - (cy - r));
+		Path.curveTo(cx - d, DocHeight - (cy - r), cx - r, DocHeight - (cy - d), cx - r, DocHeight - cy);
+		Path.close();
+	}
+	else if (tag == 'ellipse') //simulated with cubic bezier curves
+	{
+		var cx = NormUnits($Node.attr('cx'), DocWidth);
+		var cy = NormUnits($Node.attr('cy'), DocHeight);
+		var rx = NormUnits($Node.attr('rx'), DocWidth);
+		var ry = NormUnits($Node.attr('ry'), DocHeight);
+		
+		//good approximation for cubic bezier ellipse
+		var dx = rx * 0.551784;
+		var dy = ry * 0.551784;
+
+		Path.moveTo(cx - rx, DocHeight - cy);
+		Path.curveTo(cx - rx, DocHeight - (cy + dy), cx - dx, DocHeight - (cy + ry), cx, DocHeight - (cy + ry));
+		Path.curveTo(cx + dx, DocHeight - (cy + ry), cx + rx, DocHeight - (cy + dy), cx + rx, DocHeight - cy);
+		Path.curveTo(cx + rx, DocHeight - (cy - dy), cx + dx, DocHeight - (cy - ry), cx, DocHeight - (cy - ry));
+		Path.curveTo(cx - dx, DocHeight - (cy - ry), cx - rx, DocHeight - (cy - dy), cx - rx, DocHeight - cy);
+		Path.close();
+	}
+	else if (tag == 'rect')
+	{
+		var x = NormUnits($Node.attr('x'), DocWidth);
+		var y = NormUnits($Node.attr('y'), DocHeight);
+		var w = NormUnits($Node.attr('width'), DocHeight);
+		var h = NormUnits($Node.attr('height'), DocHeight);
+
+		Path.moveTo(x, DocHeight - y);
+		Path.lineTo(x + w, DocHeight - y);
+		Path.lineTo(x + w, DocHeight - (y + h));
+		Path.lineTo(x, DocHeight - (y + h));
+		Path.lineTo(x, DocHeight - y);
+		Path.close();
+	}
+	else if (tag == 'polygon' || tag == 'polyline')
+	{
+		var points = $Node.attr('points').match(/(-?[\d.]+)/gi);
+		if (points.length < 2)
+			return;
+
+		Path.moveTo(parseInt(points[0]), DocHeight - parseInt(points[1]));
+		for (var i = 2; i < points.length - 1; i += 2)
+			Path.lineTo(parseInt(points[i]), DocHeight - parseInt(points[i + 1]));
+		if (tag == 'polygon')
+			Path.lineTo(parseInt(points[0]), DocHeight - parseInt(points[1]));
 		Path.close();
 	}
 }

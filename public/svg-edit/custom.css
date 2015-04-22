@@ -1,0 +1,63 @@
+#tool_eyedropper, #tool_image, #tool_fhpath, #tool_text,
+#tool_position, #tool_blur, #tool_make_link,
+#tool_fill, #tool_opacity, #tools_bottom_3, #tools_bottom .tool_sep,
+#tool_stroke .icon_label, #tool_stroke .color_block, #stroke_style,
+#cornerRadiusLabel, #marker_panel, #sidepanel_handle
+{
+	display: none !important;
+}
+#tool_stroke {
+	left: 5px;
+}
+
+body {
+	background: #ddd;
+}
+
+#main_icon {
+	width: 100px;
+}
+
+.tool_button, .push_button, .tool_button_current, .push_button_pressed, .tools_flyout .tool_button, input, select {
+	border: none;
+	border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+	border-radius: 0;
+	background: #eee;
+	-webkit-box-shadow: none !important;
+	-moz-box-shadow: none !important;
+	box-shadow: none !important;
+
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-user-select: none;
+
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+
+	min-width: 3em;
+	min-height: 3em;
+}
+input {
+	min-height: 2em;
+	background: #fff;
+	padding: 2px 4px !important;
+}
+input[type='number'] {
+	width: 4em;
+}
+#zoom {
+	width: 5em;
+}
+.tool_button:hover, .push_button:hover, .buttonup:hover, .buttondown, .tool_button_current, .push_button_pressed{
+	background-color: #fa8 !important;
+}
+.tool_button_current, .push_button_pressed{
+	border: 1px solid rgba(0, 0, 0, 0.3);
+	border-top: 2px solid rgba(0, 0, 0, 0.3);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+	background: #ddd;
+	-webkit-box-shadow: none !important;
+	-moz-box-shadow: none !important;
+	box-shadow: none !important;
+}

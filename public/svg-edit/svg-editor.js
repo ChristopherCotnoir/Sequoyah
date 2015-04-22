@@ -597,6 +597,7 @@ TODOS
 				fallback: {
 					'new_image': 'clear.png',
 					'save': 'save.png',
+					'save_2': 'save.png',
 					'open': 'open.png',
 					'source': 'source.png',
 					'docprops': 'document-properties.png',
@@ -653,12 +654,14 @@ TODOS
 
 					'#tool_clear div,#layer_new': 'new_image',
 					'#tool_save div': 'save',
+					'#tool_save_2': 'save',
 					'#tool_export div': 'export',
 					'#tool_open div div': 'open',
 					'#tool_import div div': 'import',
 					'#tool_source': 'source',
 					'#tool_docprops > div': 'docprops',
 					'#tool_wireframe': 'wireframe',
+					'#tool_snapping': 'select_node',
 
 					'#tool_undo': 'undo',
 					'#tool_redo': 'redo',
@@ -1913,7 +1916,7 @@ TODOS
 					return;
 				}
 
-				$('#zoom').val((zoomlevel*100).toFixed(1));
+				$('#zoom').val(zoomlevel.toFixed(1) * 100);
 
 				if (autoCenter) {
 					updateCanvas();
@@ -1930,11 +1933,6 @@ TODOS
 			};
 
 			changeZoom = function(ctl) {
-				var zoomlevel = ctl.value / 100;
-				if (zoomlevel < 0.001) {
-					ctl.value = 0.1;
-					return;
-				}
 				var zoom = svgCanvas.getZoom();
 				var w_area = workarea;
 
@@ -1944,7 +1942,7 @@ TODOS
 					// center pt of scroll position
 					x: (w_area[0].scrollLeft + w_area.width()/2)/zoom,
 					y: (w_area[0].scrollTop + w_area.height()/2)/zoom,
-					zoom: zoomlevel
+					zoom: parseFloat(ctl.value) / 100
 				}, true);
 			};
 
@@ -4490,6 +4488,10 @@ TODOS
 							clickSave();
 						}
 					}, evt: 'mouseup', key: ['S', true]},
+					{sel: '#tool_save_2', fn: function() {
+						if (editingsource) { saveSourceEditor(); } else { clickSave(); }
+
+					}, evt: 'mouseup'},
 					{sel: '#tool_export', fn: clickExport, evt: 'mouseup'},
 					{sel: '#tool_open', fn: clickOpen, evt: 'mouseup', key: ['O', true]},
 					{sel: '#tool_import', fn: clickImport, evt: 'mouseup'},
@@ -4755,6 +4757,7 @@ TODOS
 			});
 
 			// init SpinButtons
+			/*
 			$('#rect_rx').SpinButton({ min: 0, max: 1000, callback: changeRectRadius });
 			$('#stroke_width').SpinButton({ min: 0, max: 99, smallStep: 0.1, callback: changeStrokeWidth });
 			$('#angle').SpinButton({ min: -180, max: 180, step: 5, callback: changeRotationAngle });
@@ -4762,8 +4765,15 @@ TODOS
 			$('#group_opacity').SpinButton({ min: 0, max: 100, step: 5, callback: changeOpacity });
 			$('#blur').SpinButton({ min: 0, max: 10, step: 0.1, callback: changeBlur });
 			$('#zoom').SpinButton({ min: 0.001, max: 10000, step: 50, stepfunc: stepZoom, callback: changeZoom })
-				// Set default zoom
-				.val(svgCanvas.getZoom() * 100);
+			*/
+			$('#rect_rx').on('change', function() { changeRectRadius(this); });
+			$('#stroke_width').on('change', function() { changeStrokeWidth(this); });
+			$('#angle').on('change', function() { changeRotationAngle(this); });
+			$('#font_size').on('change', function() { changeFontSize(this); }).attr('step', stepFontSize);
+			$('#group_opacity').on('change', function() { changeOpacity(this); });
+			$('#blur').on('change', function() { changeBlur(this); });
+			$('#zoom').on('change', function() { changeZoom(this); })
+			.val(svgCanvas.getZoom() * 100);
 
 			$('#workarea').contextMenu({
 					menu: 'cmenu_canvas',

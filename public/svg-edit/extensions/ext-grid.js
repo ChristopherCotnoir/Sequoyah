@@ -146,7 +146,8 @@ svgEditor.addExtension('view_grid', function() { 'use strict';
 				gridUpdate();
 			}
 		},
-		buttons: [{
+		buttons: 
+		[{
 			id: 'view_grid',
 			type: 'context',
 			panel: 'editor_panel',
