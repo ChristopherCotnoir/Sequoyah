@@ -44,7 +44,7 @@ class AccountController extends Controller
         foreach($Projects as $project)
         {
             $UserProject['Name'] = Project::where('id','=',$project['project_id'])->firstOrFail()['name'];
-            $UserProject['Role'] = Project::where('id','=',$project['project_id'])->firstOrFail()['access'];
+            $UserProject['Role'] = $project['access'];
             $Syllabaries = Project::where('id','=',$project['project_id'])->get();
             $UserProject['Syllabaries'] = array();
             foreach($Syllabaries as $syllabary)
@@ -52,7 +52,7 @@ class AccountController extends Controller
                 $SyllabaryName = Syllabary::where('id','=',$syllabary['syllabary_id'])->firstOrFail()['name'];
                 array_push($UserProject['Syllabaries'], $SyllabaryName);
             }
-            $Users = ProjectMembers::where('id','=',$project['project_id'])->get();
+            $Users = ProjectMembers::where('project_id','=',$project['project_id'])->get();
             $UserProject['Users'] = array();
             foreach($Users as $user)
             {
@@ -61,7 +61,7 @@ class AccountController extends Controller
             }
             array_push($UserProjects, $UserProject);
         }
-        $Users = User::where('id','=',1)->get(); //I don't know the command to get everything, I'll fix this when I find out. Right now I just put something that lets it compile.
+        $Users = User::where('id','>',0)->get(); //I don't know the command to get everything, I'll fix this when I find out. Right now I just put something that lets it compile.
         $AllUsers = array();
         foreach($Users as $user)
         {

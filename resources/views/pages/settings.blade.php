@@ -12,6 +12,7 @@ $AllUsers is a list of the names of all users in the database.-->
     @endforeach
     </select>
     <button type="button" onclick="showProject(true)">Choose Project</button>
+    <br>
 @elseif(count($UserProjects)==1)
     <script type='text/javascript'>
         showProject(false);
@@ -24,19 +25,21 @@ $AllUsers is a list of the names of all users in the database.-->
     <div id="Project-{{{ $ProjectIndex }}}" class="Project" style="display:none">
     {{{ $Project['Name'] }}}
     <br>
-    @if($Project['Role']=='Admin')
+    @if($Project['Role']==3)
         <select id="Users">
         @foreach($AllUsers as $UserIndex => $User)
             <option value="{{{ $UserIndex }}}">{{{ $User }}}</option>
         @endforeach
         </select>
         <button type="button" onclick="addUser()">Add User to Project</button>
+        <br>
         <select id="CurrentUsersRemove">
         @foreach($Project['Users'] as $UserIndex => $User)
             <option value="{{{ $UserIndex }}}">{{{ $User }}}</option>
         @endforeach
         </select>
         <button type="button" onclick="removeUser()">Remove User from Project</button>
+        <br>
         <select id="CurrentUsersChange">   
         @foreach($Project['Users'] as $UserIndex => $User)
             <option value="{{{ $UserIndex }}}">{{{ $User }}}</option>
@@ -48,6 +51,7 @@ $AllUsers is a list of the names of all users in the database.-->
         <option value="Read">Read</option>
         </select>
         <button type="button" onclick="changeRole()">Change User's Role</button>
+        <br>
     @endif
     <select id="Syllabaries">
     @foreach($Project['Syllabaries'] as $SyllabaryIndex => $Syllabary)
@@ -61,7 +65,7 @@ $AllUsers is a list of the names of all users in the database.-->
 <script type='text/javascript'>
     function showProject(isSelected)
     {
-        var index = 1;
+        var index = 0;
         if(isSelected)
         {
             var dropdown = document.getElementById("Projects");
