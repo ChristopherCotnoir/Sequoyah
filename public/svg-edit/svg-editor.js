@@ -654,7 +654,7 @@ TODOS
 
 					'#tool_clear div,#layer_new': 'new_image',
 					'#tool_save div': 'save',
-					'#tool_save_2': 'save',
+					'#save_icon': 'save',
 					'#tool_export div': 'export',
 					'#tool_open div div': 'open',
 					'#tool_import div div': 'import',
@@ -4488,7 +4488,7 @@ TODOS
 							clickSave();
 						}
 					}, evt: 'mouseup', key: ['S', true]},
-					{sel: '#tool_save_2', fn: function() {
+					{sel: '#save_button', fn: function() {
 						if (editingsource) { saveSourceEditor(); } else { clickSave(); }
 
 					}, evt: 'mouseup'},

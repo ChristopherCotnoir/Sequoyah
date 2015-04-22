@@ -15,7 +15,19 @@ body {
 }
 
 #main_icon {
-	width: 100px;
+	width: 10em;
+	margin-right: 5px;
+}
+#save_button {
+	width: 10.5em;
+	font-weight: bold;
+}
+#save_icon {
+	float: left;
+	margin-right: 10px;
+}
+#tools_top {
+	left: 11em;
 }
 
 .tool_button, .push_button, .tool_button_current, .push_button_pressed, .tools_flyout .tool_button, input, select {

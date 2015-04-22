@@ -23,16 +23,37 @@ function ExportSyllabary(SyllabaryId, FontName, Callback)
 			path: ndp
 		}));
 
+		var ccode = 97; //a
 		for (var i in Data.vowels)
 		{
-			var s = Data.vowels[i];
-			glyphs.push(CreateGlyph(s.ipa.charCodeAt(0), s.symbol.symbol_data));
-		}
+			for (j in Data.consonants)
+			{
+				var v = Data.vowels[i].symbol;
+				var c = Data.consonants[j].symbol;
+				var sdata;
+				//console.log(Data.cells);
+				/*if (Data.cells.length > (i + j * Data.vowels.length))
+				{
+					sData = Data.cells[i + j * Data.vowels.length].symbol_data;
+					sdata = $($.parseXML(sdata)).children('svg');
+				}
+				else*/
+				{
+					var vdata = $($.parseXML(v.symbol_data)).children('svg');
+					var cdata = $($.parseXML(c.symbol_data)).children('svg');
 
+					sdata = $(vdata).append(cdata.children());
+					console.log(sdata);
+				}
+
+				glyphs.push(CreateGlyph(ccode, sdata));
+				ccode++;
+			}
+		}
 		var font = new opentype.Font(
 		{
 			familyName: FontName || 'Sequoyah Font',
-			syleName: 'medium',
+			styleName: 'regular',
 			designer: 'Sequoyah',
 			glyphs: glyphs,
 			//unitsPerEm (1000)
@@ -53,15 +74,13 @@ function ExportSyllabary(SyllabaryId, FontName, Callback)
 	});
 }
 //Creates a glyph and returns the opentype glyph
-function CreateGlyph(CharCode, SvgData)
+function CreateGlyph(CharCode, $Svg)
 {
-	var $svg = $($.parseXML(SvgData)).children('svg');
-
-	var wid = parseInt($svg.attr('width'));
-	var hgt = parseInt($svg.attr('height'));
+	var wid = parseInt($Svg.attr('width'));
+	var hgt = parseInt($Svg.attr('height'));
 
 	var chPath = new opentype.Path();
-	$svg.children().each(function(i)
+	$Svg.children().each(function(i)
 	{
 		SvgToPath(chPath, $(this), wid, hgt);
 	});

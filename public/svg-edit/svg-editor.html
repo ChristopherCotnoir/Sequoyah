@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=Edge, chrome=1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
-<link rel="icon" type="image/png" href="images/logo.png"/>
+<!-- <link rel="icon" type="image/png" href="images/logo.png"/> -->
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wQWDw4peCNYBgAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAB7ElEQVQ4y4WTMWhTYRDHf/e9NCEtTiLWQSiICHUovpDGUoToC4oIDgoOVhGsi1204ObQgOBoUbDgoGIpiIoIgqKQhJApJnkpOrg4OIgUaSdppJSXnIPvpS9JY286Po7f3f9/9wld8SljnzQq06BHQYZFtAn8UKXkqSxMFNzlcL0EycvR0YGRffEnRrhEn1ClBZpN5ut3egAVJ5E1wlxQKKJvFK1rywyJqCMiqTaI1uVkbnkJIBI8GtHpgKeqs8l8/UGo+e1qJvFQYMbvOwt0AlRlj/jzeGJK3eNverIQtXTSB2z2SKhmbFcQ28e9Xvc2rqSLXxvsECEP7DOCvBXB/NOpayjPPDUvPhZqtSzofwEA5eOJ0xGjjxDZ3+E+/FRY/OOZ++li9VdfAEAxPRKLW7unLPSqIhPBRP52GqrcGC+4j/sCOmHJvUNW86wI10DGg/cmXEzl3OcdgNKxxHCQF6xdq9lisRmGVZzEvBFu+pK+JHPuGLA1XjzGt8EYK4MxVk7JeqrnClutpyFTDrXvp61F9XOQRyyd6QYYw4l2rehqu3YLqvcEmfR1TdUc+7DCB+A3cETgXMjMpW1NrDr2LYS7ggz0/1D6/nsjev5Cubyx7RYqzthBI9Z1VTLAARGiwJoqLrD4Ll9/FT6qvwElspdzH9DxAAAAAElFTkSuQmCC"/>
 <link rel="stylesheet" href="jgraduate/css/jPicker.css" type="text/css"/>
 <link rel="stylesheet" href="jgraduate/css/jgraduate.css" type="text/css"/>
 <link rel="stylesheet" href="svg-editor.css" type="text/css"/>
@@ -58,7 +59,7 @@ by creating the following file and adding by calls to svgEditor.setConfig -->
 <link rel="alternate" type="application/atom+xml" title="SVG-edit Updates (Issues/Fixes/Commits)" href="http://code.google.com/feeds/p/svg-edit/updates/basic" />
 
 <!-- Add script with custom handlers here -->
-<title>SVG-edit</title>
+<title>Sequoyah Editor</title>
 </head>
 <body>
 <div id="svg_editor">
@@ -142,7 +143,7 @@ by creating the following file and adding by calls to svgEditor.setConfig -->
 			
 			<li id="tool_save">
 				<div></div>
-				Save Image (S)
+				Save &amp; Exit (S)
 			</li>
 			
 			<li id="tool_export">
@@ -175,7 +176,10 @@ by creating the following file and adding by calls to svgEditor.setConfig -->
 <div id="tools_top" class="tools_panel">
 
 	<div id="editor_panel">
-		<div class="push_button" id="tool_save_2" title="Save and Close"></div>
+		<div id="save_button" class="push_button" title="Save &amp; Exit">
+			<span>Save &amp; Exit</span>
+			<div id="save_icon"></div>
+		</div>
 		<div class="tool_sep"></div>
 		<div class="push_button" id="tool_source" title="Edit Source [U]"></div>
 		<div class="tool_button" id="tool_wireframe" title="Wireframe Mode [F]"></div>
