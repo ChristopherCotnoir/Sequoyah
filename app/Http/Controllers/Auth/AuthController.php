@@ -78,7 +78,7 @@ class AuthController extends Controller
 		$credentials = $request->only('username', 'password');
 
 		if ($this->auth->attempt($credentials, $request->has('remember')))
-			return redirect('/');
+			return redirect('/projectmanagement');
 		
 		return redirect()
 			->action('Auth\AuthController@ShowLogin')
