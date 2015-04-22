@@ -31,13 +31,12 @@ function ExportSyllabary(SyllabaryId, FontName, Callback)
 				var v = Data.vowels[i].symbol;
 				var c = Data.consonants[j].symbol;
 				var sdata;
-				//console.log(Data.cells);
-				/*if (Data.cells.length > (i + j * Data.vowels.length))
+				if (false)
 				{
 					sData = Data.cells[i + j * Data.vowels.length].symbol_data;
 					sdata = $($.parseXML(sdata)).children('svg');
 				}
-				else*/
+				else
 				{
 					var vdata = $($.parseXML(v.symbol_data)).children('svg');
 					var cdata = $($.parseXML(c.symbol_data)).children('svg');
