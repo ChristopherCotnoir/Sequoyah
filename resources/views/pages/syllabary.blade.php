@@ -10,7 +10,8 @@
 
 <main>
 
-<audio id="audio-container"></audio>
+<audio id="audio-container-1"></audio>
+<audio id="audio-container-2"></audio>
 <div id="grid-div">
 </div>
 
@@ -115,6 +116,9 @@
         selectedColId = $("#col-" + index).attr("colId");
         select("col-" + index);
 		    openModal = $("#edit-column-modal-" + index);
+            openModal.on('hide.bs.modal', function () {
+            unselectAll();
+            })
         openModal.modal('show');
     }
 
@@ -123,6 +127,9 @@
         selectedRowId = $("#row-" + index).attr("rowId");
         select("row-" + index);
 		    openModal = $("#edit-row-modal-" + index);
+            openModal.on('hide.bs.modal', function () {
+            unselectAll();
+            })
         openModal.modal('show');
     }
 
@@ -130,6 +137,9 @@
     {
        select("cell-" + colIndex + "-" + rowIndex);
 		   openModal = $("#edit-symbol-modal-" + colIndex + "-" + rowIndex)
+            openModal.on('hide.bs.modal', function () {
+            unselectAll();
+            })
        openModal.modal('show');
     }
 
@@ -231,20 +241,48 @@
       });
     }
 
-    function pronounceVowel(colId)
+    function pronounceVowel(event, colId)
     {
+      event.stopPropagation();
       // We append a date on the end as a cache-busting parameter, ensuring any new audio files are loaded
       // instead of cached ones.
-      $('#audio-container').attr('src', '/syllabary/1/column/' + colId + '/getAudio?cb=' + new Date().getTime());
-      $('#audio-container')[0].play();
+      $('#audio-container-1').attr('src', '/syllabary/1/column/' + colId + '/getAudio?cb=' + new Date().getTime());
+      $('#audio-container-1')[0].play();
     }
 
-    function pronounceConsonant(rowId)
+    function pronounceConsonant(event, rowId)
     {
+      event.stopPropagation();
       // We append a date on the end as a cache-busting parameter, ensuring any new audio files are loaded
       // instead of cached ones.
-      $('#audio-container').attr('src', '/syllabary/1/row/' + rowId + '/getAudio?cb=' + new Date().getTime());
-      $('#audio-container')[0].play();
+      $('#audio-container-1').attr('src', '/syllabary/1/row/' + rowId + '/getAudio?cb=' + new Date().getTime());
+      $('#audio-container-1')[0].play();
+    }
+
+    function pronounceSyllable(event, rowId, colId)
+    {
+      event.stopPropagation();
+      $('#audio-container-1').attr('src', '/syllabary/1/row/' + rowId + '/getAudio?cb=' + new Date().getTime());
+      $('#audio-container-2').attr('src', '/syllabary/1/column/' + rowId + '/getAudio?cb=' + new Date().getTime());
+
+      $('#audio-container-1')[0].play();
+      $('#audio-container-2')[0].play();
+    }
+    
+    function editVowel(vowel)
+    {
+        var newVowel = prompt("Please enter the vowel", vowel);
+        $.post("/syllabary/1/column/" + selectedColId + "/vowel/" + newVowel, function() {
+          loadGrid();
+        });
+    }
+    
+    function editConsonant(consonant)
+    {
+        var newConsonant = prompt("Please enter the consonant", consonant);
+        $.post("/syllabary/1/row/" + selectedRowId + "/consonant/" + newConsonant, function() {
+          loadGrid();
+        });
     }
 </script>
 

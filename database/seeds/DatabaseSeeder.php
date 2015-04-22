@@ -37,8 +37,18 @@ class UsersSeeder extends Seeder {
     DB::table('users')->truncate();
 
     User::create([
-      'name' => 'Tester',
-      'username' => 'tester',
+      'name' => 'Chris',
+      'username' => 'ccotnoir',
+      'password' => '$2y$10$aAe3xBMIG6dBiAa8kbXyc.rbQLWwv0wzaQaUiOSH8MJOyzUBF2u1a'
+    ]);
+    User::create([
+      'name' => 'Nicholai',
+      'username' => 'ngoodall',
+      'password' => '$2y$10$aAe3xBMIG6dBiAa8kbXyc.rbQLWwv0wzaQaUiOSH8MJOyzUBF2u1a'
+    ]);
+    User::create([
+      'name' => 'Preston',
+      'username' => 'pbrown',
       'password' => '$2y$10$aAe3xBMIG6dBiAa8kbXyc.rbQLWwv0wzaQaUiOSH8MJOyzUBF2u1a'
     ]);
   }
@@ -51,6 +61,9 @@ class SyllabarySeeder extends Seeder {
     Syllabary::create([
       'name' => 'Sequoyah Test',
     ]);
+    Syllabary::create([
+      'name' => 'Sequoyah Extra',
+    ]);
   }
 }
 
@@ -59,8 +72,12 @@ class ProjectsSeeder extends Seeder {
   {
     DB::table('projects')->truncate();
     Project::create([
-      'name' => 'Demo Project',
+      'name' => 'Demo Project 1',
       'syllabary_id' => 1,
+    ]);
+    Project::create([
+      'name' => 'Demo Project 2',
+      'syllabary_id' => 2,
     ]);
   }
 }
@@ -73,6 +90,21 @@ class ProjectMembersSeeder extends Seeder {
       'user_id' => 1,
       'project_id' => 1,
       'access' => 3, // Read/Write access
+    ]);
+    ProjectMembers::create([
+      'user_id' => 2,
+      'project_id' => 1,
+      'access' => 2
+    ]);
+    ProjectMembers::create([
+      'user_id' => 1,
+      'project_id' => 2,
+      'access' => 3
+    ]);
+    ProjectMembers::create([
+      'user_id' => 3,
+      'project_id' => 2,
+      'access' => 1
     ]);
   }
 }

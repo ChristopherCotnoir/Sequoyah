@@ -39,8 +39,8 @@ class AudioController extends Controller
 
     public function GetRowAudioSample($syllabaryId, $rowId)
     {
-       $row = SyllabaryColumnHeader::where('syllabary_id', '=', $syllabaryId)->
-                                     where('id', '=', $rowId)->first();
+       $row = SyllabaryRowHeader::where('syllabary_id', '=', $syllabaryId)->
+                                  where('id', '=', $rowId)->first();
        
        if ($row == NULL || $row->audio_sample == NULL)
          return '';
@@ -69,12 +69,12 @@ class AudioController extends Controller
 
       $uploadStatus = $this->_UploadAudioSample();
       if ($uploadStatus['success'] == false)
-        return response()->json(['success' => false]);
+        return redirect()->back();
 
       $row->audio_sample = $uploadStatus['file_path'];
       $row->save();
 
-      return response()->json(['success' => true]);
+      return redirect()->back();
     }
 
     public function UploadColumnHeaderSample($syllabaryId, $columnId)
@@ -87,12 +87,12 @@ class AudioController extends Controller
 
       $uploadStatus = $this->_UploadAudioSample();
       if ($uploadStatus['success'] == false)
-        return response()->json(['success' => false]);
+        return redirect()->back();
 
       $column->audio_sample = $uploadStatus['file_path'];
       $column->save();
 
-      return response()->json(['success' => true]);
+      return redirect()->back();
     }
 
     public function UploadSyllableSample($syllabaryId, $syllableCellId)

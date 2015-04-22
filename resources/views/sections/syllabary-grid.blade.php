@@ -11,14 +11,18 @@
             </div>
             <div class="modal-body">
                 
-				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="addColumnLeft('-');unselectAll()">Add Column Left</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="removeSelectedColumn();unselectAll()">Remove Column</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="addColumnRight('-');unselectAll()">Add Column Right</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="unselectAll()">Edit Vowel</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="editSymbol('{{{ $vowel['symbol_id'] 				}}}');unselectAll()">Edit Symbol</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="addColumnLeft('')">Add Column Left</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="removeSelectedColumn()">Remove Column</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="addColumnRight('')">Add Column Right</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="editVowel('{{{ $vowel['ipa'] }}}')">Edit Vowel</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="editSymbol('{{{ $vowel['symbol_id'] 				}}}')">Edit Symbol</button>
+        <form action="/syllabary/1/column/{{{ $vowel['header_id'] }}}/uploadAudio" method="post" enctype="multipart/form-data">
+          <button type="submit" class="btn btn-default">Upload Audio</button>
+          <input name="audioSample" type="file">
+        </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="flat-button" data-dismiss="modal" onclick="unselectAll()">Close</button>
+                <button type="button" class="flat-button" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -39,15 +43,18 @@
             </div>
             <div class="modal-body">
                 
-				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="addRowTop('-');unselectAll()">Add Row Top</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="removeSelectedRow();unselectAll()">Remove Row</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="addRowBottom('-');unselectAll()">Add Row 				Bottom</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="unselectAll()">Edit Consonant</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="editSymbol('{{{ $consonant['symbol_id'] 				}}}');unselectAll()">Edit Symbol</button>
-				
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="addRowTop('')">Add Row Top</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="removeSelectedRow()">Remove Row</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="addRowBottom('')">Add Row 				Bottom</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="editConsonant('{{{ $consonant['ipa'] }}}')">Edit Consonant</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="editSymbol('{{{ $consonant['symbol_id'] 				}}}')">Edit Symbol</button>
+        <form action="/syllabary/1/row/{{{ $consonant['header_id'] }}}/uploadAudio" method="post" enctype="multipart/form-data">
+          <button type="submit" class="btn btn-default">Upload Audio</button>
+          <input name="audioSample" type="file">
+        </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="flat-button" data-dismiss="modal" onclick="unselectAll()">Close</button>
+                <button type="button" class="flat-button" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -68,13 +75,13 @@
 				</div>
 				<div class="modal-body">
                 
-					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="unselectAll()">Remove Cell</button>
-					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="unselectAll()">Restore Cell</button>
-					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="unselectAll()">Edit Symbol</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="removeCell({{{ $consonant['header_id'] }}}, {{{ $vowel['header_id'] }}})">Remove Cell</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="restoreCell({{{ $consonant['header_id'] }}}, {{{ $vowel['header_id'] }}})">Restore Cell</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Edit Symbol</button>
 				
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="flat-button" data-dismiss="modal" onclick="unselectAll()">Close</button>
+					<button type="button" class="flat-button" data-dismiss="modal">Close</button>
 				</div>
 			</div>
 		</div>
@@ -93,7 +100,7 @@
         @foreach($vowels as $colIndex => $vowel)
         <th class='headerCell' id='col-{{{ $colIndex }}}' colId="{{{$vowel['header_id']}}}" onclick='selectColumn("{{{ $colIndex }}}")'>
             @if ($vowel['audio_sample'] != NULL)
-            <img class="sampleBtn" src="/images/speaker.png" onclick="pronounceVowel('{{{ $vowel['header_id'] }}}')"></img>
+            <img class="sampleBtn" src="/images/speaker.png" onclick="pronounceVowel(event, '{{{ $vowel['header_id'] }}}')"></img>
             @endif
             <b>{{{ $vowel['ipa'] }}}</b>
             <br>
@@ -106,7 +113,7 @@
     <tr>
         <th class='headerCell' id='row-{{{ $rowIndex }}}' rowId="{{{$consonant['header_id']}}}" onclick='selectRow("{{{ $rowIndex }}}")'>
             @if ($consonant['audio_sample'] != NULL)
-            <img class="sampleBtn" src="/images/speaker.png" onclick="pronounceConsonant('{{{ $consonant['header_id'] }}}')"></img>
+            <img class="sampleBtn" src="/images/speaker.png" onclick="pronounceConsonant(event, '{{{ $consonant['header_id'] }}}')"></img>
             @endif
             <b>{{{ $consonant['ipa'] }}}</b>
             <br>
@@ -117,18 +124,27 @@
           if (isset($cells[$consonant['header_id']][$vowel['header_id']])) {
             $cell = $cells[$consonant['header_id']][$vowel['header_id']];
             $cellDeleted = $cell->deleted;
+            $cellSymbolId = $cell->symbol_id;
           } else {
             $cellDeleted = false;
+            unset($cellSymbolId);
           }
         ?>
 
         <?php if (!$cellDeleted) { ?>
         <td class="syllableCell" id='cell-{{{ $colIndex }}}-{{{ $rowIndex }}}' colId="{{{$vowel['header_id']}}}" rowId="{{{$consonant['header_id']}}}" onclick='selectCell("{{{ $colIndex }}}", "{{{ $rowIndex }}}")'>
+          @if ($consonant['audio_sample'] != NULL && $vowel['audio_sample'] != NULL)
+          <img class="sampleBtn" src="/images/speaker.png" onclick="pronounceSyllable(event, '{{{ $consonant['header_id'] }}}', '{{{ $vowel['header_id'] }}}')"></img>
+          @endif
           <b>{{{ $consonant['ipa'] . $vowel['ipa'] }}}</b>
           <br>
           <div>
-            <img src="/syllabary/symbol/{{{ $consonant['symbol_id'] }}}/data"></img>
-            <img src="/syllabary/symbol/{{{ $vowel['symbol_id'] }}}/data"></img>
+             @if (isset($cellSymbolId))
+              <img src="/syllabary/symbol/{{{ $cellSymbolId }}}/data"></img>
+            @else
+              <img src="/syllabary/symbol/{{{ $consonant['symbol_id'] }}}/data"></img>
+              <img src="/syllabary/symbol/{{{ $vowel['symbol_id'] }}}/data"></img>
+            @endif
           </div>
         </td>
         <?php } else { ?>

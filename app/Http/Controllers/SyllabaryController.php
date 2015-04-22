@@ -149,8 +149,6 @@ class SyllabaryController extends Controller
     public function AddColumn($syllabaryId, $relativeId = NULL)
     {
         $ipa = Input::get('ipa');
-        if ($ipa == False)
-            return response()->json(['success' => False]);
 
         $headers = SyllabaryColumnHeader::where('syllabary_id', '=', 1)->get();
 
@@ -234,14 +232,19 @@ class SyllabaryController extends Controller
 
         $selectedHeader->delete();
 
+        $cells = SyllabaryCell::where('col_id', '=', $columnId)->get();
+        foreach($cells as $cell)
+        {
+            $cell->deleted = false;
+            $cell->save();
+        }
+
         return response()->json(['success' => True]);
     }
 
     public function AddRow($syllabaryId, $relativeId)
     {
         $ipa = Input::get('ipa');
-        if ($ipa == False)
-            return response()->json(['success' => False]);
 
         $headers = SyllabaryRowHeader::where('syllabary_id', '=', 1)->get();
 
@@ -323,6 +326,13 @@ class SyllabaryController extends Controller
         }
 
         $selectedHeader->delete();
+        
+        $cells = SyllabaryCell::where('row_id', '=', $rowId)->get();
+        foreach($cells as $cell)
+        {
+            $cell->deleted = false;
+            $cell->save();
+        }
 
         return response()->json(['success' => True]);
 
@@ -336,11 +346,13 @@ class SyllabaryController extends Controller
             $cell->deleted = false;
             $cell->save();
         } else {
+            $symbol = Symbol::create(['symbol_data' => '']);
             $cell = SyllabaryCell::create(array(
                 'syllabary_id' => 1,
                 'row_id' => $rowId,
                 'col_id' => $colId,
                 'deleted' => false,
+                'symbol_id' => $symbol->id,
                 ));
         }
 
@@ -406,6 +418,33 @@ class SyllabaryController extends Controller
             return '<b>Symbol not found!</b>';
 
         return '<body>' . $symbol->symbol_data . '</body>';
+    }
+    
+    public function EditVowel($syllabaryId, $columnId, $vowel)
+    {
+        $column = SyllabaryColumnHeader::where('syllabary_id', '=', $syllabaryId)->
+                                         where('id', '=', $columnId)->first();
+        if($column == NULL)
+            return response()->json(['success' => false]);
+
+        $column->ipa = $vowel;
+        $column->save();
+
+        return response()->json(['success' => true]);
+    
+    }
+    
+    public function EditConsonant($syllabaryId, $rowId, $consonant)    
+    {
+        $row = SyllabaryRowHeader::where('syllabary_id', '=', $syllabaryId)->
+                                   where('id', '=', $rowId)->first();
+        if($row == NULL)
+            return response()->json(['success' => false]);
+
+        $row->ipa = $consonant;
+        $row->save();
+
+        return response()->json(['success' => true]);    
     }
 }
 
