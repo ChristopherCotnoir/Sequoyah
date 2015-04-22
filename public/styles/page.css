@@ -458,7 +458,15 @@ background: #C43;
 transition:background-color 0.4s linear;
 }
 
-
+.headerCell img.sampleBtn,
+.headerCell-selected img.sampleBtn,
+.syllableCell img.sampleBtn,
+.syllableCell-selected img.sampleBtn
+{
+float:right;
+width:48px;
+height:48px;
+}
 
 
 

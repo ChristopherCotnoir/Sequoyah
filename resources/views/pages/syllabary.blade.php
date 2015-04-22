@@ -10,7 +10,8 @@
 
 <main>
 
-<audio id="audio-container"></audio>
+<audio id="audio-container-1"></audio>
+<audio id="audio-container-2"></audio>
 <div id="grid-div">
 </div>
 
@@ -240,20 +241,32 @@
       });
     }
 
-    function pronounceVowel(colId)
+    function pronounceVowel(event, colId)
     {
+      event.stopPropagation();
       // We append a date on the end as a cache-busting parameter, ensuring any new audio files are loaded
       // instead of cached ones.
-      $('#audio-container').attr('src', '/syllabary/1/column/' + colId + '/getAudio?cb=' + new Date().getTime());
-      $('#audio-container')[0].play();
+      $('#audio-container-1').attr('src', '/syllabary/1/column/' + colId + '/getAudio?cb=' + new Date().getTime());
+      $('#audio-container-1')[0].play();
     }
 
-    function pronounceConsonant(rowId)
+    function pronounceConsonant(event, rowId)
     {
+      event.stopPropagation();
       // We append a date on the end as a cache-busting parameter, ensuring any new audio files are loaded
       // instead of cached ones.
-      $('#audio-container').attr('src', '/syllabary/1/row/' + rowId + '/getAudio?cb=' + new Date().getTime());
-      $('#audio-container')[0].play();
+      $('#audio-container-1').attr('src', '/syllabary/1/row/' + rowId + '/getAudio?cb=' + new Date().getTime());
+      $('#audio-container-1')[0].play();
+    }
+
+    function pronounceSyllable(event, rowId, colId)
+    {
+      event.stopPropagation();
+      $('#audio-container-1').attr('src', '/syllabary/1/row/' + rowId + '/getAudio?cb=' + new Date().getTime());
+      $('#audio-container-2').attr('src', '/syllabary/1/column/' + rowId + '/getAudio?cb=' + new Date().getTime());
+
+      $('#audio-container-1')[0].play();
+      $('#audio-container-2')[0].play();
     }
     
     function editVowel(vowel)
