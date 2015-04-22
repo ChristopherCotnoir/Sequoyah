@@ -1,0 +1,7 @@
+#tool_eyedropper, #tool_image, #tool_fhpath, #tools_line_show, #tool_text,
+#tool_position, #tool_blur, #tool_make_link,
+#tools_bottom_2, #tools_bottom_3, #tools_bottom .tool_sep,
+#cornerRadiusLabel, #marker_panel, #sidepanel_handle
+{
+	display: none !important;
+}

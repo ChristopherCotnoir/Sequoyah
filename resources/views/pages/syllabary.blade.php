@@ -8,45 +8,35 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
-
-
-
-
 <main>
-		
 
-		
-		
-	<div id="grid-div">
-		
-	</div>
+<audio id="audio-container"></audio>
+<div id="grid-div">
+</div>
 
 <script type='text/javascript'>
-	
-	
-	
-	
     var selectedRowId;
     var selectedColId;
+    var openModal;
     // On load
     $(function() {
       loadGrid();
       selectedRowId = -1;
       selectedColid = -1;
+      openModal = undefined;
     });
-
-
-
-	
-
 
     function loadGrid()
     {
-      $("#grid-div").load("/syllabary/grid/1");
+      // Ensure any open modals are closed first.
+      closeOpenModal(function() {
+        $("#grid-div").load("/syllabary/grid/1");
+      });
     }
 
     function addColumnRight(ipa)
     {
+      
       $.post("/syllabary/1/column/add/" + selectedColId, {"ipa": ipa}, function() {
         loadGrid();
       });
@@ -54,6 +44,7 @@
 
     function addColumnLeft(ipa)
     {
+      
       $.post("/syllabary/1/column/add/-" + selectedColId, {"ipa": ipa}, function() {
         loadGrid();
       });
@@ -61,6 +52,7 @@
 
     function removeSelectedColumn()
     {
+      
       if (selectedColId != -1) {
         $.post("/syllabary/1/column/" + selectedColId + "/remove", function() {
           loadGrid();
@@ -70,6 +62,7 @@
 
     function addRowTop(ipa)
     {
+      
       $.post("/syllabary/1/row/add/-" + selectedRowId, {"ipa": ipa}, function() {
         loadGrid();
       });
@@ -77,6 +70,7 @@
 
     function addRowBottom(ipa)
     {
+      
       $.post("/syllabary/1/row/add/" + selectedRowId, {"ipa": ipa}, function() {
         loadGrid();
       });
@@ -84,6 +78,7 @@
 
     function removeSelectedRow()
     {
+      
       if (selectedRowId != -1) {
         $.post("/syllabary/1/row/" + selectedRowId + "/remove", function() {
           loadGrid();
@@ -91,40 +86,51 @@
       }
     }
 
+    function uploadRowAudioSample(rowId)
+    {
+      var fd = new FormData($('#audioUpload-row-' + rowId)[0]);
+      $.ajax({
+        method: 'POST',
+        url:  '/syllabary/1/row/' + rowId + '/uploadAudio',
+        data: fd,
+        cache: false,
+        enctype: 'multipart/form-data',
+        contentType: false,
+        processData: false,
+        success: function(data) {
+          alert('Sample uploaded successfully!');
+          loadGrid();
+          
+        },
+      });
+    }
+
+    function uploadColumnAudioSample(colId)
+    {
+      alert("Uploaded to column " + colId);
+    }
+
     function selectColumn(index)
     {
-        /*selectedColId = $("#col-" + index).attr("colId");
-        hide("col-controls");
-        hide("row-controls");
-        hide("cell-controls");
-        show("col-control-" + index);*/
+        selectedColId = $("#col-" + index).attr("colId");
         select("col-" + index);
-		
-		
-		$("#edit-column-modal-" + index).modal('show')
+		    openModal = $("#edit-column-modal-" + index);
+        openModal.modal('show');
     }
 
     function selectRow(index)
     {
-       /* selectedRowId = $("#row-" + index).attr("rowId");
-        hide("col-controls");
-        hide("row-controls");
-        hide("cell-controls");
-        show("row-control-" + index); */
+        selectedRowId = $("#row-" + index).attr("rowId");
         select("row-" + index);
-		
-		$("#edit-row-modal-" + "index").modal('show');
+		    openModal = $("#edit-row-modal-" + index);
+        openModal.modal('show');
     }
 
     function selectCell(colIndex, rowIndex)
     {
-       // hide("col-controls");
-       // hide("row-controls");
-       // hide("cell-controls");
-       // show("cell-control-" + colIndex + "-" + rowIndex);
-        select("cell-" + colIndex + "-" + rowIndex);
-		
-		$("#edit-symbol-modal-" + colIndex + "-" + rowIndex).modal('show');
+       select("cell-" + colIndex + "-" + rowIndex);
+		   openModal = $("#edit-symbol-modal-" + colIndex + "-" + rowIndex)
+       openModal.modal('show');
     }
 
     function unselectAll()
@@ -147,6 +153,18 @@
         {
             selected[i].style.display = 'none';
         }
+    }
+
+    function closeOpenModal(callback)
+    {
+      if (openModal != undefined) {
+        if (callback != undefined)
+          openModal.one('hidden.bs.modal', callback);
+        openModal.modal('hide');
+      } else {
+        if (callback != undefined)
+          callback();
+      }
     }
 
     function select(cell)
@@ -197,18 +215,39 @@
     {
         window.location = '/svg-edit/svg-editor.html?symbol_id=' + symbolId;
     }
-	
-	
-	
 
-	
+    function removeCell(rowId, colId)
+    { 
+      $.post("/syllabary/1/cell/" + rowId + "/" + colId + "/remove", function() {
+        loadGrid();
+      });
+    }
+
+    function restoreCell(rowId, colId)
+    {
+      
+      $.post("/syllabary/1/cell/" + rowId + "/" + colId + "/restore", function() {
+        loadGrid();
+      });
+    }
+
+    function pronounceVowel(colId)
+    {
+      // We append a date on the end as a cache-busting parameter, ensuring any new audio files are loaded
+      // instead of cached ones.
+      $('#audio-container').attr('src', '/syllabary/1/column/' + colId + '/getAudio?cb=' + new Date().getTime());
+      $('#audio-container')[0].play();
+    }
+
+    function pronounceConsonant(rowId)
+    {
+      // We append a date on the end as a cache-busting parameter, ensuring any new audio files are loaded
+      // instead of cached ones.
+      $('#audio-container').attr('src', '/syllabary/1/row/' + rowId + '/getAudio?cb=' + new Date().getTime());
+      $('#audio-container')[0].play();
+    }
 </script>
 
 	
 </main>
-
-
-
-
-
 @stop 
