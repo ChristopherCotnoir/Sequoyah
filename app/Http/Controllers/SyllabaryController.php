@@ -343,18 +343,12 @@ class SyllabaryController extends Controller
         $cell = SyllabaryCell::where('row_id', '=', $rowId)->
         where('col_id', '=', $colId)->first();
         if ($cell != NULL) {
-            $cell->deleted = false;
+            if ($cell->deleted == false)
+                $cell->symbol_id = NULL;
+            else
+                $cell->deleted = false;
             $cell->save();
-        } else {
-            $symbol = Symbol::create(['symbol_data' => '']);
-            $cell = SyllabaryCell::create(array(
-                'syllabary_id' => 1,
-                'row_id' => $rowId,
-                'col_id' => $colId,
-                'deleted' => false,
-                'symbol_id' => $symbol->id,
-                ));
-        }
+        } 
 
         return response()->json(array('success' => true));
     }
@@ -372,9 +366,39 @@ class SyllabaryController extends Controller
                 'row_id' => $rowId,
                 'col_id' => $colId,
                 'deleted' => true,
+                'symbol_id' => NULL,
                 ));
         }
         return response()->json(array('success' => true));
+    }
+
+    public function GetCellCustomSymbolId($syllabaryId, $rowId, $colId)
+    {
+        $cell = SyllabaryCell::where('row_id', '=', $rowId)->
+        where('col_id', '=', $colId)->first();
+        if ($cell != NULL) {
+            if ($cell->symbol_id != NULL) {
+                $symbol_id = $cell->symbol_id;
+            } else {
+                $symbol = Symbol::create(['symbol_data' => '']);
+                $cell->symbol_id = $symbol->id;
+                $cell->save();
+
+                $symbol_id = $symbol->id;
+            }
+        } else {
+            $symbol = Symbol::create(['symbol_data' => '']);
+            $symbol_id = $symbol->id;
+            SyllabaryCell::create(array(
+                'syllabary_id' => 1,
+                'row_id' => $rowId,
+                'col_id' => $colId,
+                'deleted' => false,
+                'symbol_id' => $symbol->id,
+                ));
+        }
+
+        return response()->json(['success' => true, 'symbol_id' => $symbol_id]);
     }
 
     public function GetSymbolData($symbolId)

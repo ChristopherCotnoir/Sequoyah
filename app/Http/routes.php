@@ -14,6 +14,7 @@ Route::get('syllabary/testsvg/{symbolId}', 'SyllabaryController@TestSvg');
 Route::get('syllabary/symbol/{symbolId}/data', 'SyllabaryController@GetSymbolData');
 Route::get('syllabary/{syllabaryId}/column/{columnId}/getAudio', 'AudioController@GetColumnAudioSample');
 Route::get('syllabary/{syllabaryId}/row/{rowId}/getAudio', 'AudioController@GetRowAudioSample');
+Route::get('syllabary/{syllabaryId}/cell/{rowId}/{colId}/customSymbolId', 'SyllabaryController@GetCellCustomSymbolId');
 Route::get('settings', 'AccountController@ShowPage');
 
 Route::post('syllabary/symbol/{symbolId}/update', 'SyllabaryController@UpdateSymbol');
@@ -27,7 +28,6 @@ Route::post('syllabary/{syllabaryId}/row/{rowId}/consonant/{consonant}', 'Syllab
 Route::post('syllabary/{syllabaryId}/row/{rowId}/uploadAudio', 'AudioController@UploadRowHeaderSample');
 Route::post('syllabary/{syllabaryId}/cell/{rowId}/{colId}/remove', 'SyllabaryController@RemoveCell');
 Route::post('syllabary/{syllabaryId}/cell/{rowId}/{colId}/restore', 'SyllabaryController@RestoreCell');
-
 
 Route::group(['namespace' => 'Auth', 'prefix' => 'auth'], function()
 {

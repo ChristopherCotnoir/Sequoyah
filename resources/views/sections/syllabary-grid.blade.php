@@ -77,7 +77,7 @@
                 
 					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="removeCell({{{ $consonant['header_id'] }}}, {{{ $vowel['header_id'] }}})">Remove Cell</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="restoreCell({{{ $consonant['header_id'] }}}, {{{ $vowel['header_id'] }}})">Restore Cell</button>
-					<button type="button" class="btn btn-default" data-dismiss="modal">Edit Symbol</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="editSyllableSymbol({{{ $consonant['header_id'] }}}, {{{ $vowel['header_id'] }}})">Edit Symbol</button>
 				
 				</div>
 				<div class="modal-footer">
@@ -139,7 +139,7 @@
           <b>{{{ $consonant['ipa'] . $vowel['ipa'] }}}</b>
           <br>
           <div>
-             @if (isset($cellSymbolId))
+             @if (isset($cellSymbolId) && $cellSymbolId != NULL)
               <img src="/syllabary/symbol/{{{ $cellSymbolId }}}/data"></img>
             @else
               <img src="/syllabary/symbol/{{{ $consonant['symbol_id'] }}}/data"></img>
