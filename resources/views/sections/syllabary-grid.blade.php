@@ -59,7 +59,6 @@
             </div>
         </div>
     </div>
-
     @endforeach
 
         <!--===========================================================================================================
@@ -131,28 +130,28 @@
                 }
                 ?>
 
-                <?php if (!$cellDeleted) { ?>
-                <td class="syllableCell" id='cell-{{{ $colIndex }}}-{{{ $rowIndex }}}' colId="{{{$vowel['header_id']}}}" rowId="{{{$consonant['header_id']}}}" onclick='selectCell("{{{ $colIndex }}}", "{{{ $rowIndex }}}")'>
-                  @if ($consonant['audio_sample'] != NULL && $vowel['audio_sample'] != NULL)
-                  <img class="sampleBtn" src="/images/speaker.png" onclick="pronounceSyllable(event, '{{{ $consonant['header_id'] }}}', '{{{ $vowel['header_id'] }}}')"></img>
-                  @endif
-                  <b>{{{ $consonant['ipa'] . $vowel['ipa'] }}}</b>
-                  <br>
-                  <div>
-                   @if (isset($cellSymbolId))
-                   <img src="/syllabary/symbol/{{{ $cellSymbolId }}}/data"></img>
-                   @else
-                   <img src="/syllabary/symbol/{{{ $consonant['symbol_id'] }}}/data"></img>
-                   <img src="/syllabary/symbol/{{{ $vowel['symbol_id'] }}}/data"></img>
-                   @endif
-               </div>
-           </td>
-           <?php } else { ?>
-           <td class="syllableCell" id='cell-{{{ $colIndex }}}-{{{ $rowIndex }}}' colId="{{{$vowel['header_id']}}}" rowId="{{{$consonant['header_id']}}}" onclick='selectCell("{{{ $colIndex }}}", "{{{ $rowIndex }}}")'>
-              <br>
-              <div>
-                <img src='data:image/svg+xml;utf8,<?xml version="1.0"?><svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"></svg>'></img>
-            </div>
+        <?php if (!$cellDeleted) { ?>
+        <td class="syllableCell" id='cell-{{{ $colIndex }}}-{{{ $rowIndex }}}' colId="{{{$vowel['header_id']}}}" rowId="{{{$consonant['header_id']}}}" onclick='selectCell("{{{ $colIndex }}}", "{{{ $rowIndex }}}")'>
+          @if ($consonant['audio_sample'] != NULL && $vowel['audio_sample'] != NULL)
+          <img class="sampleBtn" src="/images/speaker.png" onclick="pronounceSyllable(event, '{{{ $consonant['header_id'] }}}', '{{{ $vowel['header_id'] }}}')"></img>
+          @endif
+          <b>{{{ $consonant['ipa'] . $vowel['ipa'] }}}</b>
+          <br>
+          <div>
+             @if (isset($cellSymbolId) && $cellSymbolId != NULL)
+              <img src="/syllabary/symbol/{{{ $cellSymbolId }}}/data"></img>
+            @else
+              <img src="/syllabary/symbol/{{{ $consonant['symbol_id'] }}}/data"></img>
+              <img src="/syllabary/symbol/{{{ $vowel['symbol_id'] }}}/data"></img>
+            @endif
+          </div>
+        </td>
+        <?php } else { ?>
+        <td class="syllableCell" id='cell-{{{ $colIndex }}}-{{{ $rowIndex }}}' colId="{{{$vowel['header_id']}}}" rowId="{{{$consonant['header_id']}}}" onclick='selectCell("{{{ $colIndex }}}", "{{{ $rowIndex }}}")'>
+          <br>
+          <div>
+            <img src='data:image/svg+xml;utf8,<?xml version="1.0"?><svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"></svg>'></img>
+          </div>
         </td>
         <?php } ?>
         @endforeach

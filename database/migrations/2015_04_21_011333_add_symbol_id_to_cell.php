@@ -14,7 +14,7 @@ class AddSymbolIdToCell extends Migration {
 	{
 		Schema::table('syllabary_cell', function(Blueprint $table)
 		{
-			$table->integer('symbol_id')->unsigned();
+			$table->integer('symbol_id')->unsigned()->nullable();
 		});
 	}
 
