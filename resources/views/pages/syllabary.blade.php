@@ -115,6 +115,9 @@
         selectedColId = $("#col-" + index).attr("colId");
         select("col-" + index);
 		    openModal = $("#edit-column-modal-" + index);
+            openModal.on('hide.bs.modal', function () {
+            unselectAll();
+            })
         openModal.modal('show');
     }
 
@@ -123,6 +126,9 @@
         selectedRowId = $("#row-" + index).attr("rowId");
         select("row-" + index);
 		    openModal = $("#edit-row-modal-" + index);
+            openModal.on('hide.bs.modal', function () {
+            unselectAll();
+            })
         openModal.modal('show');
     }
 
@@ -130,6 +136,9 @@
     {
        select("cell-" + colIndex + "-" + rowIndex);
 		   openModal = $("#edit-symbol-modal-" + colIndex + "-" + rowIndex)
+            openModal.on('hide.bs.modal', function () {
+            unselectAll();
+            })
        openModal.modal('show');
     }
 
@@ -245,6 +254,22 @@
       // instead of cached ones.
       $('#audio-container').attr('src', '/syllabary/1/row/' + rowId + '/getAudio?cb=' + new Date().getTime());
       $('#audio-container')[0].play();
+    }
+    
+    function editVowel(vowel)
+    {
+        var newVowel = prompt("Please enter the vowel", vowel);
+        $.post("/syllabary/1/column/" + selectedColId + "/vowel/" + newVowel, function() {
+          loadGrid();
+        });
+    }
+    
+    function editConsonant(consonant)
+    {
+        var newConsonant = prompt("Please enter the consonant", consonant);
+        $.post("/syllabary/1/row/" + selectedRowId + "/consonant/" + newConsonant, function() {
+          loadGrid();
+        });
     }
 </script>
 
