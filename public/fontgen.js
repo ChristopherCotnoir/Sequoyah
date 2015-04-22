@@ -3,11 +3,8 @@
 //path api ref: https://github.com/nodebox/opentype.js/blob/master/src/path.js
 
 //Export a syllabary to an opentype.Font which can be downloaded to an OTF
-//File extension automatically appended to FontName
 function ExportSyllabary(SyllabaryId, FontName, Callback)
 {
-	var file = FontName + ".otf";
-
 	var glyphs = [];
 
 	//fetch all glyphs from server
@@ -34,11 +31,11 @@ function ExportSyllabary(SyllabaryId, FontName, Callback)
 
 		var font = new opentype.Font(
 		{
-			familyName: FontName || "Sequoyah Font",
+			familyName: FontName || 'Sequoyah Font',
+			syleName: 'medium',
 			designer: 'Sequoyah',
 			glyphs: glyphs,
 			//unitsPerEm (1000)
-			//styleName
 			//encoding
 			//copyright
 			//description
@@ -112,13 +109,13 @@ function SvgToPath(Path, $Node, DocWidth, DocHeight)
 				var dx = parseInt(sub[1]), dy = parseInt(sub[2]);
 				if (isCap)
 				{
-					Path.moveTo(dx, dy);
+					Path.moveTo(dx, DocHeight - dy);
 					x = dx;
 					y = dy;
 				}
 				else
 				{
-					Path.moveTo(x + dx, y + dy);
+					Path.moveTo(x + dx, DocHeight - (y + dy));
 					x += dx;
 					y += dy;
 				}
@@ -130,13 +127,13 @@ function SvgToPath(Path, $Node, DocWidth, DocHeight)
 				var dx = parseInt(sub[1]), dy = parseInt(sub[2]);
 				if (isCap)
 				{
-					Path.lineTo(dx, dy);
+					Path.lineTo(dx, DocHeight - dy);
 					x = dx;
 					y = dy;
 				}
 				else
 				{
-					Path.lineTo(x + dx, y + dy);
+					Path.lineTo(x + dx, DocHeight - (y + dy));
 					x += dx;
 					y += dy;
 				}
@@ -151,21 +148,76 @@ function SvgToPath(Path, $Node, DocWidth, DocHeight)
 
 				if (isCap)
 				{
-					Path.curveTo(d1x, d1y, d2x, d2y, dx, dy);
+					Path.curveTo(d1x, DocHeight - d1y, d2x, DocHeight - d2y, dx, DocHeight - dy);
 					x = dx;
 					y = dy;
 				}
 				else
 				{
-					Path.curveTo(x + d1x, y + d1y, x + d2x, y + d2y, x + dx, y + dy);
+					Path.curveTo(x + d1x, DocHeight - (y + d1y), x + d2x, DocHeight - (y + d2y), x + dx, DocHeight - (y + dy));
 					x += dx;
 					y += dy;
 				}
 			}
 			else if (c == 'q') //quadratic curve to
 			{
-				//todo
+				var sub = m.match(/(-?[\d.]+)/gi); //requires well-formed
+
+				var d1x = parseInt(sub[0]), d1y = parseInt(sub[1]);
+				var dx = parseInt(sub[2]), dy = parseInt(sub[3]);
+
+				if (isCap)
+				{
+					Path.quadTo(d1x, DocHeight - d1y, dx, DocHeight - dy);
+					x = dx;
+					y = dy;
+				}
+				else
+				{
+					Path.quadTo(x + d1x, DocHeight - (y + d1y), x + dx, DocHeight - (y + dy));
+					x += dx;
+					y += dy;
+				}
 			}
 		}
+	}
+	else if (tag == 'line')
+	{
+		var w = $Node[0].getAttribute('stroke-width');
+		console.log(w);
+		if (!w || w <= 0)
+			w = 1;
+		else
+			w = parseInt(w) * (w.indexOf('%') >= 0 ? DocWidth / 100 : 1);
+
+		var x1 = $Node.attr('x1');
+		var y1 = $Node.attr('y1');
+		var x2 = $Node.attr('x2');
+		var y2 = $Node.attr('y2');
+
+		//handle relative; other units ignored
+		x1 = parseInt(x1) * (x1.indexOf('%') >= 0 ? DocWidth / 100 : 1);
+		y1 = parseInt(y1) * (y1.indexOf('%') >= 0 ? DocHeight / 100 : 1);
+		x2 = parseInt(x2) * (x2.indexOf('%') >= 0 ? DocWidth / 100 : 1);
+		y2 = parseInt(y2) * (y2.indexOf('%') >= 0 ? DocHeight / 100 : 1);
+
+		var dx = x2 - x1;
+		var dy = y2 - y1;
+		var w2 = w / 2;
+
+		var l = Math.sqrt((dx * dx) + (dy * dy));
+		var nx = -dy / l;
+		var ny = dx / l;
+		nx *= w2;
+		ny *= w2;
+
+		//console.log(DocWidth, DocHeight, w, x1, y1, x2, y2, l);
+
+		Path.moveTo(x1 - nx, DocHeight - (y1 - ny));
+		Path.lineTo(x1 + nx, DocHeight - (y1 + ny));
+		Path.lineTo(x2 + nx, DocHeight - (y2 + ny));
+		Path.lineTo(x2 - nx, DocHeight - (y2 - ny));
+		Path.lineTo(x1 - nx, DocHeight - (y1 - ny));
+		Path.close();
 	}
 }
