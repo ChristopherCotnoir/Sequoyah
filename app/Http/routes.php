@@ -2,6 +2,7 @@
 
 Route::get('/', 'HomeController@ShowIndex');
 Route::get('/settings', 'SettingsController@ShowIndex');
+Route::get('/projectmanagement', 'PMController@ShowIndex');
 Route::get('sleep', function() { return Redirect::away('http://Ncnl.tumblr.com'); });
 Route::get('fuck', function() { return 'FUCK'; });
 
@@ -18,9 +19,11 @@ Route::get('settings', 'AccountController@ShowPage');
 Route::post('syllabary/symbol/{symbolId}/update', 'SyllabaryController@UpdateSymbol');
 Route::post('syllabary/{syllabaryId}/column/add/{relativeId?}', 'SyllabaryController@AddColumn');
 Route::post('syllabary/{syllabaryId}/column/{columnId}/remove', 'SyllabaryController@RemoveColumn');
+Route::post('syllabary/{syllabaryId}/column/{columnId}/vowel/{vowel}', 'SyllabaryController@EditVowel');
 Route::post('syllabary/{syllabaryId}/column/{columnId}/uploadAudio', 'AudioController@UploadColumnHeaderSample');
 Route::post('syllabary/{syllabaryId}/row/add/{relativeId?}', 'SyllabaryController@AddRow');
 Route::post('syllabary/{syllabaryId}/row/{rowId}/remove', 'SyllabaryController@RemoveRow');
+Route::post('syllabary/{syllabaryId}/row/{rowId}/consonant/{consonant}', 'SyllabaryController@EditConsonant');
 Route::post('syllabary/{syllabaryId}/row/{rowId}/uploadAudio', 'AudioController@UploadRowHeaderSample');
 Route::post('syllabary/{syllabaryId}/cell/{rowId}/{colId}/remove', 'SyllabaryController@RemoveCell');
 Route::post('syllabary/{syllabaryId}/cell/{rowId}/{colId}/restore', 'SyllabaryController@RestoreCell');

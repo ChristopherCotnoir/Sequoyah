@@ -458,7 +458,15 @@ background: #C43;
 transition:background-color 0.4s linear;
 }
 
-
+.headerCell img.sampleBtn,
+.headerCell-selected img.sampleBtn,
+.syllableCell img.sampleBtn,
+.syllableCell-selected img.sampleBtn
+{
+float:right;
+width:48px;
+height:48px;
+}
 
 
 
@@ -637,7 +645,7 @@ transition:background-color 0.4s linear;
   cursor: pointer;
 
   box-shadow: inset 0 -2px #b53224;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 .flat-button:active {
   top: 1px;
