@@ -42,6 +42,7 @@ class AccountController extends Controller
         $UserId = 1; //Temporary placeholder until there is a way to get the current user.
         //$UserId = Auth::user()->id;
         $UserProjects = array();
+        $Projects = ProjectMembers::where('user_id','=',$UserId)->get(); 
         foreach($Projects as $project)
         {
             $UserProject['Name'] = Project::where('id','=',$project['project_id'])->firstOrFail()['name'];

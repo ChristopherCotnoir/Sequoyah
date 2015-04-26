@@ -244,6 +244,13 @@
       });
     }
 
+    function editSyllableSymbol(rowId, colId)
+    {
+      $.get("/syllabary/1/cell/" + rowId + "/" + colId + "/customSymbolId", function(data) {
+        editSymbol(data.symbol_id);
+      });
+    }
+
     function removeCell(rowId, colId)
     { 
         $.post("/syllabary/1/cell/" + rowId + "/" + colId + "/remove", function() {

@@ -90,8 +90,13 @@ class AudioController extends Controller
             return response()->json(['success' => false]);
 
         $uploadStatus = $this->_UploadAudioSample();
-        if ($uploadStatus['success'] == false)
+        if ($uploadStatus['success'] == false) {
+            if (isset($uploadStatus['empty_audio'])) {
+                $row->audio_sample = NULL;
+                $row->save();
+            }
             return redirect()->back();
+        }
 
         $row->audio_sample = $uploadStatus['file_path'];
         $row->save();
@@ -108,8 +113,13 @@ class AudioController extends Controller
             return response()->json(['success' => false]);
 
         $uploadStatus = $this->_UploadAudioSample();
-        if ($uploadStatus['success'] == false)
+        if ($uploadStatus['success'] == false) {
+            if (isset($uploadStatus['empty_audio'])) {
+                $column->audio_sample = NULL;
+                $column->save();
+            }
             return redirect()->back();
+        }
 
         $column->audio_sample = $uploadStatus['file_path'];
         $column->save();
@@ -123,6 +133,9 @@ class AudioController extends Controller
 
     private function _UploadAudioSample()
     {
+        if ($_FILES['audioSample']['name'] == NULL)
+          return ['success' => false, 'empty_audio' => true];
+
         $audioFileType = pathinfo(basename($_FILES['audioSample']['name']), PATHINFO_EXTENSION);
         $targetDir = "audioSample/";
         $targetFile = $targetDir . uniqid() . '.' .  $audioFileType;
