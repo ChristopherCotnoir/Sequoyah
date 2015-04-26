@@ -451,6 +451,11 @@ class SyllabaryController extends Controller
         if($column == NULL)
             return response()->json(['success' => false]);
 
+        if($vowel == "-")
+        {
+            $vowel = "";
+        }
+
         $column->ipa = $vowel;
         $column->save();
 
@@ -464,6 +469,11 @@ class SyllabaryController extends Controller
                                    where('id', '=', $rowId)->first();
         if($row == NULL)
             return response()->json(['success' => false]);
+
+        if($consonant == "-")
+        {
+            $consonant = "";
+        }
 
         $row->ipa = $consonant;
         $row->save();

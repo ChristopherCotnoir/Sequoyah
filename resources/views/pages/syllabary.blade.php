@@ -297,8 +297,13 @@
     function editVowel(vowel)
     {
         var newVowel = prompt("Please enter the vowel", vowel);
-        if (newVowel)
+        if (newVowel != null)
         {
+            if(newVowel == "")
+            {
+                newVowel = "-";
+            }
+
             $.post("/syllabary/1/column/" + selectedColId + "/vowel/" + newVowel, function() {
                 loadGrid();
             });
@@ -308,8 +313,13 @@
     function editConsonant(consonant)
     {
         var newConsonant = prompt("Please enter the consonant", consonant);
-        if (newConsonant)
+        if (newConsonant != null)
         {
+            if(newConsonant == "")
+            {
+                newConsonant = "-";
+            }
+
             $.post("/syllabary/1/row/" + selectedRowId + "/consonant/" + newConsonant, function() {
                 loadGrid();
             });
