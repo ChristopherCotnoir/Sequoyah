@@ -23,10 +23,12 @@ Route::post('syllabary/{syllabaryId}/column/add/{relativeId?}', 'SyllabaryContro
 Route::post('syllabary/{syllabaryId}/column/{columnId}/remove', 'SyllabaryController@RemoveColumn');
 Route::post('syllabary/{syllabaryId}/column/{columnId}/vowel/{vowel}', 'SyllabaryController@EditVowel');
 Route::post('syllabary/{syllabaryId}/column/{columnId}/uploadAudio', 'AudioController@UploadColumnHeaderSample');
+Route::any('syllabary/{syllabaryId}/column/{columnId}/removeAudio', 'AudioController@RemoveColumnAudioSample');
 Route::post('syllabary/{syllabaryId}/row/add/{relativeId?}', 'SyllabaryController@AddRow');
 Route::post('syllabary/{syllabaryId}/row/{rowId}/remove', 'SyllabaryController@RemoveRow');
 Route::post('syllabary/{syllabaryId}/row/{rowId}/consonant/{consonant}', 'SyllabaryController@EditConsonant');
 Route::post('syllabary/{syllabaryId}/row/{rowId}/uploadAudio', 'AudioController@UploadRowHeaderSample');
+Route::any('syllabary/{syllabaryId}/row/{rowId}/removeAudio', 'AudioController@RemoveRowAudioSample');
 Route::post('syllabary/{syllabaryId}/cell/{rowId}/{colId}/remove', 'SyllabaryController@RemoveCell');
 Route::post('syllabary/{syllabaryId}/cell/{rowId}/{colId}/restore', 'SyllabaryController@RestoreCell');
 

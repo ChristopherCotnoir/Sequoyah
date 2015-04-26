@@ -14,8 +14,11 @@ Column Control Panel
                 <button type="button" class="green" data-dismiss="modal" onclick="addColumnLeft('')">Add Column Before</button>
                 <button type="button" class="red" data-dismiss="modal" onclick="removeSelectedColumn()">Remove Column</button>
                 <button type="button" class="green" data-dismiss="modal" onclick="addColumnRight('')">Add Column After</button>
-                <button type="button" class="yellow" data-dismiss="modal" onclick="editVowel('{{ $vowel['ipa'] }}')">Edit Vowel</button>
+                <button type="button" class="yellow" onclick="editVowel('{{ $vowel['ipa'] }}')">Edit Vowel</button>
                 <button type="button" class="blue" data-dismiss="modal" onclick="editSymbol('{{ $vowel['symbol_id'] }}')">Edit Symbol</button>
+                @if ($vowel['audio_sample'] != null)
+                    <a class="red button" href="/syllabary/1/column/{{ $vowel['header_id'] }}/removeAudio">Remove Audio</a>
+                @endif
                 <form action="/syllabary/1/column/{{ $vowel['header_id'] }}/uploadAudio" method="post" enctype="multipart/form-data">
                     <label for="audioSample">Select Audio</label>
                     <input name="audioSample" type="file">
@@ -47,8 +50,11 @@ Row Control Panel
                 <button type="button" class="green" data-dismiss="modal" onclick="addRowTop('')">Add Row Above</button>
                 <button type="button" class="red" data-dismiss="modal" onclick="removeSelectedRow()">Remove Row</button>
                 <button type="button" class="green" data-dismiss="modal" onclick="addRowBottom('')">Add Row Below</button>
-                <button type="button" class="yellow" data-dismiss="modal" onclick="editConsonant('{{ $consonant['ipa'] }}')">Edit Consonant</button>
+                <button type="button" class="yellow" onclick="editConsonant('{{ $consonant['ipa'] }}')">Edit Consonant</button>
                 <button type="button" class="blue" data-dismiss="modal" onclick="editSymbol('{{ $consonant['symbol_id'] }}')">Edit Symbol</button>
+                @if ($consonant['audio_sample'] != null)
+                    <a class="red button" href="/syllabary/1/row/{{ $consonant['header_id'] }}/removeAudio">Remove Audio</a>
+                @endif
                 <form action="/syllabary/1/row/{{ $consonant['header_id'] }}/uploadAudio" method="post" enctype="multipart/form-data">
                     <label for="audioSample">Select Audio</label>
                     <input name="audioSample" type="file">
