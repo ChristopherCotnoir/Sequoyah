@@ -1,13 +1,12 @@
 <?php
 
 Route::get('/', 'HomeController@ShowIndex');
-Route::get('/settings', 'SettingsController@ShowIndex');
-Route::get('/projectmanagement', 'PMController@ShowIndex');
+Route::get('/settings', 'AccountController@ShowIndex');
 Route::get('sleep', function() { return Redirect::away('http://Ncnl.tumblr.com'); });
 Route::get('fuck', function() { return 'FUCK'; });
 Route::get('glyphs', function() { return Redirect::away('http://nodebox.github.io/opentype.js/glyph-inspector.html'); });
 
-
+Route::get('projects', 'AccountController@ShowPage');
 Route::get('syllabary', 'SyllabaryController@ShowGrid');
 Route::get('syllabary/grid/{syllabaryId}', 'SyllabaryController@GetGrid');
 Route::get('json/syllabary/grid/{syllabaryId}', 'SyllabaryController@GetGridJson');
@@ -16,7 +15,6 @@ Route::get('syllabary/symbol/{symbolId}/data', 'SyllabaryController@GetSymbolDat
 Route::get('syllabary/{syllabaryId}/column/{columnId}/getAudio', 'AudioController@GetColumnAudioSample');
 Route::get('syllabary/{syllabaryId}/row/{rowId}/getAudio', 'AudioController@GetRowAudioSample');
 Route::get('syllabary/{syllabaryId}/cell/{rowId}/{colId}/customSymbolId', 'SyllabaryController@GetCellCustomSymbolId');
-Route::get('settings', 'AccountController@ShowPage');
 
 Route::post('syllabary/symbol/{symbolId}/update', 'SyllabaryController@UpdateSymbol');
 Route::post('syllabary/{syllabaryId}/column/add/{relativeId?}', 'SyllabaryController@AddColumn');

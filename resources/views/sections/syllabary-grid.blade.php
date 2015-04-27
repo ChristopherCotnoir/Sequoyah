@@ -81,17 +81,9 @@ Cell Control Panel
                 <h4 class="modal-title">Edit Cell &lsquo;{{ $consonant['ipa'] }}{{ $vowel['ipa'] }}&rsquo;</h4>
             </div>
             <div class="modal-body">
-
-<<<<<<< HEAD
-                       <button type="button" class="red" data-dismiss="modal" onclick="removeCell({{{ $consonant['header_id'] }}}, {{{ $vowel['header_id'] }}})">Remove Cell</button>
-                       <button type="button" class="" data-dismiss="modal" onclick="restoreCell({{{ $consonant['header_id'] }}}, {{{ $vowel['header_id'] }}})">Restore Cell</button>
-                       <button type="button" class="" data-dismiss="modal"  onclick="editSyllableSymbol({{{ $consonant['header_id'] }}}, {{{ $vowel['header_id'] }}})">Edit Symbol</button>
-=======
                 <button type="button" class="red" data-dismiss="modal" onclick="removeCell({{ $consonant['header_id'] }}, {{ $vowel['header_id'] }})">Remove Cell</button>
                 <button type="button" class="" data-dismiss="modal" onclick="restoreCell({{ $consonant['header_id'] }}, {{ $vowel['header_id'] }})">Restore Cell</button>
                 <button type="button" class="blue" data-dismiss="modal">Edit Symbol</button>
->>>>>>> 0c72d579814ee26a9aad4ec7de3f7884d8623093
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="red" data-dismiss="modal">Close</button>
