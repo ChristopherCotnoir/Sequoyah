@@ -1,5 +1,8 @@
 <?php namespace Sequoyah\Http\Controllers;
 
+use Auth;
+use Redirect;
+
 class HomeController extends Controller
 {
 	/**
@@ -19,6 +22,9 @@ class HomeController extends Controller
 	 */
 	public function ShowIndex()
 	{
+		//if (Auth::check())
+		//	return Redirect::action('SettingsController@ShowIndex');
+
 		return view('pages.home');
 	}
 }

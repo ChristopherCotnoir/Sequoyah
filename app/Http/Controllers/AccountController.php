@@ -37,7 +37,7 @@ class AccountController extends Controller
         $Projects[Users]->index
         
     */
-    public function ShowPage()
+    public function ShowIndex()
     {
         $UserId = 1; //Temporary placeholder until there is a way to get the current user.
         //$UserId = Auth::user()->id;
