@@ -64,6 +64,9 @@ class SyllabarySeeder extends Seeder {
     Syllabary::create([
       'name' => 'Sequoyah Extra',
     ]);
+    Syllabary::create([
+      'name' => 'Sequoyah Extra 2',
+    ]);
   }
 }
 
@@ -72,12 +75,19 @@ class ProjectsSeeder extends Seeder {
   {
     DB::table('projects')->truncate();
     Project::create([
+      'project_id' => 1,
       'name' => 'Demo Project 1',
       'syllabary_id' => 1,
     ]);
     Project::create([
+      'project_id' => 2,
       'name' => 'Demo Project 2',
       'syllabary_id' => 2,
+    ]);
+    Project::create([
+      'project_id' => 2,
+      'name' => 'Demo Project 2',
+      'syllabary_id' => 3,
     ]);
   }
 }
