@@ -16,6 +16,7 @@ Route::get('syllabary/{syllabaryId}/column/{columnId}/getAudio', 'AudioControlle
 Route::get('syllabary/{syllabaryId}/row/{rowId}/getAudio', 'AudioController@GetRowAudioSample');
 Route::get('syllabary/{syllabaryId}/cell/{rowId}/{colId}/customSymbolId', 'SyllabaryController@GetCellCustomSymbolId');
 
+Route::post('syllabary/{syllabaryId}/undoAction', 'SyllabaryController@UndoAction');
 Route::post('syllabary/symbol/{symbolId}/update', 'SyllabaryController@UpdateSymbol');
 Route::post('syllabary/{syllabaryId}/column/add/{relativeId?}', 'SyllabaryController@AddColumn');
 Route::post('syllabary/{syllabaryId}/column/{columnId}/remove', 'SyllabaryController@RemoveColumn');

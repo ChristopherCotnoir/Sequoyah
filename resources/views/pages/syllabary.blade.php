@@ -13,10 +13,11 @@
 <main id='syllmain'>
     <h1>Syllabary</h1>
     <a id='font-dl' class='block hint'>DOWNLOAD</a>
-    <div class='float-right'>Click on a cell to show its options</div>
 
     <audio id="audio-container-1"></audio>
     <audio id="audio-container-2"></audio>
+
+    <button id="undo-btn" class="float-right" onclick="undoAction()">Undo Action</button>
     <div id="grid-div">
     </div>
 
@@ -179,8 +180,12 @@
     function closeOpenModal(callback)
     {
         if (openModal != undefined) {
-            if (callback != undefined)
-                openModal.one('hidden.bs.modal', callback);
+            if (callback != undefined) {
+                openModal.one('hidden.bs.modal', function() {
+                  callback();
+                  openModal = undefined;
+                });
+            }
             openModal.modal('hide');
         } else {
             if (callback != undefined)
@@ -314,6 +319,18 @@
                 loadGrid();
             });
         }
+    }
+
+    function undoAction()
+    {
+      $.post("/syllabary/1/undoAction", function(data) {
+        if (data.success) {
+          loadGrid();
+        } else {
+          openModal = $("#undo-alert-modal")
+          openModal.modal('show');
+        }
+      });
     }
     </script>
 </main>

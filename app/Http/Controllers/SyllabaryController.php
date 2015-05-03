@@ -8,6 +8,7 @@ use Sequoyah\Models\SyllabaryColumnHeader;
 use Sequoyah\Models\SyllabaryRowHeader;
 use Sequoyah\Models\SyllabaryCell;
 use Sequoyah\Models\Symbol;
+use Sequoyah\Models\UndoRecord;
 use Illuminate\Support\Facades\Input;
 use Request;
 use Illuminate\Html\HtmlServiceProvider;
@@ -146,7 +147,7 @@ class SyllabaryController extends Controller
     }
 
 
-    public function AddColumn($syllabaryId, $relativeId = NULL)
+    public function AddColumn($syllabaryId, $relativeId = NULL, $suppressUndo = false)
     {
         $ipa = Input::get('ipa');
 
@@ -205,8 +206,16 @@ class SyllabaryController extends Controller
         }
     }
 
-
-    return response()->json(['success' => True]);
+        if (!$suppressUndo) {
+            UndoRecord::create([
+                'syllabary_id' => $syllabaryId,
+                'json_data' => json_encode([
+                    'action' => 'add_column',
+                    'col_id' => $newHeader->id,
+                ]),
+            ]);
+        }
+        return response()->json(['success' => True]);
     }
 
     public function RemoveColumn($syllabaryId, $columnId)
@@ -242,7 +251,7 @@ class SyllabaryController extends Controller
         return response()->json(['success' => True]);
     }
 
-    public function AddRow($syllabaryId, $relativeId)
+    public function AddRow($syllabaryId, $relativeId, $suppressUndo = false)
     {
         $ipa = Input::get('ipa');
 
@@ -300,8 +309,17 @@ class SyllabaryController extends Controller
             $lastHeader->save();
         }
     }
+        if (!$suppressUndo) {
+            UndoRecord::create([
+                'syllabary_id' => $syllabaryId,
+                'json_data' => json_encode([
+                    'action' => 'add_row',
+                    'row_id' => $newHeader->id,
+                ]),
+            ]);
+        }
 
-    return response()->json(['success' => True]);
+        return response()->json(['success' => True]);
     }
 
     public function RemoveRow($syllabaryId, $rowId)
@@ -338,7 +356,7 @@ class SyllabaryController extends Controller
 
     }
 
-    public function RestoreCell($syllabaryId, $rowId, $colId)
+    public function RestoreCell($syllabaryId, $rowId, $colId, $suppressUndo = false)
     {
         $cell = SyllabaryCell::where('row_id', '=', $rowId)->
         where('col_id', '=', $colId)->first();
@@ -350,10 +368,21 @@ class SyllabaryController extends Controller
             $cell->save();
         } 
 
+        if (!$suppressUndo) {
+            UndoRecord::create([
+                'syllabary_id' => $syllabaryId,
+                'json_data' => json_encode([
+                    'action' => 'restore_cell',
+                    'row_id' => $rowId,
+                    'col_id' => $colId,
+                ]),
+            ]);
+        }
+
         return response()->json(array('success' => true));
     }
 
-    public function RemoveCell($syllabaryId, $rowId, $colId)
+    public function RemoveCell($syllabaryId, $rowId, $colId, $suppressUndo = false)
     {
         $cell = SyllabaryCell::where('row_id', '=', $rowId)->
         where('col_id', '=', $colId)->first();
@@ -369,6 +398,18 @@ class SyllabaryController extends Controller
                 'symbol_id' => NULL,
                 ));
         }
+
+        if (!$suppressUndo) {
+            UndoRecord::create([
+                'syllabary_id' => $syllabaryId,
+                'json_data' => json_encode([
+                    'action' => 'remove_cell',
+                    'row_id' => $rowId,
+                    'col_id' => $colId,
+                ]),
+            ]);
+        }
+
         return response()->json(array('success' => true));
     }
 
@@ -429,8 +470,19 @@ class SyllabaryController extends Controller
             return response()->json(array('success' => false));
 
         $svgData = base64_decode(Input::get('svg'));
+        $oldSymbolData = $symbol->symbol_data;
         $symbol->symbol_data = $svgData;
         $symbol->save();
+
+        UndoRecord::create([
+            'syllabary_id' => 1,
+            'json_data' => json_encode([
+                'action' => 'update_symbol',
+                'symbol_id' => $symbolId,
+                'old_symbol_data' => $oldSymbolData,
+            ]),
+        ]);
+
         return response()->json(array('success' => true));
     }
 
@@ -469,6 +521,50 @@ class SyllabaryController extends Controller
         $row->save();
 
         return response()->json(['success' => true]);    
+    }
+
+    public function UndoAction($syllabaryId)
+    {
+        $undo = UndoRecord::where('syllabary_id', '=', $syllabaryId)->
+                            orderBy('created_at', 'desc')->first();
+
+        if ($undo == NULL)
+            return response()->json(['success' => false]);
+
+
+        $undoData = json_decode($undo->json_data, true);
+
+        if ($undoData['action'] == "add_row") {
+            $rowId = $undoData['row_id'];
+            $this->RemoveRow($syllabaryId, $rowId, true);
+        } else if ($undoData['action'] == 'remove_row') {
+
+        } else if ($undoData['action'] == 'add_column') {
+            $colId = $undoData['col_id'];
+            $this->RemoveColumn($syllabaryId, $colId, true);
+        } else if ($undoData['action'] == 'remove_column') {
+
+        } else if ($undoData['action'] == 'remove_cell') {
+            $rowId = $undoData['row_id'];
+            $colId = $undoData['col_id'];
+            $this->RestoreCell($syllabaryId, $rowId, $colId, true);
+        } else if ($undoData['action'] == 'restore_cell') {
+            $rowId = $undoData['row_id'];
+            $colId = $undoData['col_id'];
+            $this->RemoveCell($syllabaryId, $rowId, $colId, true);
+        } else if ($undoData['action'] == 'update_symbol') {
+            $symbolId = $undoData['symbol_id'];
+            $symbolData = $undoData['old_symbol_data'];
+            $symbol = Symbol::find($symbolId);
+            if ($symbol != NULL) {
+                $symbol->symbol_data = $symbolData;
+                $symbol->save();
+            }
+        }
+
+        $undo->delete();
+
+        return response()->json(['success' => true]);
     }
 }
 

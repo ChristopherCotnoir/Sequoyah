@@ -677,3 +677,13 @@ table, th, td {
 #font-dl {
     margin-top: 4px;
 }
+
+#grid-div {
+    margin-top: 10px;
+}
+
+#undo-btn {
+    position: fixed;
+    right: 10px;
+    top: 50%;
+}

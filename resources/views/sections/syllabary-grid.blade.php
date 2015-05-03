@@ -1,4 +1,23 @@
 <!--===========================================================================================================
+Undo Alert
+============================================================================================================-->
+<div id="undo-alert-modal" class="modal fade">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h4 class="modal-title"></h4>
+          </div>
+          <div class="modal-body">
+            <h3 class="text-center">Nothing Left To Undo</h3>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="red" data-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!--===========================================================================================================
 Column Control Panel 
 ============================================================================================================-->
 
@@ -83,7 +102,7 @@ Cell Control Panel
             <div class="modal-body">
                 <button type="button" class="red" data-dismiss="modal" onclick="removeCell({{ $consonant['header_id'] }}, {{ $vowel['header_id'] }})">Remove Cell</button>
                 <button type="button" class="" data-dismiss="modal" onclick="restoreCell({{ $consonant['header_id'] }}, {{ $vowel['header_id'] }})">Restore Cell</button>
-                <button type="button" class="blue" data-dismiss="modal">Edit Symbol</button>
+                <button type="button" class="blue" data-dismiss="modal" onclick="editSyllableSymbol({{ $consonant['header_id'] }}, {{ $vowel['header_id'] }})">Edit Symbol</button>
             </div>
             <div class="modal-footer">
                 <button type="button" class="red" data-dismiss="modal">Close</button>
