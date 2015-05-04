@@ -19,6 +19,7 @@ $AllUsers is a list of the names of all users in the database.-->
     </script>
 @endif
 
+<input type="text" size="10" id="Create">
 <button type="button" onclick="createProject()">Create Project</button>
 
 @foreach($UserProjects as $ProjectIndex => $Project)
@@ -63,6 +64,8 @@ $AllUsers is a list of the names of all users in the database.-->
     </div>
 @endforeach
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script type='text/javascript'>
     function showProject(isSelected)
     {
@@ -82,7 +85,8 @@ $AllUsers is a list of the names of all users in the database.-->
     
     function createProject()
     {
-    <!-- function to create a new Project here -->
+        var name = document.getElementById("Create").value;
+        $.post("/projects/create/" + name);
     }
     
     function addUser()

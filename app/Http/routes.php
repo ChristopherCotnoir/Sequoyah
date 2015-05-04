@@ -7,6 +7,7 @@ Route::get('fuck', function() { return 'FUCK'; });
 Route::get('glyphs', function() { return Redirect::away('http://nodebox.github.io/opentype.js/glyph-inspector.html'); });
 
 Route::get('projects', 'AccountController@ShowPage');
+Route::post('projects/create/{name}', 'AccountController@CreateProject');
 Route::get('syllabary', 'SyllabaryController@ShowGrid');
 Route::get('syllabary/grid/{syllabaryId}', 'SyllabaryController@GetGrid');
 Route::get('json/syllabary/grid/{syllabaryId}', 'SyllabaryController@GetGridJson');

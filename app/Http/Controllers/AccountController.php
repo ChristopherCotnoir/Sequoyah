@@ -45,7 +45,7 @@ class AccountController extends Controller
         $Projects = ProjectMembers::where('user_id','=',$UserId)->get(); 
         foreach($Projects as $project)
         {
-            $UserProject['Name'] = Project::where('id','=',$project['project_id'])->firstOrFail()['name'];
+            $UserProject['Name'] = Project::where('project_id','=',$project['project_id'])->firstOrFail()['name'];
             $UserProject['Role'] = $project['access'];
             $Syllabaries = Project::where('project_id','=',$project['project_id'])->get();
             $UserProject['Syllabaries'] = array();
@@ -109,5 +109,35 @@ class AccountController extends Controller
         {
             return $projectMember->access;
         }
+    }
+
+    public function CreateProject($name)
+    {
+        $syllabary = Syllabary::create(array(
+        'name' => "Default",
+        ));
+
+        $Projects = Project::all();
+        $maxID = 1;
+        foreach($Projects as $project)
+        {
+            if($project['project_id']>$maxID)
+            {
+                $maxID = $project['project_id'];
+            }
+        }
+
+        $project = Project::create(array(
+        'project_id' => $maxID+1,
+        'name' => $name,
+        'syllabary_id' => $syllabary->id,
+        ));
+
+        ProjectMembers::create(array(
+        'user_id' => 1, //Temporary placeholder until there is a way to get the current user.
+        //'user_id' =>  Auth::user()->id,
+        'project_id' => $project->project_id,
+        'access' => 3,
+        ));
     }
 }
