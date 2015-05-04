@@ -29,7 +29,22 @@ $AllUsers is a list of the names of all users in the database.-->
     @if($Project['Role']==3)
         <select id="Users">
         @foreach($AllUsers as $UserIndex => $User)
-            <option value="{{{ $UserIndex }}}">{{{ $User }}}</option>
+            <?php
+                $found = false;
+                foreach($Project['Users'] as $ProjectUser)
+                {
+                    if($ProjectUser==$User)
+                    {
+                        $found = true;
+                    }
+                }
+                if(!$found)
+                {
+            ?>
+                    <option value="{{{ $UserIndex }}}">{{{ $User }}}</option>
+            <?php
+                }
+            ?>
         @endforeach
         </select>
         <button type="button" onclick="addUser()">Add User to Project</button>
