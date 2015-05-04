@@ -27,7 +27,7 @@ $AllUsers is a list of the names of all users in the database.-->
     {{{ $Project['Name'] }}}
     <br>
     @if($Project['Role']==3)
-        <select id="Users">
+        <select id="Users-{{{ $ProjectIndex }}}">
         @foreach($AllUsers as $UserIndex => $User)
             <?php
                 $found = false;
@@ -47,16 +47,16 @@ $AllUsers is a list of the names of all users in the database.-->
             ?>
         @endforeach
         </select>
-        <button type="button" onclick="addUser()">Add User to Project</button>
+        <button type="button" onclick="addUser({{{ $ProjectIndex }}}, '{{{ $Project['Name'] }}}')">Add User to Project</button>
         <br>
-        <select id="CurrentUsersRemove">
+        <select id="CurrentUsersRemove-{{{ $ProjectIndex }}}">
         @foreach($Project['Users'] as $UserIndex => $User)
             <option value="{{{ $UserIndex }}}">{{{ $User }}}</option>
         @endforeach
         </select>
-        <button type="button" onclick="removeUser()">Remove User from Project</button>
+        <button type="button" onclick="removeUser({{{ $ProjectIndex }}}, '{{{ $Project['Name'] }}}')">Remove User from Project</button>
         <br>
-        <select id="CurrentUsersChange">   
+        <select id="CurrentUsersChange-{{{ $ProjectIndex }}}">
         @foreach($Project['Users'] as $UserIndex => $User)
             <option value="{{{ $UserIndex }}}">{{{ $User }}}</option>
         @endforeach
@@ -66,7 +66,7 @@ $AllUsers is a list of the names of all users in the database.-->
         <option value="Write">Write</option>
         <option value="Read">Read</option>
         </select>
-        <button type="button" onclick="changeRole()">Change User's Role</button>
+        <button type="button" onclick="changeRole({{{ $ProjectIndex }}}, '{{{ $Project['Name'] }}}')">Change User's Role</button>
         <br>
     @endif
     <select id="Syllabaries">
@@ -104,27 +104,27 @@ $AllUsers is a list of the names of all users in the database.-->
         $.post("/projects/create/" + name);
     }
     
-    function addUser()
+    function addUser(index, name)
     {
-        var dropdown = document.getElementById("Users");
-        var index = dropdown.options[dropdown.selectedIndex].value;
-        $.post("/projects/add/user/" + index);
+        var dropdown = document.getElementById("Users-" + index);
+        var user = dropdown.options[dropdown.selectedIndex].text;
+        $.post("/projects/" + name + "/add/user/" + user);
     }
     
-    function removeUser()
+    function removeUser(index, name)
     {
-        var dropdown = document.getElementById("CurrentUsersRemove");
-        var index = dropdown.options[dropdown.selectedIndex].value;
-        $.post("/projects/remove/user/" + index);
+        var dropdown = document.getElementById("CurrentUsersRemove-" + index);
+        var user = dropdown.options[dropdown.selectedIndex].text;
+        $.post("/projects/" + name + "/remove/user/" + user);
     }
     
-    function changeRole()
+    function changeRole(index, name)
     {
-        var dropdown = document.getElementById("CurrentUsersChange");
-        var index = dropdown.options[dropdown.selectedIndex].value;
+        var dropdown = document.getElementById("CurrentUsersChange-" + index);
+        var user = dropdown.options[dropdown.selectedIndex].text;
         var dropdown2 = document.getElementById("Roles");
-        var role = dropdown.options[dropdown.selectedIndex].value;
-        $.post("/projects/change/user/" + index + "/role/" + role);
+        var role = dropdown2.options[dropdown2.selectedIndex].text;
+        $.post("/projects/" + name + "/change/user/" + user + "/role/" + role);
     }
     
     function loadSyllabary()

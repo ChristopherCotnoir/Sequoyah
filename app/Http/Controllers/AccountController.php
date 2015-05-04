@@ -141,16 +141,39 @@ class AccountController extends Controller
         ));
     }
     
-    public function AddUser($user)
+    public function AddUser($project, $user)
     {
+        $user_id = User::where('name','=',$user)->firstOrFail()['id'];
+        $project_id = Project::where('name','=',$project)->firstOrFail()['project_id'];
+        ProjectMembers::create(array(
+        'user_id' => $user_id,
+        'project_id' => $project_id,
+        'access' => 1,
+        ));
     }
     
-    public function RemoveUser($user)
+    public function RemoveUser($project, $user)
     {
+        $user_id = User::where('name','=',$user)->firstOrFail()['id'];
+        $project_id = Project::where('name','=',$project)->firstOrFail()['project_id'];
+        $entry = ProjectMembers::where('project_id','=',$project_id)->where('user_id','=',$user_id)->firstOrFail();
+        $entry->delete();
     }
     
-    public function ChangeRole($user, $role)
+    public function ChangeRole($project, $user, $role)
     {
+        $user_id = User::where('name','=',$user)->firstOrFail()['id'];
+        $project_id = Project::where('name','=',$project)->firstOrFail()['project_id'];
+        $entry = ProjectMembers::where('project_id','=',$project_id)->where('user_id','=',$user_id)->firstOrFail();
+        if($role=="Admin")
+            $access = 3;
+        elseif($role=="Write")
+            $access = 2;
+        else
+            $access = 1;
+        
+        $entry['access'] = $access;
+        $entry->save();
     }
     
     public function LoadSyllabary($syllabary)
