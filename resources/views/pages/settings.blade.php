@@ -108,14 +108,14 @@ $AllUsers is a list of the names of all users in the database.-->
     {
         var dropdown = document.getElementById("Users");
         var index = dropdown.options[dropdown.selectedIndex].value;
-        <!-- function to add user $AllUsers[index] to project -->
+        $.post("/projects/add/user/" + index);
     }
     
     function removeUser()
     {
         var dropdown = document.getElementById("CurrentUsersRemove");
         var index = dropdown.options[dropdown.selectedIndex].value;
-        <!-- function to remove user $Project['Users'][index] from project -->
+        $.post("/projects/remove/user/" + index);
     }
     
     function changeRole()
@@ -124,14 +124,14 @@ $AllUsers is a list of the names of all users in the database.-->
         var index = dropdown.options[dropdown.selectedIndex].value;
         var dropdown2 = document.getElementById("Roles");
         var role = dropdown.options[dropdown.selectedIndex].value;
-        <!-- function to change role of user $Project['Users'][index] to role -->
+        $.post("/projects/change/user/" + index + "/role/" + role);
     }
     
     function loadSyllabary()
     {
         var dropdown = document.getElementById("Syllabaries");
         var index = dropdown.options[dropdown.selectedIndex].value;
-        <!-- function to load syllabary $Project['Syllabaries'][index] -->
+        $.post("/projects/load/syllabary/" + index);
     }
 </script>
 </main>

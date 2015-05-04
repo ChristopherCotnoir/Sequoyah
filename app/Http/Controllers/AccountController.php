@@ -140,4 +140,20 @@ class AccountController extends Controller
         'access' => 3,
         ));
     }
+    
+    public function AddUser($user)
+    {
+    }
+    
+    public function RemoveUser($user)
+    {
+    }
+    
+    public function ChangeRole($user, $role)
+    {
+    }
+    
+    public function LoadSyllabary($syllabary)
+    {
+    }
 }

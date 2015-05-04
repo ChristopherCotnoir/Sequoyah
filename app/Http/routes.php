@@ -8,6 +8,10 @@ Route::get('glyphs', function() { return Redirect::away('http://nodebox.github.i
 
 Route::get('projects', 'AccountController@ShowPage');
 Route::post('projects/create/{name}', 'AccountController@CreateProject');
+Route::post('projects/add/user/{user}', 'AccountController@AddUser');
+Route::post('projects/remove/user/{user}', 'AccountController@RemoveUser');
+Route::post('projects/change/user/{user}/role/{role}', 'AccountController@ChangeRole');
+Route::post('projects/load/syllabary/{syllabary}', 'AccountController@LoadSyllabary');
 Route::get('syllabary', 'SyllabaryController@ShowGrid');
 Route::get('syllabary/grid/{syllabaryId}', 'SyllabaryController@GetGrid');
 Route::get('json/syllabary/grid/{syllabaryId}', 'SyllabaryController@GetGridJson');
