@@ -13,17 +13,17 @@ $AllUsers is a list of the names of all users in the database.-->
     </select>
     <button type="button" onclick="showProject(true)">Choose Project</button>
     <br>
-@elseif(count($UserProjects)==1)
-    <script type='text/javascript'>
-        showProject(false);
-    </script>
 @endif
 
 <input type="text" size="10" id="Create">
 <button type="button" onclick="createProject()">Create Project</button>
 
 @foreach($UserProjects as $ProjectIndex => $Project)
-    <div id="Project-{{{ $ProjectIndex }}}" class="Project" style="display:none">
+    @if(count($UserProjects)==1)
+        <div id="Project-{{{ $ProjectIndex }}}" class="Project">
+    @else
+        <div id="Project-{{{ $ProjectIndex }}}" class="Project" style="display:none">
+    @endif
     {{{ $Project['Name'] }}}
     <br>
     @if($Project['Role']==3)
