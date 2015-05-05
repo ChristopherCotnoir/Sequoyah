@@ -9,12 +9,31 @@ use Sequoyah\Models\SyllabaryRowHeader;
 use Sequoyah\Models\SyllabaryCell;
 use Sequoyah\Models\Symbol;
 use Sequoyah\Models\UndoRecord;
+use Sequoyah\Models\Syllabary;
+use Sequoyah\Models\Project;
+use Sequoyah\Models\ProjectMembers;
 use Illuminate\Support\Facades\Input;
 use Request;
+use Auth;
 use Illuminate\Html\HtmlServiceProvider;
 
 class SyllabaryController extends Controller
 {
+    private function _getUserSyllabaryRole($user_id, $syllabary_id)
+    {
+      $project = Project::where('syllabary_id', '=', $syllabary_id)->first();
+      if ($project == NULL)
+        return -1;
+
+      $membership = ProjectMembers::where('project_id', '=', $project->id)->
+                                    where('user_id', '=', $user_id)->first();
+
+      if ($membership == NULL)
+        return -1;
+
+      return $membership->access;
+    }
+
     /**
     * Create a new controller instance.
     *
@@ -30,10 +49,20 @@ class SyllabaryController extends Controller
     *
     * @return Response
     */
-    public function ShowGrid($SyllabaryId, $Role)
+    public function ShowGrid($SyllabaryId)
     {
+        $user = Auth::user();
+
+        if ($user == NULL)
+          return redirect("/auth/login");
+
+        $role = $this->_getUserSyllabaryRole($user->id, $SyllabaryId);
+
+        if ($role == -1)
+          return redirect("/settings");
+
         return view('pages.syllabary', array(
-            'SyllabaryId' => $SyllabaryId, 'Role' => $Role
+            'SyllabaryId' => $SyllabaryId, 'Role' => $role
         ));
     }
 
