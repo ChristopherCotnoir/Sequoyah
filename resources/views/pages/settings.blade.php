@@ -69,13 +69,12 @@ $AllUsers is a list of the names of all users in the database.-->
         <button type="button" onclick="changeRole({{{ $ProjectIndex }}}, '{{{ $Project['Name'] }}}')">Change User's Role</button>
         <br>
     @endif
-    <select id="Syllabaries">
-    @foreach($Project['Syllabaries'] as $SyllabaryIndex => $Syllabary)
-        t
-        <option value="{{{ $SyllabaryIndex }}}">{{{ $Syllabary }}}</option>
+    <select id="Syllabaries-{{{ $ProjectIndex }}}">
+    @foreach($Project['Syllabaries'] as $Syllabary)
+        <option value="{{{ $Syllabary['Id'] }}}">{{{ $Syllabary['Name'] }}}</option>
     @endforeach
     </select>
-    <button type="button" onclick="loadSyllabary()">Go to Syllabary</button>
+    <button type="button" onclick="loadSyllabary({{{ $ProjectIndex }}})">Go to Syllabary</button>
     </div>
 @endforeach
 
@@ -127,11 +126,11 @@ $AllUsers is a list of the names of all users in the database.-->
         $.post("/projects/" + name + "/change/user/" + user + "/role/" + role);
     }
     
-    function loadSyllabary()
+    function loadSyllabary(index)
     {
-        var dropdown = document.getElementById("Syllabaries");
-        var index = dropdown.options[dropdown.selectedIndex].value;
-        $.post("/projects/load/syllabary/" + index);
+        var dropdown = document.getElementById("Syllabaries-" + index);
+        var syllabary = dropdown.options[dropdown.selectedIndex].value;
+        window.location = '/syllabary/' + syllabary;
     }
 </script>
 </main>

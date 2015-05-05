@@ -52,7 +52,10 @@ class AccountController extends Controller
             foreach($Syllabaries as $syllabary)
             {
                 $SyllabaryName = Syllabary::where('id','=',$syllabary['syllabary_id'])->firstOrFail()['name'];
-                array_push($UserProject['Syllabaries'], $SyllabaryName);
+                $SyllabaryId = $syllabary['syllabary_id'];
+                $currentSyllabary['Name'] = $SyllabaryName;
+                $currentSyllabary['Id'] = $SyllabaryId;
+                array_push($UserProject['Syllabaries'], $currentSyllabary);
             }
             $Users = ProjectMembers::where('project_id','=',$project['project_id'])->get();
             $UserProject['Users'] = array();
@@ -174,9 +177,5 @@ class AccountController extends Controller
         
         $entry['access'] = $access;
         $entry->save();
-    }
-    
-    public function LoadSyllabary($syllabary)
-    {
     }
 }
