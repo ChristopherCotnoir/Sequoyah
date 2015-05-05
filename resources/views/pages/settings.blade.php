@@ -33,7 +33,7 @@ $AllUsers is a list of the names of all users in the database.-->
                 $found = false;
                 foreach($Project['Users'] as $ProjectUser)
                 {
-                    if($ProjectUser==$User)
+                    if($ProjectUser['Id']==$User['Id'])
                     {
                         $found = true;
                     }
@@ -41,32 +41,32 @@ $AllUsers is a list of the names of all users in the database.-->
                 if(!$found)
                 {
             ?>
-                    <option value="{{{ $UserIndex }}}">{{{ $User }}}</option>
+                    <option value="{{{ $User['Id'] }}}">{{{ $User['Name'] }}}</option>
             <?php
                 }
             ?>
         @endforeach
         </select>
-        <button type="button" onclick="addUser({{{ $ProjectIndex }}}, '{{{ $Project['Name'] }}}')">Add User to Project</button>
+        <button type="button" onclick="addUser({{{ $ProjectIndex }}}, '{{{ $Project['Id'] }}}')">Add User to Project</button>
         <br>
         <select id="CurrentUsersRemove-{{{ $ProjectIndex }}}">
         @foreach($Project['Users'] as $UserIndex => $User)
-            <option value="{{{ $UserIndex }}}">{{{ $User }}}</option>
+            <option value="{{{ $User['Id'] }}}">{{{ $User['Name'] }}}</option>
         @endforeach
         </select>
-        <button type="button" onclick="removeUser({{{ $ProjectIndex }}}, '{{{ $Project['Name'] }}}')">Remove User from Project</button>
+        <button type="button" onclick="removeUser({{{ $ProjectIndex }}}, '{{{ $Project['Id'] }}}')">Remove User from Project</button>
         <br>
         <select id="CurrentUsersChange-{{{ $ProjectIndex }}}">
         @foreach($Project['Users'] as $UserIndex => $User)
-            <option value="{{{ $UserIndex }}}">{{{ $User }}}</option>
+            <option value="{{{ $User['Id'] }}}">{{{ $User['Name'] }}}</option>
         @endforeach
         </select>
         <select id="Roles">
-        <option value="Admin">Admin</option>
-        <option value="Write">Write</option>
-        <option value="Read">Read</option>
+        <option value=3>Admin</option>
+        <option value=2>Write</option>
+        <option value=1>Read</option>
         </select>
-        <button type="button" onclick="changeRole({{{ $ProjectIndex }}}, '{{{ $Project['Name'] }}}')">Change User's Role</button>
+        <button type="button" onclick="changeRole({{{ $ProjectIndex }}}, '{{{ $Project['Id'] }}}')">Change User's Role</button>
         <br>
     @endif
     <select id="Syllabaries-{{{ $ProjectIndex }}}">
@@ -103,27 +103,27 @@ $AllUsers is a list of the names of all users in the database.-->
         $.post("/projects/create/" + name);
     }
     
-    function addUser(index, name)
+    function addUser(index, id)
     {
         var dropdown = document.getElementById("Users-" + index);
-        var user = dropdown.options[dropdown.selectedIndex].text;
-        $.post("/projects/" + name + "/add/user/" + user);
+        var user = dropdown.options[dropdown.selectedIndex].value;
+        $.post("/projects/" + id + "/add/user/" + user);
     }
     
-    function removeUser(index, name)
+    function removeUser(index, id)
     {
         var dropdown = document.getElementById("CurrentUsersRemove-" + index);
-        var user = dropdown.options[dropdown.selectedIndex].text;
-        $.post("/projects/" + name + "/remove/user/" + user);
+        var user = dropdown.options[dropdown.selectedIndex].value;
+        $.post("/projects/" + id + "/remove/user/" + user);
     }
     
-    function changeRole(index, name)
+    function changeRole(index, id)
     {
         var dropdown = document.getElementById("CurrentUsersChange-" + index);
-        var user = dropdown.options[dropdown.selectedIndex].text;
+        var user = dropdown.options[dropdown.selectedIndex].value;
         var dropdown2 = document.getElementById("Roles");
-        var role = dropdown2.options[dropdown2.selectedIndex].text;
-        $.post("/projects/" + name + "/change/user/" + user + "/role/" + role);
+        var role = dropdown2.options[dropdown2.selectedIndex].value;
+        $.post("/projects/" + id + "/change/user/" + user + "/role/" + role);
     }
     
     function loadSyllabary(index)

@@ -45,6 +45,7 @@ class AccountController extends Controller
         $Projects = ProjectMembers::where('user_id','=',$UserId)->get(); 
         foreach($Projects as $project)
         {
+            $UserProject['Id'] = $project['project_id'];
             $UserProject['Name'] = Project::where('project_id','=',$project['project_id'])->firstOrFail()['name'];
             $UserProject['Role'] = $project['access'];
             $Syllabaries = Project::where('project_id','=',$project['project_id'])->get();
@@ -62,7 +63,10 @@ class AccountController extends Controller
             foreach($Users as $user)
             {
                 $UserName = User::where('id','=',$user['user_id'])->firstOrFail()['name'];
-                array_push($UserProject['Users'], $UserName);
+                $UserId = $user['user_id'];
+                $currentUser['Name'] = $UserName;
+                $currentUser['Id'] = $UserId;
+                array_push($UserProject['Users'], $currentUser);
             }
             array_push($UserProjects, $UserProject);
         }
@@ -71,7 +75,10 @@ class AccountController extends Controller
         foreach($Users as $user)
         {
             $UserName = $user['name'];
-            array_push($AllUsers, $UserName);
+            $UserId = $user['id'];
+            $currentUser['Name'] = $UserName;
+            $currentUser['Id'] = $UserId;           
+            array_push($AllUsers, $currentUser);
         }
             
         return view('pages.settings', array(
@@ -146,36 +153,23 @@ class AccountController extends Controller
     
     public function AddUser($project, $user)
     {
-        $user_id = User::where('name','=',$user)->firstOrFail()['id'];
-        $project_id = Project::where('name','=',$project)->firstOrFail()['project_id'];
         ProjectMembers::create(array(
-        'user_id' => $user_id,
-        'project_id' => $project_id,
+        'user_id' => $user,
+        'project_id' => $project,
         'access' => 1,
         ));
     }
     
     public function RemoveUser($project, $user)
     {
-        $user_id = User::where('name','=',$user)->firstOrFail()['id'];
-        $project_id = Project::where('name','=',$project)->firstOrFail()['project_id'];
-        $entry = ProjectMembers::where('project_id','=',$project_id)->where('user_id','=',$user_id)->firstOrFail();
+        $entry = ProjectMembers::where('project_id','=',$project)->where('user_id','=',$user)->firstOrFail();
         $entry->delete();
     }
     
     public function ChangeRole($project, $user, $role)
     {
-        $user_id = User::where('name','=',$user)->firstOrFail()['id'];
-        $project_id = Project::where('name','=',$project)->firstOrFail()['project_id'];
-        $entry = ProjectMembers::where('project_id','=',$project_id)->where('user_id','=',$user_id)->firstOrFail();
-        if($role=="Admin")
-            $access = 3;
-        elseif($role=="Write")
-            $access = 2;
-        else
-            $access = 1;
-        
-        $entry['access'] = $access;
+        $entry = ProjectMembers::where('project_id','=',$project)->where('user_id','=',$user)->firstOrFail();
+        $entry['access'] = $role;
         $entry->save();
     }
 }
