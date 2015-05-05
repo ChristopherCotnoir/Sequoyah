@@ -306,4 +306,17 @@ class AccountController extends Controller
         $entry['access'] = $role;
         $entry->save();
     }
+    
+    public function NewSyllabary($project, $name)
+    {
+        $syllabary = $this->CreateSyllabary($name);
+        
+        $projectName = Project::where('project_id','=',$project)->firstOrFail()['name'];
+        
+        Project::create(array(
+        'project_id' => $project,
+        'name' => $projectName,
+        'syllabary_id' => $syllabary->id,
+        ));
+    }
 }

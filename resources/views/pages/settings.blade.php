@@ -68,6 +68,9 @@ $AllUsers is a list of the names of all users in the database.-->
         </select>
         <button type="button" onclick="changeRole({{{ $ProjectIndex }}}, '{{{ $Project['Id'] }}}')">Change User's Role</button>
         <br>
+        <input type="text" size="10" id="NewSyllabary">
+        <button type="button" onclick="newSyllabary('{{{ $Project['Id'] }}}')">Create New Syllabary</button>
+        <br>
     @endif
     <select id="Syllabaries-{{{ $ProjectIndex }}}">
     @foreach($Project['Syllabaries'] as $Syllabary)
@@ -125,7 +128,13 @@ $AllUsers is a list of the names of all users in the database.-->
         var role = dropdown2.options[dropdown2.selectedIndex].value;
         $.post("/projects/" + id + "/change/user/" + user + "/role/" + role);
     }
-    
+
+    function newSyllabary(id)
+    {
+        var name = document.getElementById("NewSyllabary").value;
+        $.post("/projects/" + id + "/create/syllabary/" + name);
+    }
+
     function loadSyllabary(index)
     {
         var dropdown = document.getElementById("Syllabaries-" + index);

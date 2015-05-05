@@ -25,7 +25,7 @@ class SyllabaryController extends Controller
       if ($project == NULL)
         return -1;
 
-      $membership = ProjectMembers::where('project_id', '=', $project->id)->
+      $membership = ProjectMembers::where('project_id', '=', $project->project_id)->
                                     where('user_id', '=', $user_id)->first();
 
       if ($membership == NULL)
