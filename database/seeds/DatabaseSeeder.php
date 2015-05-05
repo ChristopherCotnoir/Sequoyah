@@ -64,6 +64,9 @@ class SyllabarySeeder extends Seeder {
     Syllabary::create([
       'name' => 'Sequoyah Extra',
     ]);
+    Syllabary::create([
+      'name' => 'Sequoyah Extra 2',
+    ]);
   }
 }
 
@@ -72,12 +75,19 @@ class ProjectsSeeder extends Seeder {
   {
     DB::table('projects')->truncate();
     Project::create([
+      'project_id' => 1,
       'name' => 'Demo Project 1',
       'syllabary_id' => 1,
     ]);
     Project::create([
+      'project_id' => 2,
       'name' => 'Demo Project 2',
       'syllabary_id' => 2,
+    ]);
+    Project::create([
+      'project_id' => 2,
+      'name' => 'Demo Project 2',
+      'syllabary_id' => 3,
     ]);
   }
 }
@@ -160,35 +170,35 @@ class SyllabaryRowHeaderSeeder extends Seeder {
         SyllabaryRowHeader::create(array(
             'syllabary_id' => 1,
             'ipa' => 'b',
-            'symbol_id' => 1,
+            'symbol_id' => 6,
             'next_id' => 2,
             'prev_id' => -1,
         ));
         SyllabaryRowHeader::create(array(
             'syllabary_id' => 1,
             'ipa' => 'd',
-            'symbol_id' => 2,
+            'symbol_id' => 7,
             'next_id' => 3,
             'prev_id' => 1,
         ));
         SyllabaryRowHeader::create(array(
             'syllabary_id' => 1,
             'ipa' => 'f',
-            'symbol_id' => 3,
+            'symbol_id' => 8,
             'next_id' => 4,
             'prev_id' => 2
         ));
         SyllabaryRowHeader::create(array(
             'syllabary_id' => 1,
             'ipa' => 'g',
-            'symbol_id' => 4,
+            'symbol_id' => 9,
             'next_id' => 5,
             'prev_id' => 3,
         ));
         SyllabaryRowHeader::create(array(
             'syllabary_id' => 1,
             'ipa' => 'h',
-            'symbol_id' => 5,
+            'symbol_id' => 10,
             'next_id' => -1,
             'prev_id' => 4,
         ));
@@ -199,6 +209,26 @@ class SymbolsSeeder extends Seeder {
     public function run()
     {
       DB::table('symbols')->truncate();
+
+      Symbol::create(array(
+        'symbol_data' => '<?xml version="1.0"?><svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><circle id="svg_18" r="105.621967" cy="256" cx="256" stroke-width="5" stroke="#000000" fill="#000000"/></svg>'
+      ));
+
+      Symbol::create(array(
+        'symbol_data' => '<?xml version="1.0"?><svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><line x1="0" y1="50%" x2="100%" y2="50%" style="stroke:rgb(0,0,0);stroke-width:5"/></svg>'
+      ));
+
+      Symbol::create(array(
+        'symbol_data' => '<?xml version="1.0"?><svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><line x1="0" y1="0" x2="100%" y2="100%" style="stroke:rgb(0,0,0);stroke-width:5"/></svg>'
+      ));
+
+      Symbol::create(array(
+        'symbol_data' => '<?xml version="1.0"?><svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><line x1="100%" y1="0" x2="0" y2="100%" style="stroke:rgb(0,0,0);stroke-width:5"/></svg>'
+      ));
+
+      Symbol::create(array(
+        'symbol_data' => '<?xml version="1.0"?><svg width="512" height="512" xmlns="http://www.w3.org/2000/svg"><rect xmlns="http://www.w3.org/2000/svg" id="svg_1" height="168" width="392" y="156" x="54" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="null" fill="black"/></svg>'
+      ));
 
       Symbol::create(array(
         'symbol_data' => '<?xml version="1.0"?><svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><circle id="svg_18" r="105.621967" cy="256" cx="256" stroke-width="5" stroke="#000000" fill="#000000"/></svg>'

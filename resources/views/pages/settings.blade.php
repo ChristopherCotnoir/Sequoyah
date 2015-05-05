@@ -13,34 +13,50 @@ $AllUsers is a list of the names of all users in the database.-->
     </select>
     <button type="button" onclick="showProject(true)">Choose Project</button>
     <br>
-@elseif(count($UserProjects)==1)
-    <script type='text/javascript'>
-        showProject(false);
-    </script>
 @endif
 
+<input type="text" size="10" id="Create">
 <button type="button" onclick="createProject()">Create Project</button>
 
 @foreach($UserProjects as $ProjectIndex => $Project)
-    <div id="Project-{{{ $ProjectIndex }}}" class="Project" style="display:none">
+    @if(count($UserProjects)==1)
+        <div id="Project-{{{ $ProjectIndex }}}" class="Project">
+    @else
+        <div id="Project-{{{ $ProjectIndex }}}" class="Project" style="display:none">
+    @endif
     {{{ $Project['Name'] }}}
     <br>
     @if($Project['Role']==3)
-        <select id="Users">
+        <select id="Users-{{{ $ProjectIndex }}}">
         @foreach($AllUsers as $UserIndex => $User)
-            <option value="{{{ $UserIndex }}}">{{{ $User }}}</option>
+            <?php
+                $found = false;
+                foreach($Project['Users'] as $ProjectUser)
+                {
+                    if($ProjectUser==$User)
+                    {
+                        $found = true;
+                    }
+                }
+                if(!$found)
+                {
+            ?>
+                    <option value="{{{ $UserIndex }}}">{{{ $User }}}</option>
+            <?php
+                }
+            ?>
         @endforeach
         </select>
-        <button type="button" onclick="addUser()">Add User to Project</button>
+        <button type="button" onclick="addUser({{{ $ProjectIndex }}}, '{{{ $Project['Name'] }}}')">Add User to Project</button>
         <br>
-        <select id="CurrentUsersRemove">
+        <select id="CurrentUsersRemove-{{{ $ProjectIndex }}}">
         @foreach($Project['Users'] as $UserIndex => $User)
             <option value="{{{ $UserIndex }}}">{{{ $User }}}</option>
         @endforeach
         </select>
-        <button type="button" onclick="removeUser()">Remove User from Project</button>
+        <button type="button" onclick="removeUser({{{ $ProjectIndex }}}, '{{{ $Project['Name'] }}}')">Remove User from Project</button>
         <br>
-        <select id="CurrentUsersChange">   
+        <select id="CurrentUsersChange-{{{ $ProjectIndex }}}">
         @foreach($Project['Users'] as $UserIndex => $User)
             <option value="{{{ $UserIndex }}}">{{{ $User }}}</option>
         @endforeach
@@ -50,19 +66,20 @@ $AllUsers is a list of the names of all users in the database.-->
         <option value="Write">Write</option>
         <option value="Read">Read</option>
         </select>
-        <button type="button" onclick="changeRole()">Change User's Role</button>
+        <button type="button" onclick="changeRole({{{ $ProjectIndex }}}, '{{{ $Project['Name'] }}}')">Change User's Role</button>
         <br>
     @endif
-    <select id="Syllabaries">
-    @foreach($Project['Syllabaries'] as $SyllabaryIndex => $Syllabary)
-        t
-        <option value="{{{ $SyllabaryIndex }}}">{{{ $Syllabary }}}</option>
+    <select id="Syllabaries-{{{ $ProjectIndex }}}">
+    @foreach($Project['Syllabaries'] as $Syllabary)
+        <option value="{{{ $Syllabary['Id'] }}}">{{{ $Syllabary['Name'] }}}</option>
     @endforeach
     </select>
-    <button type="button" onclick="loadSyllabary()">Go to Syllabary</button>
+    <button type="button" onclick="loadSyllabary({{{ $ProjectIndex }}})">Go to Syllabary</button>
     </div>
 @endforeach
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script type='text/javascript'>
     function showProject(isSelected)
     {
@@ -82,37 +99,38 @@ $AllUsers is a list of the names of all users in the database.-->
     
     function createProject()
     {
-    <!-- function to create a new Project here -->
+        var name = document.getElementById("Create").value;
+        $.post("/projects/create/" + name);
     }
     
-    function addUser()
+    function addUser(index, name)
     {
-        var dropdown = document.getElementById("Users");
-        var index = dropdown.options[dropdown.selectedIndex].value;
-        <!-- function to add user $AllUsers[index] to project -->
+        var dropdown = document.getElementById("Users-" + index);
+        var user = dropdown.options[dropdown.selectedIndex].text;
+        $.post("/projects/" + name + "/add/user/" + user);
     }
     
-    function removeUser()
+    function removeUser(index, name)
     {
-        var dropdown = document.getElementById("CurrentUsersRemove");
-        var index = dropdown.options[dropdown.selectedIndex].value;
-        <!-- function to remove user $Project['Users'][index] from project -->
+        var dropdown = document.getElementById("CurrentUsersRemove-" + index);
+        var user = dropdown.options[dropdown.selectedIndex].text;
+        $.post("/projects/" + name + "/remove/user/" + user);
     }
     
-    function changeRole()
+    function changeRole(index, name)
     {
-        var dropdown = document.getElementById("CurrentUsersChange");
-        var index = dropdown.options[dropdown.selectedIndex].value;
+        var dropdown = document.getElementById("CurrentUsersChange-" + index);
+        var user = dropdown.options[dropdown.selectedIndex].text;
         var dropdown2 = document.getElementById("Roles");
-        var role = dropdown.options[dropdown.selectedIndex].value;
-        <!-- function to change role of user $Project['Users'][index] to role -->
+        var role = dropdown2.options[dropdown2.selectedIndex].text;
+        $.post("/projects/" + name + "/change/user/" + user + "/role/" + role);
     }
     
-    function loadSyllabary()
+    function loadSyllabary(index)
     {
-        var dropdown = document.getElementById("Syllabaries");
-        var index = dropdown.options[dropdown.selectedIndex].value;
-        <!-- function to load syllabary $Project['Syllabaries'][index] -->
+        var dropdown = document.getElementById("Syllabaries-" + index);
+        var syllabary = dropdown.options[dropdown.selectedIndex].value;
+        window.location = '/syllabary/' + syllabary;
     }
 </script>
 </main>

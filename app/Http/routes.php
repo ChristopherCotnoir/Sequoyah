@@ -7,7 +7,12 @@ Route::get('fuck', function() { return 'FUCK'; });
 Route::get('glyphs', function() { return Redirect::away('http://nodebox.github.io/opentype.js/glyph-inspector.html'); });
 
 Route::get('projects', 'AccountController@ShowPage');
-Route::get('syllabary', 'SyllabaryController@ShowGrid');
+Route::post('projects/create/{name}', 'AccountController@CreateProject');
+Route::post('projects/{project}/add/user/{user}', 'AccountController@AddUser');
+Route::post('projects/{project}/remove/user/{user}', 'AccountController@RemoveUser');
+Route::post('projects/{project}/change/user/{user}/role/{role}', 'AccountController@ChangeRole');
+Route::get('syllabary', 'SyllabaryController@ShowGridDefault');
+Route::get('syllabary/{syllabaryId}', 'SyllabaryController@ShowGrid');
 Route::get('syllabary/grid/{syllabaryId}', 'SyllabaryController@GetGrid');
 Route::get('json/syllabary/grid/{syllabaryId}', 'SyllabaryController@GetGridJson');
 Route::get('syllabary/testsvg/{symbolId}', 'SyllabaryController@TestSvg');

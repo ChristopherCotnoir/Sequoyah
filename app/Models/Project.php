@@ -6,5 +6,5 @@ class Project extends Model
 {
     protected $table = 'projects';
 
-    protected $fillable = ['name', 'syllabary_id'];
+    protected $fillable = ['project_id', 'name', 'syllabary_id'];
 }

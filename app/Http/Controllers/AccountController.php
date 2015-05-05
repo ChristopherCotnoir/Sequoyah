@@ -45,14 +45,17 @@ class AccountController extends Controller
         $Projects = ProjectMembers::where('user_id','=',$UserId)->get(); 
         foreach($Projects as $project)
         {
-            $UserProject['Name'] = Project::where('id','=',$project['project_id'])->firstOrFail()['name'];
+            $UserProject['Name'] = Project::where('project_id','=',$project['project_id'])->firstOrFail()['name'];
             $UserProject['Role'] = $project['access'];
-            $Syllabaries = Project::where('id','=',$project['project_id'])->get();
+            $Syllabaries = Project::where('project_id','=',$project['project_id'])->get();
             $UserProject['Syllabaries'] = array();
             foreach($Syllabaries as $syllabary)
             {
                 $SyllabaryName = Syllabary::where('id','=',$syllabary['syllabary_id'])->firstOrFail()['name'];
-                array_push($UserProject['Syllabaries'], $SyllabaryName);
+                $SyllabaryId = $syllabary['syllabary_id'];
+                $currentSyllabary['Name'] = $SyllabaryName;
+                $currentSyllabary['Id'] = $SyllabaryId;
+                array_push($UserProject['Syllabaries'], $currentSyllabary);
             }
             $Users = ProjectMembers::where('project_id','=',$project['project_id'])->get();
             $UserProject['Users'] = array();
@@ -63,7 +66,6 @@ class AccountController extends Controller
             }
             array_push($UserProjects, $UserProject);
         }
-        //$Users = User::where('id','=',1)->get(); //I don't know the command to get everything, I'll fix this when I find out. Right now I just put something that lets it compile.
         $Users = User::all();
         $AllUsers = array();
         foreach($Users as $user)
@@ -110,5 +112,70 @@ class AccountController extends Controller
         {
             return $projectMember->access;
         }
+    }
+
+    public function CreateProject($name)
+    {
+        $syllabary = Syllabary::create(array(
+        'name' => "Default",
+        ));
+
+        $Projects = Project::all();
+        $maxID = 1;
+        foreach($Projects as $project)
+        {
+            if($project['project_id']>$maxID)
+            {
+                $maxID = $project['project_id'];
+            }
+        }
+
+        $project = Project::create(array(
+        'project_id' => $maxID+1,
+        'name' => $name,
+        'syllabary_id' => $syllabary->id,
+        ));
+
+        ProjectMembers::create(array(
+        'user_id' => 1, //Temporary placeholder until there is a way to get the current user.
+        //'user_id' =>  Auth::user()->id,
+        'project_id' => $project->project_id,
+        'access' => 3,
+        ));
+    }
+    
+    public function AddUser($project, $user)
+    {
+        $user_id = User::where('name','=',$user)->firstOrFail()['id'];
+        $project_id = Project::where('name','=',$project)->firstOrFail()['project_id'];
+        ProjectMembers::create(array(
+        'user_id' => $user_id,
+        'project_id' => $project_id,
+        'access' => 1,
+        ));
+    }
+    
+    public function RemoveUser($project, $user)
+    {
+        $user_id = User::where('name','=',$user)->firstOrFail()['id'];
+        $project_id = Project::where('name','=',$project)->firstOrFail()['project_id'];
+        $entry = ProjectMembers::where('project_id','=',$project_id)->where('user_id','=',$user_id)->firstOrFail();
+        $entry->delete();
+    }
+    
+    public function ChangeRole($project, $user, $role)
+    {
+        $user_id = User::where('name','=',$user)->firstOrFail()['id'];
+        $project_id = Project::where('name','=',$project)->firstOrFail()['project_id'];
+        $entry = ProjectMembers::where('project_id','=',$project_id)->where('user_id','=',$user_id)->firstOrFail();
+        if($role=="Admin")
+            $access = 3;
+        elseif($role=="Write")
+            $access = 2;
+        else
+            $access = 1;
+        
+        $entry['access'] = $access;
+        $entry->save();
     }
 }

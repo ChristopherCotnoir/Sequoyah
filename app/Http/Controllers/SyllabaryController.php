@@ -30,9 +30,18 @@ class SyllabaryController extends Controller
     *
     * @return Response
     */
-    public function ShowGrid()
+    public function ShowGrid($SyllabaryId)
     {
-        return view('pages.syllabary');
+        return view('pages.syllabary', array(
+            'SyllabaryId' => $SyllabaryId
+        ));
+    }
+
+    public function ShowGridDefault()
+    {
+        return view('pages.syllabary', array(
+            'SyllabaryId' => 1
+        ));
     }
 
     public function GetGrid($SyllabaryId)
@@ -42,9 +51,9 @@ class SyllabaryController extends Controller
 
         // TODO - Grab the current syllabary ID from the project data
 
-        $firstDbColHeader = SyllabaryColumnHeader::where('syllabary_id', '=', 1)->
+        $firstDbColHeader = SyllabaryColumnHeader::where('syllabary_id', '=', $SyllabaryId)->
         where('prev_id', '=', -1)->first();
-        $dbColHeaders = SyllabaryColumnHeader::where('syllabary_id', '=', 1)->get();
+        $dbColHeaders = SyllabaryColumnHeader::where('syllabary_id', '=', $SyllabaryId)->get();
 
         $colHeaderList = array();
         foreach($dbColHeaders as $header) {
@@ -61,9 +70,9 @@ class SyllabaryController extends Controller
         }
 
 
-        $firstDbRowHeader = SyllabaryRowHeader::where('syllabary_id', '=', 1)->
+        $firstDbRowHeader = SyllabaryRowHeader::where('syllabary_id', '=', $SyllabaryId)->
         where('prev_id', '=', -1)->first();
-        $dbRowHeaders = SyllabaryRowHeader::where('syllabary_id', '=', 1)->get();
+        $dbRowHeaders = SyllabaryRowHeader::where('syllabary_id', '=', $SyllabaryId)->get();
 
         $rowHeaderList = array();
         foreach($dbRowHeaders as $header) {
@@ -80,7 +89,7 @@ class SyllabaryController extends Controller
         }
 
         $cells = array(array());
-        $dbCells = SyllabaryCell::where('syllabary_id', '=', 1)->get();
+        $dbCells = SyllabaryCell::where('syllabary_id', '=', $SyllabaryId)->get();
 
         foreach($dbCells as $cell) {
             $cells[$cell->row_id][$cell->col_id] = $cell;
@@ -503,6 +512,11 @@ class SyllabaryController extends Controller
         if($column == NULL)
             return response()->json(['success' => false]);
 
+        if($vowel == "-")
+        {
+            $vowel = "";
+        }
+
         $column->ipa = $vowel;
         $column->save();
 
@@ -516,6 +530,11 @@ class SyllabaryController extends Controller
                                    where('id', '=', $rowId)->first();
         if($row == NULL)
             return response()->json(['success' => false]);
+
+        if($consonant == "-")
+        {
+            $consonant = "";
+        }
 
         $row->ipa = $consonant;
         $row->save();

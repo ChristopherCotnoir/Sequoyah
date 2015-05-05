@@ -35,7 +35,7 @@
         $('#font-dl').on('click', function(ev)
         {
             ev.preventDefault();
-            ExportSyllabary(1, 'Sequoyah', function(Font) { Font.download(); });
+            ExportSyllabary({{{ $SyllabaryId }}}, 'Sequoyah', function(Font) { Font.download(); });
         });
     });
 
@@ -43,14 +43,14 @@
     {
         // Ensure any open modals are closed first.
         closeOpenModal(function() {
-            $("#grid-div").load("/syllabary/grid/1");
+            $("#grid-div").load("/syllabary/grid/{{{ $SyllabaryId }}}");
         });
     }
 
     function addColumnRight(ipa)
     {
 
-        $.post("/syllabary/1/column/add/" + selectedColId, {"ipa": ipa}, function() {
+        $.post("/syllabary/{{{ $SyllabaryId }}}/column/add/" + selectedColId, {"ipa": ipa}, function() {
             loadGrid();
         });
     }
@@ -58,7 +58,7 @@
     function addColumnLeft(ipa)
     {
 
-        $.post("/syllabary/1/column/add/-" + selectedColId, {"ipa": ipa}, function() {
+        $.post("/syllabary/{{{ $SyllabaryId }}}/column/add/-" + selectedColId, {"ipa": ipa}, function() {
             loadGrid();
         });
     }
@@ -67,7 +67,7 @@
     {
 
         if (selectedColId != -1) {
-            $.post("/syllabary/1/column/" + selectedColId + "/remove", function() {
+            $.post("/syllabary/{{{ $SyllabaryId }}}/column/" + selectedColId + "/remove", function() {
                 loadGrid();
             });
         }
@@ -76,7 +76,7 @@
     function addRowTop(ipa)
     {
 
-        $.post("/syllabary/1/row/add/-" + selectedRowId, {"ipa": ipa}, function() {
+        $.post("/syllabary/{{{ $SyllabaryId }}}/row/add/-" + selectedRowId, {"ipa": ipa}, function() {
             loadGrid();
         });
     }
@@ -84,7 +84,7 @@
     function addRowBottom(ipa)
     {
 
-        $.post("/syllabary/1/row/add/" + selectedRowId, {"ipa": ipa}, function() {
+        $.post("/syllabary/{{{ $SyllabaryId }}}/row/add/" + selectedRowId, {"ipa": ipa}, function() {
             loadGrid();
         });
     }
@@ -93,7 +93,7 @@
     {
 
         if (selectedRowId != -1) {
-            $.post("/syllabary/1/row/" + selectedRowId + "/remove", function() {
+            $.post("/syllabary/{{{ $SyllabaryId }}}/row/" + selectedRowId + "/remove", function() {
                 loadGrid();
             });
         }
@@ -104,7 +104,7 @@
         var fd = new FormData($('#audioUpload-row-' + rowId)[0]);
         $.ajax({
             method: 'POST',
-            url:  '/syllabary/1/row/' + rowId + '/uploadAudio',
+            url:  '/syllabary/{{{ $SyllabaryId }}}/row/' + rowId + '/uploadAudio',
             data: fd,
             cache: false,
             enctype: 'multipart/form-data',
@@ -244,21 +244,21 @@
 
     function editSyllableSymbol(rowId, colId)
     {
-      $.get("/syllabary/1/cell/" + rowId + "/" + colId + "/customSymbolId", function(data) {
+      $.get("/syllabary/{{{ $SyllabaryId }}}/cell/" + rowId + "/" + colId + "/customSymbolId", function(data) {
         editSymbol(data.symbol_id);
       });
     }
 
     function editSyllableSymbol(rowId, colId)
     {
-      $.get("/syllabary/1/cell/" + rowId + "/" + colId + "/customSymbolId", function(data) {
+      $.get("/syllabary/{{{ $SyllabaryId }}}/cell/" + rowId + "/" + colId + "/customSymbolId", function(data) {
         editSymbol(data.symbol_id);
       });
     }
 
     function removeCell(rowId, colId)
     { 
-        $.post("/syllabary/1/cell/" + rowId + "/" + colId + "/remove", function() {
+        $.post("/syllabary/{{{ $SyllabaryId }}}/cell/" + rowId + "/" + colId + "/remove", function() {
             loadGrid();
         });
     }
@@ -266,7 +266,7 @@
     function restoreCell(rowId, colId)
     {
 
-        $.post("/syllabary/1/cell/" + rowId + "/" + colId + "/restore", function() {
+        $.post("/syllabary/{{{ $SyllabaryId }}}/cell/" + rowId + "/" + colId + "/restore", function() {
             loadGrid();
         });
     }
@@ -276,7 +276,7 @@
         event.stopPropagation();
     // We append a date on the end as a cache-busting parameter, ensuring any new audio files are loaded
     // instead of cached ones.
-    $('#audio-container-1').attr('src', '/syllabary/1/column/' + colId + '/getAudio?cb=' + new Date().getTime());
+    $('#audio-container-1').attr('src', '/syllabary/{{{ $SyllabaryId }}}/column/' + colId + '/getAudio?cb=' + new Date().getTime());
     $('#audio-container-1')[0].play();
     }
 
@@ -285,15 +285,15 @@
         event.stopPropagation();
     // We append a date on the end as a cache-busting parameter, ensuring any new audio files are loaded
     // instead of cached ones.
-    $('#audio-container-1').attr('src', '/syllabary/1/row/' + rowId + '/getAudio?cb=' + new Date().getTime());
+    $('#audio-container-1').attr('src', '/syllabary/{{{ $SyllabaryId }}}/row/' + rowId + '/getAudio?cb=' + new Date().getTime());
     $('#audio-container-1')[0].play();
     }
 
     function pronounceSyllable(event, rowId, colId)
     {
         event.stopPropagation();
-        $('#audio-container-1').attr('src', '/syllabary/1/row/' + rowId + '/getAudio?cb=' + new Date().getTime());
-        $('#audio-container-2').attr('src', '/syllabary/1/column/' + rowId + '/getAudio?cb=' + new Date().getTime());
+        $('#audio-container-1').attr('src', '/syllabary/{{{ $SyllabaryId }}}/row/' + rowId + '/getAudio?cb=' + new Date().getTime());
+        $('#audio-container-2').attr('src', '/syllabary/{{{ $SyllabaryId }}}/column/' + rowId + '/getAudio?cb=' + new Date().getTime());
 
         $('#audio-container-1')[0].play();
         $('#audio-container-2')[0].play();
@@ -302,9 +302,14 @@
     function editVowel(vowel)
     {
         var newVowel = prompt("Please enter the vowel", vowel);
-        if (newVowel)
+        if (newVowel != null)
         {
-            $.post("/syllabary/1/column/" + selectedColId + "/vowel/" + newVowel, function() {
+            if(newVowel == "")
+            {
+                newVowel = "-";
+            }
+
+            $.post("/syllabary/{{{ $SyllabaryId }}}/column/" + selectedColId + "/vowel/" + newVowel, function() {
                 loadGrid();
             });
         }
@@ -313,9 +318,14 @@
     function editConsonant(consonant)
     {
         var newConsonant = prompt("Please enter the consonant", consonant);
-        if (newConsonant)
+        if (newConsonant != null)
         {
-            $.post("/syllabary/1/row/" + selectedRowId + "/consonant/" + newConsonant, function() {
+            if(newConsonant == "")
+            {
+                newConsonant = "-";
+            }
+
+            $.post("/syllabary/{{{ $SyllabaryId }}}/row/" + selectedRowId + "/consonant/" + newConsonant, function() {
                 loadGrid();
             });
         }
