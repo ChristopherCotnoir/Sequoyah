@@ -12,7 +12,7 @@ Route::post('projects/{project}/add/user/{user}', 'AccountController@AddUser');
 Route::post('projects/{project}/remove/user/{user}', 'AccountController@RemoveUser');
 Route::post('projects/{project}/change/user/{user}/role/{role}', 'AccountController@ChangeRole');
 Route::get('syllabary', 'SyllabaryController@ShowGridDefault');
-Route::get('syllabary/{syllabaryId}/role/{role}', 'SyllabaryController@ShowGrid');
+Route::get('syllabary/{syllabaryId}', 'SyllabaryController@ShowGrid');
 Route::get('syllabary/grid/{syllabaryId}', 'SyllabaryController@GetGrid');
 Route::get('json/syllabary/grid/{syllabaryId}', 'SyllabaryController@GetGridJson');
 Route::get('syllabary/testsvg/{symbolId}', 'SyllabaryController@TestSvg');
