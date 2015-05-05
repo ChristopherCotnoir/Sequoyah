@@ -39,8 +39,7 @@ class AccountController extends Controller
     */
     public function ShowIndex()
     {
-        $UserId = 1; //Temporary placeholder until there is a way to get the current user.
-        //$UserId = Auth::user()->id;
+        $UserId = Auth::user()->id;
         $UserProjects = array();
         $Projects = ProjectMembers::where('user_id','=',$UserId)->get(); 
         foreach($Projects as $project)
@@ -144,8 +143,7 @@ class AccountController extends Controller
         ));
 
         ProjectMembers::create(array(
-        'user_id' => 1, //Temporary placeholder until there is a way to get the current user.
-        //'user_id' =>  Auth::user()->id,
+        'user_id' =>  Auth::user()->id,
         'project_id' => $project->project_id,
         'access' => 3,
         ));
