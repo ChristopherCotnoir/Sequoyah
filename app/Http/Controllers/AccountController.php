@@ -4,6 +4,9 @@ use Sequoyah\Models\ProjectMembers;
 use Sequoyah\Models\Project;
 use Sequoyah\Models\Syllabary;
 use Sequoyah\Models\User;
+use Sequoyah\Models\SyllabaryColumnHeader;
+use Sequoyah\Models\SyllabaryRowHeader;
+use Sequoyah\Models\Symbol;
 use Auth;
 
 class AccountController extends Controller
@@ -39,6 +42,10 @@ class AccountController extends Controller
     */
     public function ShowIndex()
     {
+        if(Auth::user()==NULL)
+        {
+            return redirect('');
+        }
         $UserId = Auth::user()->id;
         $UserProjects = array();
         $Projects = ProjectMembers::where('user_id','=',$UserId)->get(); 
@@ -120,11 +127,140 @@ class AccountController extends Controller
         }
     }
 
-    public function CreateProject($name)
+    public function CreateSyllabary($name)
     {
         $syllabary = Syllabary::create(array(
-        'name' => "Default",
+        'name' => $name,
         ));
+
+        $symbol1 = Symbol::create(array(
+        'symbol_data' => '<?xml version="1.0"?><svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><circle id="svg_18" r="105.621967" cy="256" cx="256" stroke-width="5" stroke="#000000" fill="#000000"/></svg>'
+        ));
+
+        $symbol2 = Symbol::create(array(
+        'symbol_data' => '<?xml version="1.0"?><svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><line x1="0" y1="50%" x2="100%" y2="50%" style="stroke:rgb(0,0,0);stroke-width:5"/></svg>'
+        ));
+
+        $symbol3 = Symbol::create(array(
+        'symbol_data' => '<?xml version="1.0"?><svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><line x1="0" y1="0" x2="100%" y2="100%" style="stroke:rgb(0,0,0);stroke-width:5"/></svg>'
+        ));
+
+        $symbol4 = Symbol::create(array(
+        'symbol_data' => '<?xml version="1.0"?><svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><line x1="100%" y1="0" x2="0" y2="100%" style="stroke:rgb(0,0,0);stroke-width:5"/></svg>'
+        ));
+
+        $symbol5 = Symbol::create(array(
+        'symbol_data' => '<?xml version="1.0"?><svg width="512" height="512" xmlns="http://www.w3.org/2000/svg"><rect xmlns="http://www.w3.org/2000/svg" id="svg_1" height="168" width="392" y="156" x="54" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="null" fill="black"/></svg>'
+        ));
+
+        $symbol6 = Symbol::create(array(
+        'symbol_data' => '<?xml version="1.0"?><svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><circle id="svg_18" r="105.621967" cy="256" cx="256" stroke-width="5" stroke="#000000" fill="#000000"/></svg>'
+        ));
+
+        $symbol7 = Symbol::create(array(
+        'symbol_data' => '<?xml version="1.0"?><svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><line x1="0" y1="50%" x2="100%" y2="50%" style="stroke:rgb(0,0,0);stroke-width:5"/></svg>'
+        ));
+
+        $symbol8 = Symbol::create(array(
+        'symbol_data' => '<?xml version="1.0"?><svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><line x1="0" y1="0" x2="100%" y2="100%" style="stroke:rgb(0,0,0);stroke-width:5"/></svg>'
+        ));
+
+        $symbol9 = Symbol::create(array(
+        'symbol_data' => '<?xml version="1.0"?><svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><line x1="100%" y1="0" x2="0" y2="100%" style="stroke:rgb(0,0,0);stroke-width:5"/></svg>'
+        ));
+
+        $symbol10 = Symbol::create(array(
+        'symbol_data' => '<?xml version="1.0"?><svg width="512" height="512" xmlns="http://www.w3.org/2000/svg"><rect xmlns="http://www.w3.org/2000/svg" id="svg_1" height="168" width="392" y="156" x="54" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="null" fill="black"/></svg>'
+        ));        
+
+        $column = SyllabaryColumnHeader::create(array(
+            'syllabary_id' => $syllabary->id,
+            'ipa' => 'a',
+            'symbol_id' => $symbol4->id,
+            'next_id' => -1,
+            'prev_id' => -1,
+        ));
+        
+        $columnId = $column->id;
+        $column->next_id = $columnId+1;
+        $column->save();
+        
+        SyllabaryColumnHeader::create(array(
+            'syllabary_id' => $syllabary->id,
+            'ipa' => 'e',
+            'symbol_id' => $symbol3->id,
+            'next_id' => $columnId+2,
+            'prev_id' => $columnId,
+        ));
+        SyllabaryColumnHeader::create(array(
+            'syllabary_id' => $syllabary->id,
+            'ipa' => 'i',
+            'symbol_id' => $symbol2->id,
+            'next_id' => $columnId+3,
+            'prev_id' => $columnId+1,
+        ));
+        SyllabaryColumnHeader::create(array(
+            'syllabary_id' => $syllabary->id,
+            'ipa' => 'o',
+            'symbol_id' => $symbol1->id,
+            'next_id' => $columnId+4,
+            'prev_id' => $columnId+2,
+        ));
+        SyllabaryColumnHeader::create(array(
+            'syllabary_id' => $syllabary->id,
+            'ipa' => 'u',
+            'symbol_id' => $symbol5->id,
+            'next_id' => -1,
+            'prev_id' => $columnId+3,
+        ));        
+
+        $row = SyllabaryRowHeader::create(array(
+            'syllabary_id' => $syllabary->id,
+            'ipa' => 'b',
+            'symbol_id' => $symbol6->id,
+            'next_id' => -1,
+            'prev_id' => -1,
+        ));
+
+        $rowId = $row->id;
+        $row->next_id = $rowId+1;
+        $row->save();        
+
+        SyllabaryRowHeader::create(array(
+            'syllabary_id' => $syllabary->id,
+            'ipa' => 'd',
+            'symbol_id' => $symbol7->id,
+            'next_id' => $rowId+2,
+            'prev_id' => $rowId,
+        ));
+        SyllabaryRowHeader::create(array(
+            'syllabary_id' => $syllabary->id,
+            'ipa' => 'f',
+            'symbol_id' => $symbol8->id,
+            'next_id' => $rowId+3,
+            'prev_id' => $rowId+1
+        ));
+        SyllabaryRowHeader::create(array(
+            'syllabary_id' => $syllabary->id,
+            'ipa' => 'g',
+            'symbol_id' => $symbol9->id,
+            'next_id' => $rowId+4,
+            'prev_id' => $rowId+2,
+        ));
+        SyllabaryRowHeader::create(array(
+            'syllabary_id' => $syllabary->id,
+            'ipa' => 'h',
+            'symbol_id' => $symbol10->id,
+            'next_id' => -1,
+            'prev_id' => $rowId+3,
+        ));
+
+        return $syllabary;
+    }
+
+    public function CreateProject($name)
+    {
+        $syllabary = $this->CreateSyllabary("Default");
 
         $Projects = Project::all();
         $maxID = 1;
