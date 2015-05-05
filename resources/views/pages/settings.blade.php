@@ -38,7 +38,7 @@ $AllUsers is a list of the names of all users in the database.-->
                         $found = true;
                     }
                 }
-                if(!$found)
+                if(!$found&&$User['Id']!=Auth::user()->id)
                 {
             ?>
                     <option value="{{{ $User['Id'] }}}">{{{ $User['Name'] }}}</option>

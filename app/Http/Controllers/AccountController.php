@@ -68,11 +68,14 @@ class AccountController extends Controller
             $UserProject['Users'] = array();
             foreach($Users as $user)
             {
-                $UserName = User::where('id','=',$user['user_id'])->firstOrFail()['name'];
-                $UserId = $user['user_id'];
-                $currentUser['Name'] = $UserName;
-                $currentUser['Id'] = $UserId;
-                array_push($UserProject['Users'], $currentUser);
+                if($user['user_id']!=Auth::user()->id)
+                {
+                    $UserName = User::where('id','=',$user['user_id'])->firstOrFail()['name'];
+                    $UserId = $user['user_id'];
+                    $currentUser['Name'] = $UserName;
+                    $currentUser['Id'] = $UserId;
+                    array_push($UserProject['Users'], $currentUser);
+                }
             }
             array_push($UserProjects, $UserProject);
         }
