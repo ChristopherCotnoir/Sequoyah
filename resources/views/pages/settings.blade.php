@@ -130,7 +130,7 @@ $AllUsers is a list of the names of all users in the database.-->
     {
         var dropdown = document.getElementById("Syllabaries-" + index);
         var syllabary = dropdown.options[dropdown.selectedIndex].value;
-        window.location = '/syllabary/' + syllabary;
+        window.location = '/syllabary/' + syllabary + '/role/{{{ $Project["Role"] }}}';
     }
 </script>
 </main>
