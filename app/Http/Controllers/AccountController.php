@@ -287,6 +287,16 @@ class AccountController extends Controller
         'access' => 3,
         ));
     }
+
+    public function RenameProject($project, $name)
+    {
+        $entries = Project::where('project_id','=',$project)->get();
+        foreach($entries as $entry)
+        {
+            $entry['name'] = $name;
+            $entry->save();
+        }
+    }
     
     public function AddUser($project, $user)
     {
@@ -321,5 +331,12 @@ class AccountController extends Controller
         'name' => $projectName,
         'syllabary_id' => $syllabary->id,
         ));
+    }
+    
+    public function RenameSyllabary($syllabary, $name)
+    {
+        $entry = Syllabary::where('id','=',$syllabary)->firstOrFail();
+        $entry['name'] = $name;
+        $entry->save();
     }
 }

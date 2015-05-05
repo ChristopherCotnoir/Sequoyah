@@ -15,7 +15,7 @@ $AllUsers is a list of the names of all users in the database.-->
     <br>
 @endif
 
-Project Name <input type="text" size="25" id="Create">
+Project Name: <input type="text" size="25" id="Create">
 <button type="button" onclick="createProject()">Create Project</button>
 
 @foreach($UserProjects as $ProjectIndex => $Project)
@@ -24,9 +24,14 @@ Project Name <input type="text" size="25" id="Create">
     @else
         <div id="Project-{{{ $ProjectIndex }}}" class="Project" style="display:none">
     @endif
-    {{{ $Project['Name'] }}}
+    <h3><b>{{{ $Project['Name'] }}}</b></h3>
+    <br>
+    <h4>Project Settings</h4>
     <br>
     @if($Project['Role']==3)
+        New Name: <input type="text" size="25" id="ProjectName-{{{ $ProjectIndex }}}">
+        <button type="button" onclick="renameProject({{{ $ProjectIndex }}}, '{{{ $Project['Id'] }}}')">Rename Project</button>
+        <br>
         <select id="Users-{{{ $ProjectIndex }}}">
         @foreach($AllUsers as $UserIndex => $User)
             <?php
@@ -68,8 +73,19 @@ Project Name <input type="text" size="25" id="Create">
         </select>
         <button type="button" onclick="changeRole({{{ $ProjectIndex }}}, '{{{ $Project['Id'] }}}')">Change User's Role</button>
         <br>
-        Syllabary Name <input type="text" size="25" id="NewSyllabary">
-        <button type="button" onclick="newSyllabary('{{{ $Project['Id'] }}}')">Create New Syllabary</button>
+        <br>
+        <h4>Syllabary Settings</h4>
+        <br>
+        Syllabary Name: <input type="text" size="25" id="NewSyllabary-{{{ $ProjectIndex }}}">
+        <button type="button" onclick="newSyllabary({{{ $ProjectIndex }}}, '{{{ $Project['Id'] }}}')">Create New Syllabary</button>
+        <br>
+        <select id="RenameSyllabaries-{{{ $ProjectIndex }}}">
+        @foreach($Project['Syllabaries'] as $Syllabary)
+            <option value="{{{ $Syllabary['Id'] }}}">{{{ $Syllabary['Name'] }}}</option>
+        @endforeach
+        </select>
+        New Name: <input type="text" size="25" id="SyllabaryName-{{{ $ProjectIndex }}}">
+        <button type="button" onclick="renameSyllabary({{{ $ProjectIndex }}})">Rename Syllabary</button>
         <br>
     @endif
     <select id="Syllabaries-{{{ $ProjectIndex }}}">
@@ -112,7 +128,15 @@ Project Name <input type="text" size="25" id="Create">
             reload();
         });
     }
-    
+
+    function renameProject(index, id)
+    {
+        var name = document.getElementById("ProjectName-" + index).value;
+        $.post("/projects/" + id + "/rename/" + name, function() {
+            reload();
+        });
+    }
+
     function addUser(index, id)
     {
         var dropdown = document.getElementById("Users-" + index);
@@ -142,10 +166,20 @@ Project Name <input type="text" size="25" id="Create">
         });
     }
 
-    function newSyllabary(id)
+    function newSyllabary(index, id)
     {
-        var name = document.getElementById("NewSyllabary").value;
+        var name = document.getElementById("NewSyllabary-" + index).value;
         $.post("/projects/" + id + "/create/syllabary/" + name, function() {
+            reload();
+        });
+    }
+
+    function renameSyllabary(index)
+    {
+        var dropdown = document.getElementById("RenameSyllabaries-" + index);
+        var syllabary = dropdown.options[dropdown.selectedIndex].value;
+        var name = document.getElementById("SyllabaryName-" + index).value;
+        $.post("/projects/rename/syllabary/" + syllabary + "/name/" + name, function() {
             reload();
         });
     }
