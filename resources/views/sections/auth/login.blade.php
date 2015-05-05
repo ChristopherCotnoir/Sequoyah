@@ -7,13 +7,13 @@
 	@if ($errors->has('username'))
 		<output class='error'>{{ $errors->first('username') }}</output>
 	@endif
-	<input type='text' name='username' value='{{ old('username') }}'>
+	<input type='text' style='width:100%' name='username' value='{{ old('username') }}'>
 	
 	<label for='password'>Password</label>
 	@if ($errors->has('password'))
 		<output class='error'>{{ $errors->first('password') }}</output>
 	@endif
-	<input type='password' name='password' value=''>
+	<input type='password' style='width:100%' name='password' value=''>
 	
 	<div>
 		<label for='remember'>Remember Me?</label>

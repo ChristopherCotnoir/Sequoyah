@@ -10,19 +10,19 @@
 	@if ($errors->has('username'))
 		<output class='error'>{{ $errors->first('username') }}</output>
 	@endif
-	<input type='text' name='username' value='{{ old('username') }}'>
+	<input type='text' style='width:100%' name='username' value='{{ old('username') }}'>
 	
 	<label for='password'>Password</label>
 	@if ($errors->has('password'))
 		<output class='error'>{{ $errors->first('password') }}</output>
 	@endif
-	<input type='password' name='password' value=''>
+	<input type='password' style='width:100%' name='password' value=''>
 	
 	<label for='password_confirmation'>Password <span class='hint'>(Confirm)</span></label>
 	@if ($errors->has('password'))
 		<output class='error'>{{ $errors->first('password') }}</output>
 	@endif
-	<input type='password' name='password_confirmation' value=''>
+	<input type='password' style='width:100%' name='password_confirmation' value=''>
 	
 	<hr>
 	
@@ -30,7 +30,7 @@
 	@if ($errors->has('name'))
 		<output class='error'>{{ $errors->first('name') }}</output>
 	@endif
-	<input type='text' name='name' value='{{ old('name') }}'>
+	<input type='text' style='width:100%' name='name' value='{{ old('name') }}'>
 	
 	<input type='submit' value='Create Account'>
 </form>

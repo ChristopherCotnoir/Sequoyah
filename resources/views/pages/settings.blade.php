@@ -15,7 +15,7 @@ $AllUsers is a list of the names of all users in the database.-->
     <br>
 @endif
 
-<input type="text" size="10" id="Create">
+Project Name <input type="text" size="25" id="Create">
 <button type="button" onclick="createProject()">Create Project</button>
 
 @foreach($UserProjects as $ProjectIndex => $Project)
@@ -68,7 +68,7 @@ $AllUsers is a list of the names of all users in the database.-->
         </select>
         <button type="button" onclick="changeRole({{{ $ProjectIndex }}}, '{{{ $Project['Id'] }}}')">Change User's Role</button>
         <br>
-        <input type="text" size="10" id="NewSyllabary">
+        Syllabary Name <input type="text" size="25" id="NewSyllabary">
         <button type="button" onclick="newSyllabary('{{{ $Project['Id'] }}}')">Create New Syllabary</button>
         <br>
     @endif
