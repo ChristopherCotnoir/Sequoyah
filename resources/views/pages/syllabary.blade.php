@@ -125,17 +125,23 @@
 
     function selectColumn(index)
     {
-        selectedColId = $("#col-" + index).attr("colId");
-        select("col-" + index);
-        openModal = $("#edit-column-modal-" + index);
-        openModal.on('hide.bs.modal', function () {
+        @if($Role>1)
+        {
+            selectedColId = $("#col-" + index).attr("colId");
+            select("col-" + index);
+            openModal = $("#edit-column-modal-" + index);
+            openModal.on('hide.bs.modal', function () {
             unselectAll();
-        })
-        openModal.modal('show');
+            })
+            openModal.modal('show');
+        }
+        @endif
     }
 
     function selectRow(index)
     {
+        @if($Role>1)
+        {
         selectedRowId = $("#row-" + index).attr("rowId");
         select("row-" + index);
         openModal = $("#edit-row-modal-" + index);
@@ -143,16 +149,22 @@
             unselectAll();
         })
         openModal.modal('show');
+        }
+        @endif
     }
 
     function selectCell(colIndex, rowIndex)
     {
+        @if($Role>1)
+        {
         select("cell-" + colIndex + "-" + rowIndex);
         openModal = $("#edit-symbol-modal-" + colIndex + "-" + rowIndex)
         openModal.on('hide.bs.modal', function () {
             unselectAll();
         })
         openModal.modal('show');
+        }
+        @endif
     }
 
     function unselectAll()

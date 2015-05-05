@@ -30,17 +30,17 @@ class SyllabaryController extends Controller
     *
     * @return Response
     */
-    public function ShowGrid($SyllabaryId)
+    public function ShowGrid($SyllabaryId, $Role)
     {
         return view('pages.syllabary', array(
-            'SyllabaryId' => $SyllabaryId
+            'SyllabaryId' => $SyllabaryId, 'Role' => $Role
         ));
     }
 
     public function ShowGridDefault()
     {
         return view('pages.syllabary', array(
-            'SyllabaryId' => 1
+            'SyllabaryId' => 1, 'Role' => 3
         ));
     }
 
