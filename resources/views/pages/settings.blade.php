@@ -100,24 +100,35 @@ $AllUsers is a list of the names of all users in the database.-->
         document.getElementById("Project-" + index).style.display = 'block';
     }
     
+    function reload()
+    {
+        location.reload();
+    }
+    
     function createProject()
     {
         var name = document.getElementById("Create").value;
-        $.post("/projects/create/" + name);
+        $.post("/projects/create/" + name, function() {
+            reload();
+        });
     }
     
     function addUser(index, id)
     {
         var dropdown = document.getElementById("Users-" + index);
         var user = dropdown.options[dropdown.selectedIndex].value;
-        $.post("/projects/" + id + "/add/user/" + user);
+        $.post("/projects/" + id + "/add/user/" + user, function() {
+            reload();
+        });
     }
     
     function removeUser(index, id)
     {
         var dropdown = document.getElementById("CurrentUsersRemove-" + index);
         var user = dropdown.options[dropdown.selectedIndex].value;
-        $.post("/projects/" + id + "/remove/user/" + user);
+        $.post("/projects/" + id + "/remove/user/" + user, function() {
+            reload();
+        });
     }
     
     function changeRole(index, id)
@@ -126,13 +137,17 @@ $AllUsers is a list of the names of all users in the database.-->
         var user = dropdown.options[dropdown.selectedIndex].value;
         var dropdown2 = document.getElementById("Roles");
         var role = dropdown2.options[dropdown2.selectedIndex].value;
-        $.post("/projects/" + id + "/change/user/" + user + "/role/" + role);
+        $.post("/projects/" + id + "/change/user/" + user + "/role/" + role, function() {
+            reload();
+        });
     }
 
     function newSyllabary(id)
     {
         var name = document.getElementById("NewSyllabary").value;
-        $.post("/projects/" + id + "/create/syllabary/" + name);
+        $.post("/projects/" + id + "/create/syllabary/" + name, function() {
+            reload();
+        });
     }
 
     function loadSyllabary(index)
