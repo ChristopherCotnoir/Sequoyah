@@ -66,13 +66,6 @@ class SyllabaryController extends Controller
         ));
     }
 
-    public function ShowGridDefault()
-    {
-        return view('pages.syllabary', array(
-            'SyllabaryId' => 1, 'Role' => 3
-        ));
-    }
-
     public function GetGrid($SyllabaryId)
     {
         $vowels = array();
@@ -137,9 +130,9 @@ class SyllabaryController extends Controller
 
     // TODO - Grab the current syllabary ID from the project data
 
-        $firstDbColHeader = SyllabaryColumnHeader::where('syllabary_id', '=', 1)->
+        $firstDbColHeader = SyllabaryColumnHeader::where('syllabary_id', '=', $SyllabaryId)->
         where('prev_id', '=', -1)->first();
-        $dbColHeaders = SyllabaryColumnHeader::where('syllabary_id', '=', 1)->get();
+        $dbColHeaders = SyllabaryColumnHeader::where('syllabary_id', '=', $SyllabaryId)->get();
 
         $colHeaderList = array();
         foreach($dbColHeaders as $header) {
@@ -156,9 +149,9 @@ class SyllabaryController extends Controller
         }
 
 
-        $firstDbRowHeader = SyllabaryRowHeader::where('syllabary_id', '=', 1)->
+        $firstDbRowHeader = SyllabaryRowHeader::where('syllabary_id', '=', $SyllabaryId)->
         where('prev_id', '=', -1)->first();
-        $dbRowHeaders = SyllabaryRowHeader::where('syllabary_id', '=', 1)->get();
+        $dbRowHeaders = SyllabaryRowHeader::where('syllabary_id', '=', $SyllabaryId)->get();
 
         $rowHeaderList = array();
         foreach($dbRowHeaders as $header) {
@@ -175,7 +168,7 @@ class SyllabaryController extends Controller
         }
 
         $cells = array(array());
-        $dbCells = SyllabaryCell::where('syllabary_id', '=', 1)->get();
+        $dbCells = SyllabaryCell::where('syllabary_id', '=', $SyllabaryId)->get();
 
         foreach($dbCells as $cell) {
             $cells[$cell->row_id][$cell->col_id] = $cell;
@@ -189,7 +182,7 @@ class SyllabaryController extends Controller
     {
         $ipa = Input::get('ipa');
 
-        $headers = SyllabaryColumnHeader::where('syllabary_id', '=', 1)->get();
+        $headers = SyllabaryColumnHeader::where('syllabary_id', '=', $SyllabaryId)->get();
 
         $newSymbol = Symbol::create(array(
             'symbol_data' => '',
@@ -227,7 +220,7 @@ class SyllabaryController extends Controller
                 $rightHeader->save();
             }
     } else { // If we want to just add to the end of the list.
-        $lastHeader = SyllabaryColumnHeader::where('syllabary_id', '=', 1)->
+        $lastHeader = SyllabaryColumnHeader::where('syllabary_id', '=', $SyllabaryId)->
         orderBy('next_id')->first();
 
         $newHeader = SyllabaryColumnHeader::create(array(
@@ -293,7 +286,7 @@ class SyllabaryController extends Controller
     {
         $ipa = Input::get('ipa');
 
-        $headers = SyllabaryRowHeader::where('syllabary_id', '=', 1)->get();
+        $headers = SyllabaryRowHeader::where('syllabary_id', '=', $SyllabaryId)->get();
 
         $newSymbol = Symbol::create(array(
             'symbol_data' => '',
@@ -331,7 +324,7 @@ class SyllabaryController extends Controller
                 $bottomHeader->save();
             }
     } else { // If we want to just add to the end of the list.
-        $lastHeader = SyllabaryRowHeader::where('syllabary_id', '=', 1)->
+        $lastHeader = SyllabaryRowHeader::where('syllabary_id', '=', $SyllabaryId)->
         orderBy('next_id')->first();
 
         $newHeader = SyllabaryRowHeader::create(array(
@@ -429,7 +422,7 @@ class SyllabaryController extends Controller
             $cell->save();
         } else {
             SyllabaryCell::create(array(
-                'syllabary_id' => 1,
+                'syllabary_id' => $SyllabaryId,
                 'row_id' => $rowId,
                 'col_id' => $colId,
                 'deleted' => true,
@@ -469,7 +462,7 @@ class SyllabaryController extends Controller
             $symbol = Symbol::create(['symbol_data' => '']);
             $symbol_id = $symbol->id;
             SyllabaryCell::create(array(
-                'syllabary_id' => 1,
+                'syllabary_id' => $SyllabaryId,
                 'row_id' => $rowId,
                 'col_id' => $colId,
                 'deleted' => false,
@@ -513,7 +506,7 @@ class SyllabaryController extends Controller
         $symbol->save();
 
         UndoRecord::create([
-            'syllabary_id' => 1,
+            'syllabary_id' => $SyllabaryId,
             'json_data' => json_encode([
                 'action' => 'update_symbol',
                 'symbol_id' => $symbolId,

@@ -2,8 +2,6 @@
 
 Route::get('/', 'HomeController@ShowIndex');
 Route::get('/settings', 'AccountController@ShowIndex');
-Route::get('sleep', function() { return Redirect::away('http://Ncnl.tumblr.com'); });
-Route::get('fuck', function() { return 'FUCK'; });
 Route::get('glyphs', function() { return Redirect::away('http://nodebox.github.io/opentype.js/glyph-inspector.html'); });
 
 Route::get('projects', 'AccountController@ShowPage');
@@ -14,7 +12,6 @@ Route::post('projects/{project}/remove/user/{user}', 'AccountController@RemoveUs
 Route::post('projects/{project}/change/user/{user}/role/{role}', 'AccountController@ChangeRole');
 Route::post('projects/{project}/create/syllabary/{name}', 'AccountController@NewSyllabary');
 Route::post('projects/rename/syllabary/{syllabary}/name/{name}', 'AccountController@RenameSyllabary');
-Route::get('syllabary', 'SyllabaryController@ShowGridDefault');
 Route::get('syllabary/{syllabaryId}', 'SyllabaryController@ShowGrid');
 Route::get('syllabary/grid/{syllabaryId}', 'SyllabaryController@GetGrid');
 Route::get('json/syllabary/grid/{syllabaryId}', 'SyllabaryController@GetGridJson');
