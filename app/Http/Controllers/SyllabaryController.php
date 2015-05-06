@@ -178,15 +178,22 @@ class SyllabaryController extends Controller
     }
 
 
-    public function AddColumn($syllabaryId, $relativeId = NULL, $suppressUndo = false)
+    public function AddColumn($syllabaryId, $relativeId = NULL, $suppressUndo = false, $ipa = NULL, $symbol_id = NULL, $audio_sample = NULL)
     {
-        $ipa = Input::get('ipa');
+        if($ipa == NULL)
+        {
+            $ipa = "";
+        }
+        
+        $headers = SyllabaryColumnHeader::where('syllabary_id', '=', $syllabaryId)->get();
 
-        $headers = SyllabaryColumnHeader::where('syllabary_id', '=', $SyllabaryId)->get();
-
-        $newSymbol = Symbol::create(array(
-            'symbol_data' => '',
-            ));
+            if($symbol_id == NULL)
+            {
+                $newSymbol = Symbol::create(array(
+                    'symbol_data' => '',
+                    ));
+                $symbol_id = $newSymbol->id;
+            }
 
     // If we specify that we want to add to the right of a given header.
         if ($relativeId != NULL) {
@@ -205,9 +212,10 @@ class SyllabaryController extends Controller
             $newHeader = SyllabaryColumnHeader::create(array(
                 'syllabary_id' => $syllabaryId,
                 'ipa' => $ipa,
-                'symbol_id' => $newSymbol->id,
+                'symbol_id' => $symbol_id,
                 'prev_id' => ($leftHeader != NULL) ? $leftHeader->id : -1,
                 'next_id' => ($rightHeader != NULL) ? $rightHeader->id : -1,
+                'audio_sample' => $audio_sample,
                 ));
 
             if ($leftHeader != NULL) {
@@ -220,15 +228,16 @@ class SyllabaryController extends Controller
                 $rightHeader->save();
             }
     } else { // If we want to just add to the end of the list.
-        $lastHeader = SyllabaryColumnHeader::where('syllabary_id', '=', $SyllabaryId)->
+        $lastHeader = SyllabaryColumnHeader::where('syllabary_id', '=', $syllabaryId)->
         orderBy('next_id')->first();
 
         $newHeader = SyllabaryColumnHeader::create(array(
             'syllabary_id' => $syllabaryId,
             'ipa' => $ipa,
-            'symbol_id' => $newSymbol->id,
+            'symbol_id' => $symbol_id,
             'prev_id' => ($lastHeader != NULL) ? $lastHeader->id : -1,
             'next_id' => -1,
+            'audio_sample' => $audio_sample,
             ));
 
         if ($lastHeader != NULL) {
@@ -249,7 +258,7 @@ class SyllabaryController extends Controller
         return response()->json(['success' => True]);
     }
 
-    public function RemoveColumn($syllabaryId, $columnId)
+    public function RemoveColumn($syllabaryId, $columnId, $suppressUndo = false)
     {
         $colHeaders = SyllabaryColumnHeader::where('syllabary_id', '=', $syllabaryId)->get();
 
@@ -279,18 +288,55 @@ class SyllabaryController extends Controller
             $cell->save();
         }
 
+        if (!$suppressUndo) {
+            if ($selectedHeader->prev_id == -1)
+            {
+                UndoRecord::create([
+                    'syllabary_id' => $syllabaryId,
+                    'json_data' => json_encode([
+                        'action' => 'remove_column',
+                        'col_id' => $selectedHeader->next_id,
+                        'direction' => 'left',
+                        'ipa' => $selectedHeader->ipa,
+                        'symbol_id' => $selectedHeader->symbol_id,
+                        'audio_sample' => $selectedHeader->audio_sample,
+                    ]),
+                ]);
+            }
+            else
+            {
+                UndoRecord::create([
+                    'syllabary_id' => $syllabaryId,
+                    'json_data' => json_encode([
+                        'action' => 'remove_column',
+                        'col_id' => $selectedHeader->prev_id,
+                        'direction' => 'right',
+                        'ipa' => $selectedHeader->ipa,
+                        'symbol_id' => $selectedHeader->symbol_id,
+                        'audio_sample' => $selectedHeader->audio_sample,
+                    ]),
+                ]);
+            }
+        }
         return response()->json(['success' => True]);
     }
 
-    public function AddRow($syllabaryId, $relativeId, $suppressUndo = false)
+    public function AddRow($syllabaryId, $relativeId, $suppressUndo = false, $ipa = NULL, $symbol_id = NULL, $audio_sample = NULL)
     {
-        $ipa = Input::get('ipa');
+        if($ipa == NULL)
+        {
+            $ipa = "";
+        }
 
-        $headers = SyllabaryRowHeader::where('syllabary_id', '=', $SyllabaryId)->get();
+        $headers = SyllabaryRowHeader::where('syllabary_id', '=', $syllabaryId)->get();
 
-        $newSymbol = Symbol::create(array(
-            'symbol_data' => '',
-            ));
+        if($symbol_id == NULL)
+        {
+            $newSymbol = Symbol::create(array(
+                'symbol_data' => '',
+                ));
+            $symbol_id = $newSymbol->id;
+        }
 
     // If we specify that we want to add to the bottom of a given header.
         if ($relativeId != NULL) {
@@ -309,9 +355,10 @@ class SyllabaryController extends Controller
             $newHeader = SyllabaryRowHeader::create(array(
                 'syllabary_id' => $syllabaryId,
                 'ipa' => $ipa,
-                'symbol_id' => $newSymbol->id,
+                'symbol_id' => $symbol_id,
                 'prev_id' => ($topHeader != NULL) ? $topHeader->id : -1,
                 'next_id' => ($bottomHeader != NULL) ? $bottomHeader->id : -1,
+                'audio_sample' => $audio_sample,
                 ));
 
             if ($topHeader != NULL) {
@@ -324,15 +371,16 @@ class SyllabaryController extends Controller
                 $bottomHeader->save();
             }
     } else { // If we want to just add to the end of the list.
-        $lastHeader = SyllabaryRowHeader::where('syllabary_id', '=', $SyllabaryId)->
+        $lastHeader = SyllabaryRowHeader::where('syllabary_id', '=', $syllabaryId)->
         orderBy('next_id')->first();
 
         $newHeader = SyllabaryRowHeader::create(array(
             'syllabary_id' => $syllabaryId,
             'ipa' => $ipa,
-            'symbol_id' => $newSymbol->id,
+            'symbol_id' => $symbol_id,
             'prev_id' => ($lastHeader != NULL) ? $lastHeader->id : -1,
             'next_id' => -1,
+            'audio_sample' => $audio_sample,
             ));
 
         if ($lastHeader != NULL) {
@@ -353,7 +401,7 @@ class SyllabaryController extends Controller
         return response()->json(['success' => True]);
     }
 
-    public function RemoveRow($syllabaryId, $rowId)
+    public function RemoveRow($syllabaryId, $rowId, $suppressUndo = false)
     {
         $rowHeaders = SyllabaryRowHeader::where('syllabary_id', '=', $syllabaryId)->get();
 
@@ -383,6 +431,36 @@ class SyllabaryController extends Controller
             $cell->save();
         }
 
+       if (!$suppressUndo) {
+            if ($selectedHeader->prev_id == -1)
+            {
+                UndoRecord::create([
+                    'syllabary_id' => $syllabaryId,
+                    'json_data' => json_encode([
+                        'action' => 'remove_row',
+                        'row_id' => $selectedHeader->next_id,
+                        'direction' => 'up',
+                        'ipa' => $selectedHeader->ipa,
+                        'symbol_id' => $selectedHeader->symbol_id,
+                        'audio_sample' => $selectedHeader->audio_sample,
+                    ]),
+                ]);
+            }
+            else
+            {
+                UndoRecord::create([
+                    'syllabary_id' => $syllabaryId,
+                    'json_data' => json_encode([
+                        'action' => 'remove_row',
+                        'row_id' => $selectedHeader->prev_id,
+                        'direction' => 'down',
+                        'ipa' => $selectedHeader->ipa,
+                        'symbol_id' => $selectedHeader->symbol_id,
+                        'audio_sample' => $selectedHeader->audio_sample,
+                    ]),
+                ]);
+            }
+        }
         return response()->json(['success' => True]);
 
     }
@@ -422,7 +500,7 @@ class SyllabaryController extends Controller
             $cell->save();
         } else {
             SyllabaryCell::create(array(
-                'syllabary_id' => $SyllabaryId,
+                'syllabary_id' => $syllabaryId,
                 'row_id' => $rowId,
                 'col_id' => $colId,
                 'deleted' => true,
@@ -462,7 +540,7 @@ class SyllabaryController extends Controller
             $symbol = Symbol::create(['symbol_data' => '']);
             $symbol_id = $symbol->id;
             SyllabaryCell::create(array(
-                'syllabary_id' => $SyllabaryId,
+                'syllabary_id' => $syllabaryId,
                 'row_id' => $rowId,
                 'col_id' => $colId,
                 'deleted' => false,
@@ -506,7 +584,7 @@ class SyllabaryController extends Controller
         $symbol->save();
 
         UndoRecord::create([
-            'syllabary_id' => $SyllabaryId,
+            'syllabary_id' => $syllabaryId,
             'json_data' => json_encode([
                 'action' => 'update_symbol',
                 'symbol_id' => $symbolId,
@@ -527,7 +605,7 @@ class SyllabaryController extends Controller
         return '<body>' . $symbol->symbol_data . '</body>';
     }
     
-    public function EditVowel($syllabaryId, $columnId, $vowel)
+    public function EditVowel($syllabaryId, $columnId, $vowel, $suppressUndo = false)
     {
         $column = SyllabaryColumnHeader::where('syllabary_id', '=', $syllabaryId)->
                                          where('id', '=', $columnId)->first();
@@ -546,7 +624,7 @@ class SyllabaryController extends Controller
     
     }
     
-    public function EditConsonant($syllabaryId, $rowId, $consonant)    
+    public function EditConsonant($syllabaryId, $rowId, $consonant, $suppressUndo = false)    
     {
         $row = SyllabaryRowHeader::where('syllabary_id', '=', $syllabaryId)->
                                    where('id', '=', $rowId)->first();
@@ -579,12 +657,34 @@ class SyllabaryController extends Controller
             $rowId = $undoData['row_id'];
             $this->RemoveRow($syllabaryId, $rowId, true);
         } else if ($undoData['action'] == 'remove_row') {
-
+            if($undoData['direction'] == 'up')
+            {
+                $rowId = $undoData['row_id'] * -1;
+            }
+            else
+            {
+                $rowId = $undoData['row_id'];
+            }
+            $ipa = $undoData['ipa'];
+            $symbol_id = $undoData['symbol_id'];
+            $audio_sample = $undoData['audio_sample'];
+            $this->AddRow($syllabaryId, $rowId, true, $ipa, $symbol_id, $audio_sample);
         } else if ($undoData['action'] == 'add_column') {
             $colId = $undoData['col_id'];
             $this->RemoveColumn($syllabaryId, $colId, true);
         } else if ($undoData['action'] == 'remove_column') {
-
+            if($undoData['direction'] == 'left')
+            {
+                $colId = $undoData['col_id'] * -1;
+            }
+            else
+            {
+                $colId = $undoData['col_id'];
+            }
+            $ipa = $undoData['ipa'];
+            $symbol_id = $undoData['symbol_id'];
+            $audio_sample = $undoData['audio_sample'];
+            $this->AddColumn($syllabaryId, $colId, true, $ipa, $symbol_id, $audio_sample);
         } else if ($undoData['action'] == 'remove_cell') {
             $rowId = $undoData['row_id'];
             $colId = $undoData['col_id'];
