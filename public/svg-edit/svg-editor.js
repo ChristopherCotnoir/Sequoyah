@@ -1061,8 +1061,8 @@ TODOS
                                         alert('Error: Invalid Symbol Id. Cannot Save Changes.');
                                         return;
                                 }
-                                $.post('/syllabary/symbol/' + urldata.symbol_id + '/update', {"svg" : Utils.encode64(svg)}, function(data) {
-                                        window.location = '/syllabary';
+                                $.post('/syllabary/' + urldata.syllabary_id + '/symbol/' + urldata.symbol_id + '/update', {"svg" : Utils.encode64(svg)}, function(data) {
+                                        window.location = '/syllabary/' + urldata.syllabary_id;
                                 });
                                 
                                 /*

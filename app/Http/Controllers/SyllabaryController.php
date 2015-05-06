@@ -493,7 +493,21 @@ class SyllabaryController extends Controller
     */
     }
 
-    public function UpdateSymbol($symbolId)
+    public function GetCombinedSymbol($syllabaryId, $rowId, $colId)
+    {
+      $row = SyllabaryRowHeader::where('syllabary_id', '=', $syllabaryId)->
+                                 where('id', '=', $rowId)->first();
+      $col = SyllabaryRowHeader::where('syllabary_id', '=', $syllabaryId)->
+                                 where('id', '=', $colId)->first();
+
+      if ($row == NULL || $col == NULL)
+        return response()->json(['success' => false]);
+
+      $rowSymbol = Symbol::find($row->symbol_id);
+      $colSymbol = Symbol::find($col->symbol_id);
+    }
+
+    public function UpdateSymbol($syllabaryId, $symbolId)
     {
         $symbol = Symbol::find($symbolId);
 
@@ -506,7 +520,7 @@ class SyllabaryController extends Controller
         $symbol->save();
 
         UndoRecord::create([
-            'syllabary_id' => $SyllabaryId,
+            'syllabary_id' => $syllabaryId,
             'json_data' => json_encode([
                 'action' => 'update_symbol',
                 'symbol_id' => $symbolId,

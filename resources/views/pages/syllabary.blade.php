@@ -251,7 +251,7 @@
 
     function editSymbol(symbolId)
     {
-        window.location = '/svg-edit/svg-editor.html?symbol_id=' + symbolId;
+        window.location = '/svg-edit/svg-editor.html?symbol_id=' + symbolId + '&syllabary_id=' + '{{{ $SyllabaryId }}}';
     }
 
     function editSyllableSymbol(rowId, colId)
