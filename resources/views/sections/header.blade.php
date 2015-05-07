@@ -4,6 +4,7 @@
 			@if (Auth::check())
 				<a href='auth/logout'>Logout <i class='fa fa-sign-out'></i></a>
 			@else
+				<a href='{{ action('Auth\AuthController@ShowRegister') }}'>Register <i class='fa fa-sign-in'></i></a>
 				<a href='{{ action('Auth\AuthController@ShowLogin') }}'>Login <i class='fa fa-sign-in'></i></a>
 			@endif
 		</div>
